@@ -1,0 +1,43 @@
+:root {
+  /* Brand palette */
+  --color-sand:       #F5EFE0;   /* page background */
+  --color-brass:      #B8892A;   /* primary CTA, accents */
+  --color-brass-dark: #8A6318;   /* CTA hover state */
+  --color-brass-light:#D4A84B;   /* light accent */
+  --color-charcoal:   #2C2416;   /* headings, footer bg */
+  --color-surface:    #FAFAF7;   /* card backgrounds */
+  --color-mute:       #6B6358;   /* body text, labels */
+  --color-border:     rgba(44,36,22,0.12); /* card borders */
+  --color-border-strong: rgba(44,36,22,0.24);
+  --color-error:      #C0392B;   /* form error / terracotta */
+
+  /* Typography */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+
+  /* Spacing scale */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  40px;
+  --space-2xl: 80px;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-expo:  cubic-bezier(0.7, 0, 0.84, 0);
+  --duration-fast: 180ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+
+  /* Shadows */
+  --shadow-brass: 0 4px 24px rgba(184,137,42,0.18), 0 1px 4px rgba(184,137,42,0.12);
+  --shadow-card:  0 2px 16px rgba(44,36,22,0.08), 0 1px 4px rgba(44,36,22,0.04);
+  --shadow-modal: 0 24px 80px rgba(44,36,22,0.2), 0 8px 24px rgba(44,36,22,0.12);
+}

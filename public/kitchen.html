@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURELIA — Premium Modular Kitchens</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@100;200;300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* ========================================================
+   AURELIA — CSS VARIABLES & RESET
+   ======================================================== */
+:root {
+  --brown1:   #2e1a0e;
+  --brown2:   #5c3419;
+  --brown3:   #8b5630;
+  --brown4:   #b07840;
+  --gold:     #c9954a;
+  --gold2:    #e0b870;
+  --cream1:   #f8f0e3;
+  --cream2:   #f2e4c8;
+  --cream3:   #e8d0a8;
+  --white:    #fdfaf5;
+  --dark:     #0e0804;
+  --mid:      #1a0e06;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans:    'Montserrat', sans-serif;
+  --font-serif:   'Cormorant Garamond', serif;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  color: var(--cream1);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ──────────────────────────────────────────────── */
+#c-dot {
+  position:fixed; width:6px; height:6px;
+  background: var(--gold2); border-radius:50%;
+  pointer-events:none; z-index:99999;
+  transform:translate(-50%,-50%);
+  transition: background 0.2s;
+  mix-blend-mode: screen;
+}
+#c-ring {
+  position:fixed; width:40px; height:40px;
+  border:1px solid rgba(201,149,74,0.5);
+  border-radius:50%; pointer-events:none; z-index:99998;
+  transform:translate(-50%,-50%);
+  transition: width .18s ease, height .18s ease, border-color .18s ease;
+}
+body:hover #c-ring { opacity:1; }
+
+/* ── CANVAS ──────────────────────────────────────────────── */
+#canvas-wrap {
+  position:fixed; inset:0; z-index:1;
+}
+#c { width:100%; height:100%; display:block; }
+
+/* ── SCROLL SPACER ────────────────────────────────────────── */
+.scroll-space { height: 1600vh; }
+
+/* ── NOISE GRAIN ─────────────────────────────────────────── */
+.grain {
+  position:fixed; inset:0; z-index:4; pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  opacity:.5; mix-blend-mode: overlay;
+}
+
+/* ── VIGNETTE ─────────────────────────────────────────────── */
+.vignette {
+  position:fixed; inset:0; z-index:3; pointer-events:none;
+  background: radial-gradient(ellipse at 50% 50%, transparent 45%, rgba(14,8,4,0.65) 100%);
+}
+
+/* ── LOADING SCREEN ───────────────────────────────────────── */
+#loader {
+  position:fixed; inset:0; z-index:99000;
+  background: var(--dark);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  transition: opacity 1s ease 0.3s, visibility 1s ease 0.3s;
+}
+#loader.out { opacity:0; visibility:hidden; pointer-events:none; }
+
+.ld-brand {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 5vw, 72px);
+  font-weight: 300; letter-spacing: 0.25em;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+.ld-brand::after {
+  content: '';
+  position: absolute; left:-2px; right:-2px; top:0; bottom:0;
+  background: var(--dark);
+  animation: revealText 1.2s cubic-bezier(.77,0,.175,1) 0.3s forwards;
+}
+@keyframes revealText { to { transform: translateX(101%); } }
+
+.ld-brand em { color: var(--gold2); font-style:italic; }
+.ld-tagline {
+  font-family: var(--font-sans);
+  font-size: 9px; font-weight: 200;
+  letter-spacing: 0.6em; color: rgba(240,210,160,0.5);
+  text-transform: uppercase; margin-top: 16px;
+  opacity:0; animation: fadeIn .8s 1.2s forwards;
+}
+.ld-bar-wrap {
+  width: 260px; height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin-top: 44px; overflow: hidden;
+}
+.ld-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--brown3), var(--gold2));
+  animation: loadBar 1.6s cubic-bezier(.4,0,.2,1) 0.5s forwards;
+}
+@keyframes loadBar { to { width:100%; } }
+.ld-pct {
+  font-family: var(--font-sans); font-size:9px; font-weight:200;
+  letter-spacing:.35em; color:rgba(200,160,90,0.5);
+  margin-top:10px;
+  opacity:0; animation: fadeIn .5s .5s forwards;
+}
+@keyframes fadeIn { to {opacity:1;} }
+
+/* ── SITE HEADER ──────────────────────────────────────────── */
+#header {
+  position:fixed; top:0; left:0; right:0; z-index:20;
+  padding: 28px 52px;
+  display:flex; justify-content:space-between; align-items:center;
+  pointer-events:none;
+}
+#header::after {
+  content:'';
+  position:absolute; bottom:0; left:52px; right:52px; height:1px;
+  background: linear-gradient(90deg, transparent, rgba(201,149,74,0.25), transparent);
+}
+
+.hd-logo {
+  font-family: var(--font-display);
+  font-size:13px; font-weight:300;
+  letter-spacing:0.55em; color:var(--gold2);
+  text-transform:uppercase;
+}
+.hd-logo sup { font-size:7px; letter-spacing:.3em; color:var(--brown4); vertical-align:super; }
+
+.hd-nav { display:flex; gap:32px; align-items:center; pointer-events:auto; }
+.hd-link {
+  font-family:var(--font-sans); font-size:8px;
+  font-weight:200; letter-spacing:.45em;
+  color:rgba(240,210,160,0.4); text-transform:uppercase;
+  text-decoration:none; background:none; border:none;
+  cursor:none; transition: color .3s;
+}
+.hd-link:hover, .hd-link.act { color:var(--gold2); }
+
+/* ── HERO ─────────────────────────────────────────────────── */
+#hero {
+  position:fixed; inset:0; z-index:10;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  pointer-events:none;
+  transition: opacity .4s;
+}
+.hero-eyebrow {
+  font-family:var(--font-sans); font-size:9px; font-weight:200;
+  letter-spacing:.7em; color:var(--brown4);
+  text-transform:uppercase; margin-bottom:28px;
+  opacity:0; animation:slideUp .9s cubic-bezier(.22,1,.36,1) .5s forwards;
+  display:flex; align-items:center; gap:18px;
+}
+.hero-eyebrow::before,.hero-eyebrow::after{
+  content:''; width:44px; height:1px;
+  background: linear-gradient(90deg, transparent, var(--brown4));
+}
+.hero-eyebrow::after{ transform:scaleX(-1); }
+
+.hero-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 10vw, 148px);
+  font-weight: 300; line-height: .9;
+  letter-spacing:.04em; text-align:center;
+  opacity:0; animation:slideUp .9s cubic-bezier(.22,1,.36,1) .7s forwards;
+}
+.hero-h1 span { display:block; }
+.hero-h1 .line2 {
+  font-style:italic; color:transparent;
+  -webkit-text-stroke:1px rgba(201,149,74,0.55);
+  font-size:0.92em;
+}
+.hero-h1 .line3 {
+  font-size:.38em; letter-spacing:.22em;
+  color:var(--gold); font-weight:300;
+  font-style:normal; font-family:var(--font-sans); font-weight:200;
+  margin-top:22px;
+}
+
+.hero-desc {
+  font-family:var(--font-serif); font-size:clamp(13px,1.2vw,17px);
+  font-weight:300; font-style:italic;
+  color:rgba(240,220,175,0.45); letter-spacing:.06em;
+  margin-top:32px; text-align:center; max-width:480px;
+  opacity:0; animation:slideUp .9s cubic-bezier(.22,1,.36,1) .95s forwards;
+}
+
+.hero-scroll {
+  margin-top:52px; display:flex; flex-direction:column;
+  align-items:center; gap:10px;
+  opacity:0; animation:slideUp .9s cubic-bezier(.22,1,.36,1) 1.2s forwards;
+}
+.hero-scroll span {
+  font-family:var(--font-sans); font-size:8px;
+  font-weight:200; letter-spacing:.5em;
+  color:rgba(200,160,80,0.35); text-transform:uppercase;
+}
+.scroll-wire {
+  width:1px; height:52px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: wirePulse 2.2s ease-in-out infinite;
+}
+@keyframes wirePulse { 0%,100%{opacity:.25;transform:scaleY(.5);} 50%{opacity:1;transform:scaleY(1);} }
+
+@keyframes slideUp {
+  from{opacity:0;transform:translateY(28px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ── SIDE PROGRESS BAR ────────────────────────────────────── */
+.prog-wrap {
+  position:fixed; right:28px; top:50%;
+  transform:translateY(-50%);
+  z-index:20; display:flex; flex-direction:column; gap:16px;
+  align-items:center;
+}
+.prog-label {
+  writing-mode:vertical-rl; text-orientation:mixed;
+  font-family:var(--font-sans); font-size:7px;
+  font-weight:200; letter-spacing:.4em;
+  color:rgba(200,160,80,0.3); text-transform:uppercase;
+  transform:rotate(180deg); margin-bottom:6px;
+}
+.prog-rail {
+  width:1px; height:160px;
+  background:rgba(255,255,255,0.07); position:relative;
+}
+#prog-bar {
+  position:absolute; top:0; left:0;
+  width:1px; height:0;
+  background: linear-gradient(to bottom, var(--gold2), rgba(176,120,64,0.3));
+  transition: height .12s ease;
+}
+
+.prog-dots { display:flex; flex-direction:column; gap:18px; align-items:center; }
+.pdot {
+  width:4px; height:4px; border-radius:50%;
+  background:rgba(255,255,255,0.1);
+  transition: all .35s cubic-bezier(.34,1.56,.64,1);
+}
+.pdot.lit { background:var(--gold); transform:scale(2); }
+
+/* ── COMPONENT LABELS ─────────────────────────────────────── */
+.clabel {
+  position:fixed; z-index:20; pointer-events:none;
+  opacity:0; transform:translateX(-20px);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.22,1,.36,1);
+  max-width:280px;
+}
+.clabel.right { transform:translateX(20px); }
+.clabel.vis { opacity:1; transform:translateX(0); }
+
+.cl-num {
+  font-family:var(--font-display); font-size:10px;
+  font-weight:300; font-style:italic;
+  color:var(--brown4); letter-spacing:.2em;
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:8px;
+}
+.cl-num::before{
+  content:''; display:block; width:38px; height:1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+.clabel.right .cl-num::before{
+  background: linear-gradient(90deg, transparent, var(--gold));
+  order:2;
+}
+
+.cl-title {
+  font-family:var(--font-display); font-size:clamp(18px,2vw,28px);
+  font-weight:300; color:var(--white);
+  letter-spacing:.04em; line-height:1;
+  text-shadow: 0 0 40px rgba(201,149,74,0.2);
+}
+.cl-mat {
+  font-family:var(--font-sans); font-size:8px;
+  font-weight:200; letter-spacing:.4em;
+  color:var(--gold); text-transform:uppercase; margin-top:6px;
+}
+
+.cl-divider {
+  width:100%; height:1px; margin:12px 0;
+  background: linear-gradient(90deg, rgba(176,120,64,0.35), transparent);
+}
+.clabel.right .cl-divider {
+  background: linear-gradient(90deg, transparent, rgba(176,120,64,0.35));
+}
+
+.cl-specs {}
+.cl-spec {
+  font-family:var(--font-sans); font-size:8px;
+  font-weight:200; letter-spacing:.12em;
+  color:rgba(240,210,150,0.35); line-height:2.2;
+  display:flex; align-items:center; gap:8px;
+}
+.cl-spec::before{
+  content:'—'; color:rgba(201,149,74,0.4); font-size:6px;
+}
+
+/* ── FLOATING PARTICLES ───────────────────────────────────── */
+#particles { position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+.particle {
+  position:absolute; border-radius:50%;
+  background: radial-gradient(circle, rgba(201,149,74,0.6), transparent 70%);
+  pointer-events:none;
+  animation: floatPart linear infinite;
+  opacity:0;
+}
+@keyframes floatPart {
+  0%   { opacity:0; transform:translateY(0) scale(0.5); }
+  10%  { opacity:1; }
+  90%  { opacity:.4; }
+  100% { opacity:0; transform:translateY(-120vh) scale(1.2) rotate(360deg); }
+}
+
+/* ── FINAL REVEAL ─────────────────────────────────────────── */
+#final {
+  position:fixed; inset:0; z-index:30;
+  background: linear-gradient(165deg, var(--brown1) 0%, var(--dark) 40%, var(--mid) 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition: opacity .8s ease;
+  padding: 40px;
+  text-align:center;
+}
+#final.on { opacity:1; pointer-events:auto; }
+
+#final::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 40%, rgba(176,120,64,0.12) 0%, transparent 70%),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 119px,
+      rgba(201,149,74,0.04) 120px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 119px,
+      rgba(201,149,74,0.04) 120px
+    );
+}
+
+.fin-pre {
+  font-family:var(--font-sans); font-size:9px; font-weight:200;
+  letter-spacing:.65em; color:var(--brown4); text-transform:uppercase;
+  margin-bottom:20px; position:relative;
+  display:flex; align-items:center; gap:16px;
+}
+.fin-pre::before,.fin-pre::after{
+  content:''; width:44px; height:1px;
+  background: linear-gradient(90deg, transparent, var(--brown4));
+}
+.fin-pre::after{ transform:scaleX(-1); }
+
+.fin-h2 {
+  font-family:var(--font-display);
+  font-size:clamp(36px,5.5vw,78px); font-weight:300;
+  color:var(--white); letter-spacing:.06em; position:relative;
+  line-height:1;
+}
+.fin-h2 em { color:var(--gold2); font-style:italic; display:block; }
+
+.fin-sub {
+  font-family:var(--font-serif); font-size:clamp(14px,1.3vw,18px);
+  font-style:italic; font-weight:300;
+  color:rgba(240,210,150,0.45); margin-top:18px;
+  max-width:520px; letter-spacing:.04em; position:relative;
+}
+
+.fin-divider {
+  width:120px; height:1px; margin:32px auto;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  position:relative;
+}
+.fin-divider::before{
+  content:'◆'; position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  color:var(--gold); font-size:6px;
+  background:var(--dark); padding:0 6px;
+}
+
+.fin-ctas { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; position:relative; }
+
+.cta-prim {
+  padding: 16px 52px;
+  background: linear-gradient(135deg, var(--brown3), var(--brown2));
+  border: 1px solid var(--brown4);
+  color: var(--cream1);
+  font-family:var(--font-sans); font-size:9px; font-weight:300;
+  letter-spacing:.45em; text-transform:uppercase;
+  text-decoration:none; cursor:none;
+  transition: all .4s ease;
+  position:relative; overflow:hidden;
+}
+.cta-prim::after{
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, var(--gold), var(--brown3));
+  opacity:0; transition: opacity .4s;
+}
+.cta-prim:hover::after{ opacity:1; }
+.cta-prim:hover { border-color:var(--gold); }
+.cta-prim span { position:relative; z-index:1; }
+
+.cta-sec {
+  padding: 16px 52px;
+  background: transparent;
+  border: 1px solid rgba(201,149,74,0.3);
+  color: rgba(240,210,150,0.6);
+  font-family:var(--font-sans); font-size:9px; font-weight:200;
+  letter-spacing:.45em; text-transform:uppercase;
+  text-decoration:none; cursor:none;
+  transition: all .4s ease;
+}
+.cta-sec:hover { border-color:var(--gold2); color:var(--gold2); }
+
+/* ── STAGE TITLE OVERLAY ──────────────────────────────────── */
+#stage-title {
+  position:fixed; bottom:52px; left:52px;
+  z-index:20; pointer-events:none;
+  opacity:0; transition: opacity .5s, transform .5s cubic-bezier(.22,1,.36,1);
+  transform:translateY(14px);
+}
+#stage-title.vis { opacity:1; transform:translateY(0); }
+
+.st-name {
+  font-family:var(--font-display); font-size:clamp(12px,1.2vw,16px);
+  font-weight:300; font-style:italic; color:var(--brown4);
+  letter-spacing:.12em;
+}
+.st-prog {
+  font-family:var(--font-sans); font-size:8px;
+  font-weight:200; letter-spacing:.4em;
+  color:rgba(200,160,80,0.3); text-transform:uppercase; margin-top:3px;
+}
+
+/* ── GOLD LINE DECORATIONS ────────────────────────────────── */
+.corner-tl, .corner-br {
+  position:fixed; width:60px; height:60px; z-index:20; pointer-events:none;
+  opacity:.35;
+}
+.corner-tl { top:12px; left:12px; border-top:1px solid var(--gold); border-left:1px solid var(--gold); }
+.corner-br { bottom:12px; right:12px; border-bottom:1px solid var(--gold); border-right:1px solid var(--gold); }
+
+/* ── ASPECT BADGE ─────────────────────────────────────────── */
+.badge {
+  position:fixed; bottom:38px; right:52px;
+  z-index:20; pointer-events:none;
+  display:flex; flex-direction:column; align-items:flex-end;
+}
+.badge-val {
+  font-family:var(--font-display); font-size:9px; font-weight:300;
+  font-style:italic; color:rgba(201,149,74,0.4); letter-spacing:.15em;
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="ld-brand">AMS Interior<em>®</em></div>
+  <p class="ld-tagline">Premium Modular Kitchens — Aluminium Craftsmanship</p>
+  <div class="ld-bar-wrap"><div class="ld-bar"></div></div>
+  <div class="ld-pct" id="ld-pct">Preparing your experience</div>
+</div>
+
+<!-- CURSOR -->
+<div id="c-dot"></div><div id="c-ring"></div>
+
+<!-- CANVAS -->
+<div id="canvas-wrap"><canvas id="c"></canvas></div>
+
+<!-- GRAIN + VIGNETTE -->
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<!-- PARTICLES -->
+<div id="particles"></div>
+
+<!-- CORNER DECO -->
+<div class="corner-tl"></div>
+<div class="corner-br"></div>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="hd-logo">AMS Interior<sup>®</sup></div>
+  <nav class="hd-nav">
+    <a class="hd-link act" href="#">Studio</a>
+    <a class="hd-link" href="#">Materials</a>
+    <a class="hd-link" href="#">Process</a>
+    <a class="hd-link" href="#">Contact</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-eyebrow">Bespoke Aluminium Kitchens</div>
+  <h1 class="hero-h1">
+    <span class="line1">THE</span>
+    <span class="line2">Kitchen</span>
+    <span class="line3">Scroll to Discover</span>
+  </h1>
+  <p class="hero-desc">Where warm timber tones meet precision-milled aluminium — a kitchen sculpted from the finest materials on earth.</p>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-wire"></div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">Progress</div>
+  <div class="prog-rail"><div id="prog-bar"></div></div>
+</div>
+<div id="prog-dots" class="prog-dots" style="position:fixed;right:22px;top:50%;transform:translateY(-50%);margin-top:98px;z-index:20;display:flex;flex-direction:column;gap:18px;"></div>
+
+<!-- STAGE TITLE -->
+<div id="stage-title">
+  <div class="st-name" id="st-name"></div>
+  <div class="st-prog" id="st-prog"></div>
+</div>
+
+<!-- BADGE -->
+<div class="badge">
+  <div class="badge-val">3D Interactive</div>
+  <div class="badge-val" style="font-size:7px;opacity:.5;letter-spacing:.3em;">LIVE RENDER</div>
+</div>
+
+<!-- COMPONENT LABELS (Left side) -->
+<div id="lbl0" class="clabel" style="left:6vw;top:60vh">
+  <div class="cl-num">01</div>
+  <div class="cl-title">Italian Marble Floor</div>
+  <div class="cl-mat">600×600mm Checkered · Honed</div>
+  <div class="cl-divider"></div>
+  <div class="cl-specs">
+    <div class="cl-spec">Premium Black &amp; Cream Marble Tiles</div>
+    <div class="cl-spec">Anti-slip Micro-texture Surface</div>
+    <div class="cl-spec">Book-matched Gold Veining</div>
+    <div class="cl-spec">18mm Slab Thickness</div>
+  </div>
+</div>
+
+<div id="lbl1" class="clabel" style="left:5vw;top:52vh">
+  <div class="cl-num">02</div>
+  <div class="cl-title">Integrated Washer</div>
+  <div class="cl-mat">Front Load · Under-counter</div>
+  <div class="cl-divider"></div>
+  <div class="cl-specs">
+    <div class="cl-spec">8kg Drum · Inverter A+++ Motor</div>
+    <div class="cl-spec">Seamless Cabinet Integration</div>
+    <div class="cl-spec">Brushed Steel + Digital Panel</div>
+    <div class="cl-spec">15 Auto-programmes · 1400 RPM</div>
+  </div>
+</div>
+
+<div id="lbl2" class="clabel" style="left:5vw;top:44vh">
+  <div class="cl-num">03</div>
+  <div class="cl-title">Lower Cabinets</div>
+  <div class="cl-mat">Aluminium Composite · High Gloss</div>
+  <div class="cl-divider"></div>
+  <div class="cl-specs">
+    <div class="cl-spec">18mm Aluminium Extrusion Frame</div>
+    <div class="cl-spec">Charcoal Graphite High-gloss Finish</div>
+    <div class="cl-spec">Solid Gold Bar Handles · Soft-close</div>
+    <div class="cl-spec">Full-extension Tandem Drawers</div>
+  </div>
+</div>
+
+<!-- Right side labels -->
+<div id="lbl3" class="clabel right" style="right:6vw;top:52vh;text-align:right">
+  <div class="cl-num" style="flex-direction:row-reverse">03</div>
+  <div class="cl-title">Calacatta Counter</div>
+  <div class="cl-mat">Engineered Stone · 20mm Polished</div>
+  <div class="cl-divider" style="background:linear-gradient(90deg,transparent,rgba(176,120,64,.35))"></div>
+  <div class="cl-specs">
+    <div class="cl-spec" style="flex-direction:row-reverse">Calacatta Black — Full Slab</div>
+    <div class="cl-spec" style="flex-direction:row-reverse">Undermount Sink Integration</div>
+    <div class="cl-spec" style="flex-direction:row-reverse">Seamless Hob Cut-out</div>
+    <div class="cl-spec" style="flex-direction:row-reverse">Waterfall Edge Profile</div>
+  </div>
+</div>
+
+<div id="lbl4" class="clabel right" style="right:6vw;top:38vh;text-align:right">
+  <div class="cl-num" style="flex-direction:row-reverse">05</div>
+  <div class="cl-title">Marble Backsplash</div>
+  <div class="cl-mat">Calacatta Gold · Book-matched</div>
+  <div class="cl-divider" style="background:linear-gradient(90deg,transparent,rgba(176,120,64,.35))"></div>
+  <div class="cl-specs">
+    <div class="cl-spec" style="flex-direction:row-reverse">800×2400mm Full Slab Panel</div>
+    <div class="cl-spec" style="flex-direction:row-reverse">Dramatic Gold &amp; Cream Veining</div>
+    <div class="cl-spec" style="flex-direction:row-reverse">Mirror-polished Surface Finish</div>
+  </div>
+</div>
+
+<div id="lbl5" class="clabel" style="left:5vw;top:28vh">
+  <div class="cl-num">06</div>
+  <div class="cl-title">Upper Cabinets</div>
+  <div class="cl-mat">Aluminium + Ribbed Glass Shutters</div>
+  <div class="cl-divider"></div>
+  <div class="cl-specs">
+    <div class="cl-spec">Full-height Aluminium Frame Body</div>
+    <div class="cl-spec">Fluted Glass Inserts w/ LED Interior</div>
+    <div class="cl-spec">Solid Aluminium Panel Variants</div>
+    <div class="cl-spec">Recessed Touch-to-open System</div>
+  </div>
+</div>
+
+<div id="lbl6" class="clabel right" style="right:6vw;top:32vh;text-align:right">
+  <div class="cl-num" style="flex-direction:row-reverse">07</div>
+  <div class="cl-title">Built-in Refrigerator</div>
+  <div class="cl-mat">650L · Ribbed Aluminium Finish</div>
+  <div class="cl-divider" style="background:linear-gradient(90deg,transparent,rgba(176,120,64,.35))"></div>
+  <div class="cl-specs">
+    <div class="cl-spec" style="flex-direction:row-reverse">French Door · No-frost Technology</div>
+    <div class="cl-spec" style="flex-direction:row-reverse">Ribbed Aluminium Door Panel</div>
+    <div class="cl-spec" style="flex-direction:row-reverse">A++ Energy · 0dB Silent Mode</div>
+  </div>
+</div>
+
+<div id="lbl7" class="clabel right" style="right:6vw;top:18vh;text-align:right">
+  <div class="cl-num" style="flex-direction:row-reverse">08</div>
+  <div class="cl-title">Auto-clean Chimney</div>
+  <div class="cl-mat">Brushed Stainless · 1200m³/hr</div>
+  <div class="cl-divider" style="background:linear-gradient(90deg,transparent,rgba(176,120,64,.35))"></div>
+  <div class="cl-specs">
+    <div class="cl-spec" style="flex-direction:row-reverse">Touch-control Baffle Filter</div>
+    <div class="cl-spec" style="flex-direction:row-reverse">LED Task Lighting Array</div>
+    <div class="cl-spec" style="flex-direction:row-reverse">Auto-clean Oil Collection</div>
+  </div>
+</div>
+
+<div id="lbl8" class="clabel" style="left:5vw;top:10vh">
+  <div class="cl-num">09</div>
+  <div class="cl-title">False Ceiling Design</div>
+  <div class="cl-mat">Gypsum POP · Multi-tray LED Cove</div>
+  <div class="cl-divider"></div>
+  <div class="cl-specs">
+    <div class="cl-spec">Three-level Recessed Tray Profile</div>
+    <div class="cl-spec">Warm 3000K LED Cove Strip Light</div>
+    <div class="cl-spec">6 Recessed Adjustable Spotlights</div>
+    <div class="cl-spec">Ceiling Fan — 1200mm Sweep</div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div id="final">
+  <div class="fin-pre">Complete Kitchen</div>
+  <h2 class="fin-h2">Zero Compromises<em>Every Detail Matters</em></h2>
+  <p class="fin-sub">Nine layers of precision craft — from the marble floor to the cove-lit ceiling. Your kitchen, fully assembled.</p>
+  <div class="fin-divider"></div>
+  <div class="fin-ctas">
+    <a class="cta-prim" href="#"><span>Request a Consultation</span></a>
+    <a class="cta-sec" href="#">View Full Catalogue</a>
+  </div>
+</div>
+
+<div class="scroll-space"></div>
+
+<script>
+/* ============================================================
+   AURELIA — Three.js Engine v2.0
+   Brown & White Luxury Modular Kitchen
+   ============================================================ */
+
+// ── LOADER ───────────────────────────────────────────────────
+const ldr = document.getElementById('loader');
+const lpct = document.getElementById('ld-pct');
+const msgs = ['Sourcing finest materials…','Calibrating lighting…','Polishing surfaces…','Ready'];
+let mi=0;
+const lt = setInterval(()=>{ if(mi<msgs.length){lpct.textContent=msgs[mi++];} else {clearInterval(lt);} },500);
+setTimeout(()=>{ ldr.classList.add('out'); },2200);
+
+// ── CURSOR ────────────────────────────────────────────────────
+const cdot=document.getElementById('c-dot'), cring=document.getElementById('c-ring');
+let mx=window.innerWidth/2, my=window.innerHeight/2;
+let rx=mx, ry=my;
+window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+function lerpCursor(){
+  rx+=(mx-rx)*0.14; ry+=(my-ry)*0.14;
+  cdot.style.left=mx+'px'; cdot.style.top=my+'px';
+  cring.style.left=rx+'px'; cring.style.top=ry+'px';
+  requestAnimationFrame(lerpCursor);
+}
+lerpCursor();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ cring.style.width='64px'; cring.style.height='64px'; cring.style.borderColor='rgba(201,149,74,0.9)'; });
+  el.addEventListener('mouseleave',()=>{ cring.style.width='40px'; cring.style.height='40px'; cring.style.borderColor='rgba(201,149,74,0.5)'; });
+});
+
+// ── PARTICLES ─────────────────────────────────────────────────
+const pWrap = document.getElementById('particles');
+for(let i=0;i<18;i++){
+  const p=document.createElement('div'); p.className='particle';
+  const s=3+Math.random()*6;
+  p.style.cssText=`
+    width:${s}px;height:${s}px;
+    left:${Math.random()*100}%;
+    bottom:${Math.random()*-20}px;
+    animation-duration:${14+Math.random()*20}s;
+    animation-delay:${Math.random()*12}s;
+    opacity:0;
+  `;
+  pWrap.appendChild(p);
+}
+
+// ── RENDERER ──────────────────────────────────────────────────
+const canvas=document.getElementById('c');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.05;
+
+// ── SCENE ────────────────────────────────────────────────────
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x100804);
+scene.fog=new THREE.FogExp2(0x120a04,0.028);
+
+// ── CAMERA ───────────────────────────────────────────────────
+const camera=new THREE.PerspectiveCamera(44,window.innerWidth/window.innerHeight,0.1,100);
+camera.position.set(0,2.4,9.5);
+
+// ── LIGHTS ───────────────────────────────────────────────────
+const amb = new THREE.AmbientLight(0xffeedd,0.3); scene.add(amb);
+
+const sun=new THREE.DirectionalLight(0xfff6e8,1.3);
+sun.position.set(4,10,5); sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+sun.shadow.camera.left=-9; sun.shadow.camera.right=9;
+sun.shadow.camera.top=9; sun.shadow.camera.bottom=-5;
+scene.add(sun);
+
+const fill=new THREE.DirectionalLight(0xffe4b0,0.5); fill.position.set(-5,4,4); scene.add(fill);
+const back=new THREE.DirectionalLight(0x3322bb,0.2); back.position.set(0,2,-6); scene.add(back);
+
+const coveL=new THREE.PointLight(0xffcc44,4.0,9); coveL.position.set(0,3.42,-0.4); scene.add(coveL);
+const coveR=new THREE.PointLight(0xffaa33,2.5,7); coveR.position.set(-2,3.5,1); scene.add(coveR);
+
+const spot=new THREE.SpotLight(0xfff4e0,2.2,16,0.32,0.5);
+spot.position.set(0,4.2,1.5); spot.target.position.set(0,0,-2);
+spot.castShadow=true; scene.add(spot); scene.add(spot.target);
+
+// ── TEXTURE FACTORY ──────────────────────────────────────────
+function mkCheckerFloor(){
+  const cv=document.createElement('canvas'); cv.width=cv.height=1024;
+  const ctx=cv.getContext('2d');
+  const sz=128;
+  for(let i=0;i<8;i++) for(let j=0;j<8;j++){
+    if((i+j)%2===0){
+      const g=ctx.createRadialGradient(i*sz+sz/2,j*sz+sz/2,0,i*sz+sz/2,j*sz+sz/2,sz*.7);
+      g.addColorStop(0,'#f8f3eb'); g.addColorStop(1,'#ddd6c6');
+      ctx.fillStyle=g;
+    } else {
+      const g=ctx.createRadialGradient(i*sz+sz/2,j*sz+sz/2,0,i*sz+sz/2,j*sz+sz/2,sz*.7);
+      g.addColorStop(0,'#141210'); g.addColorStop(1,'#080606');
+      ctx.fillStyle=g;
+    }
+    ctx.fillRect(i*sz,j*sz,sz,sz);
+    // Veins on cream tiles
+    if((i+j)%2===0){
+      ctx.save();
+      for(let v=0;v<3;v++){
+        ctx.strokeStyle=`rgba(${140+Math.random()*40},${100+Math.random()*30},${40+Math.random()*20},0.18)`;
+        ctx.lineWidth=0.8+Math.random()*1.5;
+        ctx.beginPath();
+        ctx.moveTo(i*sz+Math.random()*sz,j*sz+Math.random()*sz);
+        ctx.bezierCurveTo(
+          i*sz+Math.random()*sz, j*sz+Math.random()*sz,
+          i*sz+Math.random()*sz, j*sz+Math.random()*sz,
+          i*sz+Math.random()*sz, j*sz+Math.random()*sz
+        );
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+  const t=new THREE.CanvasTexture(cv);
+  t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(4.5,3.5); return t;
+}
+
+function mkMarble(dark=false,w=1024,h=512){
+  const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+  const ctx=cv.getContext('2d');
+  if(dark){
+    ctx.fillStyle='#131210'; ctx.fillRect(0,0,w,h);
+    for(let i=0;i<16;i++){
+      const al=0.15+Math.random()*0.25;
+      ctx.strokeStyle=`rgba(${50+Math.random()*30},${40+Math.random()*20},${20+Math.random()*15},${al})`;
+      ctx.lineWidth=0.3+Math.random()*2.5;
+      drawV(ctx,w,h);
+    }
+  } else {
+    const g=ctx.createLinearGradient(0,0,w,h);
+    g.addColorStop(0,'#ede0c0'); g.addColorStop(.28,'#f5ead2'); g.addColorStop(.55,'#e8d6ae'); g.addColorStop(.8,'#f2e4c4'); g.addColorStop(1,'#ece0c0');
+    ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+    for(let i=0;i<14;i++){
+      ctx.strokeStyle=`rgba(${170+Math.random()*50},${110+Math.random()*40},${30+Math.random()*30},${0.2+Math.random()*0.3})`;
+      ctx.lineWidth=0.8+Math.random()*3.5;
+      drawV(ctx,w,h);
+    }
+    // brown wood-like accent
+    for(let i=0;i<4;i++){
+      ctx.strokeStyle=`rgba(120,70,20,${0.08+Math.random()*0.12})`;
+      ctx.lineWidth=3+Math.random()*6;
+      drawV(ctx,w,h);
+    }
+  }
+  return new THREE.CanvasTexture(cv);
+}
+function drawV(ctx,w,h){
+  ctx.beginPath();
+  let x=Math.random()*w,y=Math.random()*h;
+  ctx.moveTo(x,y);
+  for(let i=0;i<6;i++){
+    const cx1=x+(Math.random()-.5)*w*.5, cy1=y+(Math.random()-.5)*h*.5;
+    x+=(Math.random()-.35)*w*.4; y+=(Math.random()-.35)*h*.4;
+    ctx.quadraticCurveTo(cx1,cy1,x,y);
+  }
+  ctx.stroke();
+}
+
+function mkWood(dark=true){
+  const cv=document.createElement('canvas'); cv.width=cv.height=512;
+  const ctx=cv.getContext('2d');
+  const base=dark?'#3a1e0a':'#6b3e1e';
+  ctx.fillStyle=base; ctx.fillRect(0,0,512,512);
+  for(let i=0;i<60;i++){
+    const bright=Math.random()<0.3;
+    ctx.strokeStyle=bright
+      ?`rgba(${90+Math.random()*40},${45+Math.random()*25},${10+Math.random()*10},0.45)`
+      :`rgba(${20+Math.random()*18},${10+Math.random()*10},3,0.55)`;
+    ctx.lineWidth=0.5+Math.random()*2.5;
+    ctx.beginPath();
+    const y=Math.random()*512;
+    ctx.moveTo(0,y);
+    ctx.bezierCurveTo(160,y+(Math.random()-.5)*16,352,y+(Math.random()-.5)*16,512,y+(Math.random()-.5)*10);
+    ctx.stroke();
+  }
+  const t=new THREE.CanvasTexture(cv);
+  t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(1,2); return t;
+}
+
+function mkRibAlum(){
+  const cv=document.createElement('canvas'); cv.width=256; cv.height=512;
+  const ctx=cv.getContext('2d');
+  for(let i=0;i<256;i++){
+    const v=Math.floor(18+Math.sin(i*0.24)*11+Math.sin(i*0.48)*4+Math.sin(i*0.96)*2);
+    const g=ctx.createLinearGradient(i,0,i+1,0);
+    g.addColorStop(0,`rgb(${v},${v},${v})`);
+    g.addColorStop(1,`rgb(${v+5},${v+5},${v+5})`);
+    ctx.fillStyle=g; ctx.fillRect(i,0,1,512);
+  }
+  return new THREE.CanvasTexture(cv);
+}
+
+function mkFlutedGlass(){
+  const cv=document.createElement('canvas'); cv.width=256; cv.height=512;
+  const ctx=cv.getContext('2d');
+  const bg=ctx.createLinearGradient(0,0,0,512);
+  bg.addColorStop(0,'rgba(180,170,160,0.15)');bg.addColorStop(1,'rgba(220,210,190,0.08)');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,256,512);
+  for(let i=0;i<256;i++){
+    const v=Math.floor(85+Math.sin(i*0.28)*38+Math.cos(i*0.14)*12);
+    ctx.fillStyle=`rgba(${v+35},${v+38},${v+42},0.6)`;
+    ctx.fillRect(i,0,1,512);
+  }
+  return new THREE.CanvasTexture(cv);
+}
+
+function mkGraniteCounter(){
+  const cv=document.createElement('canvas'); cv.width=1024; cv.height=256;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle='#111111'; ctx.fillRect(0,0,1024,256);
+  for(let i=0;i<2000;i++){
+    const x=Math.random()*1024, y=Math.random()*256;
+    const r=Math.random()*2.5;
+    const v=Math.floor(20+Math.random()*45);
+    ctx.fillStyle=`rgba(${v+10},${v},${v-5},0.7)`;
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  }
+  // gold flecks
+  for(let i=0;i<200;i++){
+    ctx.fillStyle=`rgba(${160+Math.random()*60},${110+Math.random()*40},${20+Math.random()*20},0.5)`;
+    ctx.beginPath(); ctx.arc(Math.random()*1024,Math.random()*256,Math.random()*1.5,0,Math.PI*2); ctx.fill();
+  }
+  return new THREE.CanvasTexture(cv);
+}
+
+// ── MATERIALS ─────────────────────────────────────────────────
+const floorTex=mkCheckerFloor();
+const marbleTex=mkMarble(false);
+const dmarbleTex=mkMarble(true);
+const woodTex=mkWood(true);
+const woodLtTex=mkWood(false);
+const ribAlum=mkRibAlum();
+const flutGlass=mkFlutedGlass();
+const graniteTex=mkGraniteCounter();
+
+const M = {
+  floor:   new THREE.MeshStandardMaterial({map:floorTex,metalness:.22,roughness:.18}),
+  cabinet: new THREE.MeshStandardMaterial({color:0x1a1a1a,metalness:.9,roughness:.08}),
+  cabiGl:  new THREE.MeshStandardMaterial({color:0x1c1c1c,metalness:.94,roughness:.04,envMapIntensity:1.2}),
+  glass:   new THREE.MeshStandardMaterial({map:flutGlass,metalness:.1,roughness:.02,transparent:true,opacity:.38,color:0x9099a8}),
+  glassLit:new THREE.MeshStandardMaterial({color:0x8090a8,metalness:.12,roughness:.03,transparent:true,opacity:.35,emissive:0xffe8bb,emissiveIntensity:.28}),
+  counter: new THREE.MeshStandardMaterial({map:graniteTex,metalness:.42,roughness:.1}),
+  marble:  new THREE.MeshStandardMaterial({map:marbleTex,metalness:.06,roughness:.22}),
+  wood:    new THREE.MeshStandardMaterial({map:woodTex,metalness:.0,roughness:.72}),
+  woodLt:  new THREE.MeshStandardMaterial({map:woodLtTex,metalness:.0,roughness:.65}),
+  ribbed:  new THREE.MeshStandardMaterial({map:ribAlum,metalness:.8,roughness:.14,color:0x1f1e1d}),
+  gold:    new THREE.MeshStandardMaterial({color:0xc8934a,metalness:.96,roughness:.07}),
+  chrome:  new THREE.MeshStandardMaterial({color:0xb0b0b0,metalness:1.,roughness:.04}),
+  white:   new THREE.MeshStandardMaterial({color:0xf3f0ea,metalness:0,roughness:.88}),
+  cream:   new THREE.MeshStandardMaterial({color:0xe8d8b0,metalness:0,roughness:.82}),
+  dark:    new THREE.MeshStandardMaterial({color:0x0d0c0b,metalness:.4,roughness:.4}),
+  glow:    new THREE.MeshStandardMaterial({color:0xffcc44,emissive:0xffaa22,emissiveIntensity:2.8,metalness:.0,roughness:1}),
+  spot:    new THREE.MeshStandardMaterial({color:0xffffff,emissive:0xffffff,emissiveIntensity:3.5}),
+  sink:    new THREE.MeshStandardMaterial({color:0x161615,metalness:.85,roughness:.16}),
+  screen:  new THREE.MeshStandardMaterial({color:0x001133,emissive:0x0033aa,emissiveIntensity:.9}),
+  fanBl:   new THREE.MeshStandardMaterial({color:0x0c0b0a,metalness:.25,roughness:.58}),
+  wallCrm: new THREE.MeshStandardMaterial({color:0xf5f0e8,metalness:0,roughness:.92}),
+  wallBrn: new THREE.MeshStandardMaterial({color:0x1e1008,metalness:0,roughness:.78}),
+  brownAcc:new THREE.MeshStandardMaterial({color:0x8b5630,metalness:.08,roughness:.62}),
+};
+
+// ── HELPERS ───────────────────────────────────────────────────
+const B=(w,h,d,m)=>new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);
+const Cy=(rt,rb,h,s,m)=>new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,s),m);
+const Sp=(r,m)=>new THREE.Mesh(new THREE.SphereGeometry(r,12,12),m);
+const Tr=(R,r,s,m)=>new THREE.Mesh(new THREE.TorusGeometry(R,r,8,s),m);
+function add(p,o,x=0,y=0,z=0){ o.position.set(x,y,z); o.castShadow=true; o.receiveShadow=true; p.add(o); return o; }
+
+// ── BUILD KITCHEN ─────────────────────────────────────────────
+const K=new THREE.Group(); scene.add(K);
+
+/* FLOOR */
+const fG=new THREE.Group(); K.add(fG);
+const flMesh=B(12,0.07,10,M.floor); flMesh.receiveShadow=true; add(fG,flMesh,0,0,0);
+// Skirting boards (warm brown)
+add(fG,B(12,0.09,0.055,M.brownAcc),0,0.045,-3.5);
+add(fG,B(0.055,0.09,10,M.brownAcc),-5.5,0.045,0);
+// Grout lines (subtle dark grid)
+for(let gx=-5;gx<=5;gx+=0.6){
+  const gl=B(0.008,0.07,10,M.dark); gl.receiveShadow=false;
+  add(fG,gl,gx,0,0);
+}
+
+/* WALLS */
+const wG=new THREE.Group(); K.add(wG);
+const bkWall=B(12,6.5,0.1,M.wallCrm); add(wG,bkWall,0,3.25,-3.55);
+const ltWall=B(0.1,6.5,10,M.wallCrm); add(wG,ltWall,-5.55,3.25,0);
+const rtWall=B(0.1,6.5,5,M.wallCrm); add(wG,rtWall,5.05,3.25,-1.25);
+
+// Brown accent wall panels — vertical ribbed wood panel on left
+add(wG,B(0.06,4.2,1.4,M.wood),-3.9,2.1,-1.5);
+// Horizontal wainscoting on back wall, lower third
+add(wG,B(12,1.1,0.065,M.cream),0,0.55,-3.51);
+add(wG,B(12,0.03,0.065,M.gold),0,1.1,-3.51); // gold rail
+
+// Entrance columns (rich brown)
+add(wG,B(0.24,5.6,0.36,M.wood),-3.92,2.8,0.5);
+add(wG,B(0.24,5.6,0.36,M.wood),-3.92,2.8,-3.52);
+add(wG,B(0.24,0.28,4.02,M.wood),-3.92,5.54,-1.51);
+
+/* FALSE CEILING */
+const cgG=new THREE.Group(); K.add(cgG);
+add(cgG,B(13,0.15,11,M.white),0,3.92,0);
+add(cgG,B(9.5,0.12,7.0,M.white),0,3.7,-0.2);
+add(cgG,B(7.2,0.1,5.5,M.white),0,3.52,-0.2);
+// Gold moulding on outer tray
+add(cgG,B(9.52,0.04,0.04,M.gold),0,3.72,-3.7);
+add(cgG,B(9.52,0.04,0.04,M.gold),0,3.72,3.3);
+add(cgG,B(0.04,0.04,7.02,M.gold),-4.76,3.72,-0.2);
+add(cgG,B(0.04,0.04,7.02,M.gold),4.76,3.72,-0.2);
+// Cove LEDs warm
+[[-4.75,3.75,-0.2],[4.75,3.75,-0.2],[0,3.75,-3.7],[0,3.75,3.3]].forEach(([x,y,z])=>{
+  const horizontal=z!=-0.2||x===0;
+  const l=horizontal?B(9.5,0.05,0.1,M.glow):B(0.1,0.05,7.0,M.glow);
+  add(cgG,l,x,y,z);
+});
+// Spots
+[[-2.2,3.9,-1.8],[0,3.9,-1.8],[2.2,3.9,-1.8],[-1.1,3.9,0.4],[1.1,3.9,0.4],[3.3,3.9,-1.8]].forEach(([x,y,z])=>{
+  const sr=new THREE.Mesh(new THREE.CircleGeometry(0.092,18),M.spot); sr.rotation.x=-Math.PI/2; sr.position.set(x,y,z); cgG.add(sr);
+  const rim=Tr(0.1,0.015,20,M.chrome); rim.rotation.x=-Math.PI/2; rim.position.set(x,y-.01,z); cgG.add(rim);
+});
+
+/* FAN */
+const fanG=new THREE.Group(); fanG.position.set(0,3.52,-0.2); K.add(fanG);
+add(fanG,Cy(0.13,0.11,0.3,18,M.dark),0,0,0);
+add(fanG,Cy(0.026,0.026,0.38,8,M.dark),0,0.34,0);
+for(let i=0;i<3;i++){
+  const bg=new THREE.Group();
+  const blade=B(1.1,0.04,0.26,M.fanBl);
+  blade.position.set(0.54,-0.12,0);
+  blade.rotation.z=-0.04;
+  bg.add(blade);
+  bg.rotation.y=(i/3)*Math.PI*2;
+  fanG.add(bg);
+}
+const fanLt=Sp(0.065,M.spot); add(fanG,fanLt,0,-0.18,0);
+
+/* LOWER CABS */
+const lcG=new THREE.Group(); K.add(lcG);
+function makeLcab(x,w=0.78){
+  const g=new THREE.Group();
+  const bd=B(w-.025,0.86,0.57,M.cabinet); add(g,bd,x,0.43,-3.02+.57/2);
+  const dr=B(w-.06,0.8,0.04,M.cabiGl); add(g,dr,x,0.43,-3.02+.57+.02);
+  // gold horizontal bar handle
+  const h=B(w*.55,0.024,0.024,M.gold); add(g,h,x,0.3,-3.02+.57+.042);
+  // thin gold edge on door
+  const edL=B(0.01,0.8,0.01,M.gold); add(g,edL,x-w/2+.012,0.43,-3.02+.57+.02);
+  const edR=B(0.01,0.8,0.01,M.gold); add(g,edR,x+w/2-.012,0.43,-3.02+.57+.02);
+  return g;
+}
+[-2.4,-1.62,-0.84,-0.06,0.72].forEach(x=>lcG.add(makeLcab(x)));
+lcG.add(makeLcab(3.5,1.02));
+
+/* WASHING MACHINE */
+const wmG=new THREE.Group(); K.add(wmG);
+add(wmG,B(0.76,0.84,0.56,M.cabiGl),-3.2,0.42,-3.02+.56/2);
+add(wmG,B(0.76,0.84,0.02,M.cabiGl),-3.2,0.42,-3.02+.56+.01);
+const wOtr=Tr(0.27,0.036,32,M.chrome); wOtr.rotation.x=-Math.PI/2; wOtr.position.set(-3.2,0.42,-3.02+.57+.025); wmG.add(wOtr);
+const wGl=new THREE.Mesh(new THREE.CircleGeometry(0.235,32),M.glassLit); wGl.rotation.x=-Math.PI/2; wGl.position.set(-3.2,0.42,-3.02+.57+.02); wmG.add(wGl);
+const wInr=Tr(0.135,0.02,16,M.chrome); wInr.rotation.x=-Math.PI/2; wInr.position.set(-3.2,0.42,-3.02+.57+.03); wmG.add(wInr);
+// Cross inside drum
+add(wmG,B(0.25,0.01,0.01,M.dark),-3.2,0.42,-3.02+.57+.03);
+add(wmG,B(0.01,0.25,0.01,M.dark),-3.2,0.42,-3.02+.57+.03);
+add(wmG,B(0.28,0.056,0.01,M.screen),-3.2,0.78,-3.02+.57+.022);
+add(wmG,Cy(0.023,0.023,0.01,6,M.gold),-3.35,0.72,-3.02+.57+.025);
+
+/* COUNTERTOP */
+const ctG=new THREE.Group(); K.add(ctG);
+const ctW=B(7.8,0.07,0.68,M.counter); add(ctG,ctW,-0.2,0.9,-3.02+.68/2);
+add(ctG,B(1.08,0.07,0.68,M.counter),3.5,0.9,-3.02+.68/2);
+// Waterfall side edge
+add(ctG,B(0.07,0.9,0.68,M.counter),-4.1,0.45,-3.02+.68/2);
+// Sink
+add(ctG,B(0.68,0.12,0.44,M.sink),0.3,0.84,-3.02+.68/2);
+add(ctG,B(0.52,0.056,0.3,M.dark),0.3,0.79,-3.02+.68/2);
+// Faucet (tall arc)
+const fBs=Cy(.029,.033,.08,8,M.chrome); add(ctG,fBs,0.3,0.94,-3.02+.18);
+const fNk=Cy(.015,.015,.28,8,M.chrome); add(ctG,fNk,0.3,1.1,-3.02+.18);
+const fArm=B(.22,.018,.018,M.chrome); add(ctG,fArm,0.3,1.22,-3.02+.29);
+const fHd=Cy(.026,.018,.042,8,M.chrome); fHd.rotation.x=Math.PI/2; add(ctG,fHd,0.3,1.22,-3.02+.38);
+
+/* BACKSPLASH */
+const bsG=new THREE.Group(); K.add(bsG);
+add(bsG,B(7.8,0.95,0.065,M.marble),-0.2,1.4,-3.525);
+add(bsG,B(1.08,0.95,0.065,M.marble),3.5,1.4,-3.525);
+
+/* UPPER CABS */
+const ucG=new THREE.Group(); K.add(ucG);
+function makeUcab(x,w=0.78,glass=false){
+  const g=new THREE.Group();
+  const bd=B(w-.025,1.04,0.44,M.cabinet); add(g,bd,x,2.37,-3.52+.44/2);
+  if(glass){
+    const fr=B(w-.04,.96,.04,M.cabinet); add(g,fr,x,2.37,-3.52+.44+.02);
+    const gd=B(w-.1,.88,.032,M.glassLit); add(g,gd,x,2.37,-3.52+.44+.03);
+    const led=B(w-.2,.028,.028,M.glow); add(g,led,x,2.85,-3.52+.1);
+  } else {
+    const dr=B(w-.04,.96,.04,M.cabiGl); add(g,dr,x,2.37,-3.52+.44+.02);
+  }
+  const hdl=B(w*.5,.024,.024,M.gold); add(g,hdl,x,1.93,-3.52+.44+.042);
+  const edL=B(.01,.96,.01,M.gold); add(g,edL,x-w/2+.012,2.37,-3.52+.44+.02);
+  const edR=B(.01,.96,.01,M.gold); add(g,edR,x+w/2-.012,2.37,-3.52+.44+.02);
+  return g;
+}
+[{x:-2.7,gl:false},{x:-1.92,gl:true},{x:-1.14,gl:false},{x:-0.36,gl:true},{x:0.42,gl:false},{x:1.2,gl:true},{x:1.98,gl:false}].forEach(d=>ucG.add(makeUcab(d.x,.76,d.gl)));
+
+/* REFRIGERATOR */
+const rfG=new THREE.Group(); K.add(rfG);
+const rfX=2.6;
+add(rfG,B(.76,2.04,.74,M.ribbed),rfX,1.02,-3.18);
+add(rfG,B(.038,.58,.038,M.gold),rfX+.35,1.32,-3.18+.39);
+const rfSeam=B(.74,.022,.74,M.dark); add(rfG,rfSeam,rfX,1.38,-3.18);
+// Top matching cabinet
+add(rfG,B(.76,.7,.44,M.cabinet),rfX,2.72,-3.52+.44/2);
+add(rfG,B(.72,.66,.04,M.cabiGl),rfX,2.72,-3.52+.44+.02);
+
+/* CHIMNEY */
+const chG=new THREE.Group(); K.add(chG);
+add(chG,B(.96,.52,.62,M.chrome),3.5,1.74,-3.22);
+add(chG,B(.42,.88,.4,M.cabinet),3.5,2.44,-3.4);
+add(chG,B(.36,.66,.32,M.cabinet),3.5,3.14,-3.43);
+add(chG,B(.92,.028,.14,M.spot),3.5,1.5,-3.07);
+add(chG,B(.92,.065,.58,M.chrome),3.5,1.5,-3.22);
+
+/* HOB */
+const hbG=new THREE.Group(); K.add(hbG);
+add(hbG,B(.9,.042,.65,M.dark),3.5,0.93,-3.02+.65/2);
+[[-0.22,-0.15],[0.22,-0.15],[-0.22,0.13],[0.22,0.13]].forEach(([bx2,bz])=>{
+  const br=Tr(.112,.022,28,M.chrome); br.rotation.x=-Math.PI/2; br.position.set(3.5+bx2,.955,-3.02+.325+bz); hbG.add(br);
+  const ic=new THREE.Mesh(new THREE.CircleGeometry(.086,16),M.dark); ic.rotation.x=-Math.PI/2; ic.position.set(3.5+bx2,.958,-3.02+.325+bz); hbG.add(ic);
+  const g1=B(.16,.015,.015,M.chrome); g1.position.set(3.5+bx2,.97,-3.02+.325+bz); hbG.add(g1);
+  const g2=B(.015,.015,.16,M.chrome); g2.position.set(3.5+bx2,.97,-3.02+.325+bz); hbG.add(g2);
+});
+add(hbG,B(.88,.072,.04,M.cabiGl),3.5,1.055,-3.02+.03);
+[-0.27,-.09,.09,.27].forEach(k=>{ const kn=Cy(.026,.022,.044,8,M.chrome); kn.rotation.z=Math.PI/2; kn.position.set(3.5+k,1.055,-3.02+.05); hbG.add(kn); });
+// Pan
+const pan=Cy(.13,.13,.065,16,M.chrome); add(hbG,pan,3.5-.22,.994,-3.02+.325-.15); pan.rotation.y=.4;
+
+/* OPEN SHELVES */
+const shG=new THREE.Group(); K.add(shG);
+add(shG,B(.74,1.3,.065,M.wood),4.65,1.82,-2.62);
+[1.28,1.76,2.24].forEach(sy=>add(shG,B(.74,.042,.34,M.woodLt),4.65,sy,-2.48));
+// Items on shelves
+const kt=Sp(.092,M.chrome); add(shG,kt,4.65,1.42,-2.48); add(shG,Cy(.026,.026,.18,8,M.chrome),4.65,1.545,-2.48);
+add(shG,Cy(.095,.086,.14,12,M.chrome),4.65,1.895,-2.48);
+add(shG,Tr(.095,.012,16,M.chrome),4.65,1.97,-2.48);
+add(shG,Cy(.11,.11,.26,12,M.white),4.5,1.88,-3.32); add(shG,B(.22,.12,.1,M.white),4.5,1.76,-3.38);
+
+const STAGES=[
+  {g:fG,   r:{x:0,y:0,z:0}, b:{x:0,y:-5,z:0},    lbl:'lbl0', name:'Italian Marble Floor'},
+  {g:wmG,  r:{x:0,y:0,z:0}, b:{x:-5.5,y:-.4,z:4}, lbl:'lbl1', name:'Integrated Washing Machine'},
+  {g:lcG,  r:{x:0,y:0,z:0}, b:{x:0,y:0,z:5.5},    lbl:'lbl2', name:'Lower Aluminium Cabinets'},
+  {g:ctG,  r:{x:0,y:0,z:0}, b:{x:0,y:3.5,z:4},    lbl:'lbl3', name:'Calacatta Countertop'},
+  {g:bsG,  r:{x:0,y:0,z:0}, b:{x:0,y:0,z:-5.5},   lbl:'lbl4', name:'Marble Backsplash'},
+  {g:ucG,  r:{x:0,y:0,z:0}, b:{x:0,y:5,z:0},      lbl:'lbl5', name:'Upper Glass Cabinets'},
+  {g:rfG,  r:{x:0,y:0,z:0}, b:{x:5.5,y:0,z:0},    lbl:'lbl6', name:'Built-in Refrigerator'},
+  {g:chG,  r:{x:0,y:0,z:0}, b:{x:4,y:5.5,z:0},    lbl:'lbl7', name:'Chimney Hood'},
+  {g:cgG,  r:{x:0,y:0,z:0}, b:{x:0,y:5.5,z:0},    lbl:'lbl8', name:'False Ceiling Design'},
+];
+const N=STAGES.length;
+
+// Prog dots
+const pd=document.getElementById('prog-dots');
+for(let i=0;i<N;i++){
+  const d=document.createElement('div');
+  d.className='pdot'; d.id=`pd${i}`; pd.appendChild(d);
+}
+
+let scrollP=0, smoothP=0;
+window.addEventListener('scroll',()=>{
+  const sc=document.documentElement.scrollHeight-window.innerHeight;
+  scrollP=Math.min(1,Math.max(0,window.scrollY/sc));
+},{passive:true});
+
+function ease(t){return t<.5?2*t*t:-1+(4-2*t)*t;}
+function lerp(a,b,t){return a+(b-a)*t;}
+
+function updateScene(p){
+  const sf=p*(N+0.6);
+  const ai=Math.floor(sf);
+  const af=sf-ai;
+
+  STAGES.forEach((s,i)=>{
+    let t=0;
+    if(i<ai) t=1;
+    else if(i===ai) t=ease(Math.min(1,af));
+    s.g.position.x=lerp(s.r.x,s.b.x,t);
+    s.g.position.y=lerp(s.r.y,s.b.y,t);
+    s.g.position.z=lerp(s.r.z,s.b.z,t);
+    // label
+    const lb=document.getElementById(s.lbl);
+    if(lb){
+      const show=(i===ai&&af>.28)||(i===ai-1&&af<.72);
+      lb.classList.toggle('vis',show);
+    }
+    const dp=document.getElementById(`pd${i}`);
+    if(dp) dp.classList.toggle('lit',i===ai);
+  });
+
+  // Hero
+  const ho=Math.max(0,1-p*10);
+  document.getElementById('hero').style.opacity=ho;
+
+  // Camera arc
+  const angle=p*0.38;
+  const rad=lerp(9.5,12.5,p);
+  camera.position.x=Math.sin(angle)*rad*0.22+lerp(0,.2,p);
+  camera.position.y=lerp(2.4,4.2,p);
+  camera.position.z=Math.cos(angle)*lerp(9.5,12.2,p);
+  camera.lookAt(lerp(0,.4,p),lerp(1.6,2.4,p),0);
+
+  // Exposure
+  renderer.toneMappingExposure=lerp(1.05,.9,p);
+  scene.fog.density=lerp(.028,.02,p);
+
+  // Progress
+  document.getElementById('prog-bar').style.height=(p*100)+'%';
+
+  // Stage title
+  const stEl=document.getElementById('stage-title');
+  const stNm=document.getElementById('st-name');
+  const stPr=document.getElementById('st-prog');
+  if(p>.01&&p<.97){
+    stEl.classList.add('vis');
+    stNm.textContent=STAGES[Math.min(ai,N-1)].name;
+    stPr.textContent=`Component ${Math.min(ai+1,N)} of ${N}`;
+  } else { stEl.classList.remove('vis'); }
+
+  // Final
+  document.getElementById('final').classList.toggle('on',p>.95);
+}
+
+// ── RENDER LOOP ───────────────────────────────────────────────
+const clock=new THREE.Clock(); let fanA=0;
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=clock.getDelta();
+  const t=clock.getElapsedTime();
+  smoothP+=(scrollP-smoothP)*.065;
+  updateScene(smoothP);
+  fanA+=dt*2.6; fanG.rotation.y=fanA;
+  coveL.intensity=3.8+Math.sin(t*.55)*.4;
+  coveR.intensity=2.2+Math.cos(t*.42)*.3;
+  renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener('resize',()=>{
+  const w=window.innerWidth,h=window.innerHeight;
+  camera.aspect=w/h; camera.updateProjectionMatrix();
+  renderer.setSize(w,h);
+});
+</script>
+</body>
+</html>
