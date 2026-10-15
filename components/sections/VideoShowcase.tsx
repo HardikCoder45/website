@@ -11,22 +11,22 @@ const TOURS = [
     {
         href: '/kitchen',
         title: 'The Modular Kitchen',
-        description: 'Walk around an island kitchen, open the shutters and see how every drawer is planned.',
-        thumbnail: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=900',
+        description: 'Five guided stops, day and evening lighting, and every finish switchable live with an instant estimate.',
+        thumbnail: '/renders/kitchen-evening.webp',
         tag: 'Kitchen',
     },
     {
         href: '/interior',
         title: 'The Living Suite',
-        description: 'Move through a full-home interior — false ceiling, lighting and furniture in one flow.',
-        thumbnail: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=900',
+        description: 'Restyle the walls, feature panel, floor and cove lighting, and swap the sofa — all in real time.',
+        thumbnail: '/renders/living-walnut.webp',
         tag: 'Interior',
     },
     {
         href: '/wardrobe',
         title: 'The Master Wardrobe',
-        description: 'Slide the doors, peek inside and explore custom internals designed around your wardrobe.',
-        thumbnail: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=80&w=900',
+        description: 'Open the doors, explore the hanging, drawer and loft bays, and try four shutter finishes.',
+        thumbnail: '/renders/wardrobe-open.webp',
         tag: 'Wardrobe',
     },
 ];
@@ -103,8 +103,8 @@ export default function VideoShowcase() {
                                 <img
                                     src={tour.thumbnail}
                                     alt=""
-                                    loading="lazy"
-                                    className="absolute inset-0 w-full h-full object-cover opacity-60 transition-all duration-1000 group-hover:opacity-45 group-hover:scale-110"
+                                    decoding="async"
+                                    className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-1000 group-hover:opacity-60 group-hover:scale-110"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
                                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{ background: 'radial-gradient(circle at 50% 120%, rgba(184,137,42,0.35), transparent 60%)' }} />

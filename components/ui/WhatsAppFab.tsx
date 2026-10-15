@@ -1,7 +1,17 @@
 'use client';
+import { useEffect, useState } from 'react';
 import { CONTACT_INFO } from '@/lib/data/config';
 
 export default function WhatsAppFab() {
+    // Stay out of the way of the hero's 3D controls; appear once it's scrolled past.
+    const [show, setShow] = useState(false);
+    useEffect(() => {
+        const hero = document.getElementById('hero-section');
+        if (!hero) return;
+        const obs = new IntersectionObserver(([e]) => setShow(!e.isIntersecting));
+        obs.observe(hero);
+        return () => obs.disconnect();
+    }, []);
     const href = `${CONTACT_INFO.whatsapp}?text=${encodeURIComponent('Hi AMS Interiors! I would like to know more about your interior services.')}`;
     return (
         <a
@@ -9,7 +19,8 @@ export default function WhatsAppFab() {
             target="_blank"
             rel="noreferrer"
             aria-label="Chat with AMS Interiors on WhatsApp"
-            className="group fixed right-4 bottom-24 md:right-auto md:bottom-8 md:left-8 z-40 flex items-center"
+            className={`group fixed right-4 bottom-24 md:right-auto md:bottom-8 md:left-8 z-40 flex items-center transition-all duration-500 ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6 pointer-events-none'}`}
+            tabIndex={show ? undefined : -1}
         >
             <span className="relative flex w-12 h-12 md:w-14 md:h-14 items-center justify-center rounded-full text-white shadow-2xl transition-transform duration-300 group-hover:scale-110" style={{ background: '#25D366' }}>
                 <span className="pulse-ring absolute inset-0 rounded-full" style={{ background: '#25D366' }} />

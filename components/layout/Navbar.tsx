@@ -87,7 +87,7 @@ export default function Navbar() {
                         className="flex items-center gap-2 shrink-0 group"
                         onClick={(e) => { e.preventDefault(); scrollToTarget(0); }}
                     >
-                        <LogoSVG light={!scrolled} />
+                        <LogoSVG />
                     </a>
 
                     {/* Desktop Nav Links */}
@@ -102,7 +102,7 @@ export default function Navbar() {
                                         aria-current={isActive ? 'true' : undefined}
                                         className="group/link relative text-sm font-body font-medium transition-colors duration-300 hover:text-brass py-2"
                                         style={{
-                                            color: isActive ? 'var(--color-brass)' : scrolled ? 'var(--color-mute)' : 'rgba(245,239,224,0.75)',
+                                            color: isActive ? 'var(--color-brass)' : 'var(--color-mute)',
                                             letterSpacing: '0.05em'
                                         }}
                                     >
@@ -134,13 +134,13 @@ export default function Navbar() {
                         <button
                             onClick={() => setMobileOpen(true)}
                             className="lg:hidden flex flex-col gap-1.5 p-3 rounded-xl transition-colors"
-                            style={{ background: scrolled ? 'rgba(44,36,22,0.05)' : 'rgba(245,239,224,0.08)' }}
+                            style={{ background: 'rgba(44,36,22,0.05)' }}
                             aria-label="Open menu"
                             aria-expanded={mobileOpen}
                         >
-                            <span className="block w-6 h-0.5 rounded" style={{ background: scrolled ? 'var(--color-charcoal)' : '#F5EFE0' }} />
-                            <span className="block w-6 h-0.5 rounded" style={{ background: scrolled ? 'var(--color-charcoal)' : '#F5EFE0' }} />
-                            <span className="block w-4 h-0.5 rounded self-end" style={{ background: scrolled ? 'var(--color-charcoal)' : '#F5EFE0' }} />
+                            <span className="block w-6 h-0.5 rounded" style={{ background: 'var(--color-charcoal)' }} />
+                            <span className="block w-6 h-0.5 rounded" style={{ background: 'var(--color-charcoal)' }} />
+                            <span className="block w-4 h-0.5 rounded self-end" style={{ background: 'var(--color-charcoal)' }} />
                         </button>
                     </div>
                 </div>

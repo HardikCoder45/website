@@ -11,6 +11,7 @@ import WhyUs from '@/components/sections/WhyUs';
 import ServicesSection from '@/components/sections/ServicesSection';
 import ProcessSection from '@/components/sections/ProcessSection';
 import VideoShowcase from '@/components/sections/VideoShowcase';
+import Showroom from '@/components/sections/Showroom';
 import GallerySection from '@/components/gallery/GallerySection';
 import EstimateCalculator from '@/components/calculator/EstimateCalculator';
 import Testimonials from '@/components/sections/Testimonials';
@@ -73,6 +74,7 @@ export default function Home() {
         <ServicesSection />
         <ProcessSection />
         <VideoShowcase />
+        <Showroom />
         <GallerySection />
         <EstimateCalculator />
         <Testimonials />

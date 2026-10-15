@@ -51,11 +51,13 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: "AMS Interiors",
     locale: "en_IN",
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "AMS Interiors — wenge island kitchen rendered in 3D" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "AMS Interiors — Spaces That Define Luxury",
     description: "Modular kitchens, wardrobes and turnkey interiors across Delhi NCR.",
+    images: ["/og.jpg"],
   },
   robots: { index: true, follow: true },
   formatDetection: { telephone: true },

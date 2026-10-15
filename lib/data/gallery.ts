@@ -1,5 +1,6 @@
 export type GalleryCategory =
     | "All"
+    | "3D Renders"
     | "Kitchen"
     | "Bedroom"
     | "Living Room"
@@ -22,6 +23,120 @@ export interface GalleryPhoto {
 }
 
 export const galleryPhotos: GalleryPhoto[] = [
+    {
+        id: "r1",
+        src: "/renders/kitchen-wenge.webp",
+        alt: "Wenge island kitchen with emerald zellige",
+        category: "3D Renders",
+        scope: "3D design render",
+        location: "AMS Design Studio",
+        materials: "Wenge veneer, Nero Marquina, champagne gold",
+        year: "2026",
+        tall: true,
+        story: "An island layout with a breakfast bar for three, LED-lit open shelving and a full-height emerald backsplash."
+    },
+    {
+        id: "r2",
+        src: "/renders/kitchen-evening.webp",
+        alt: "The same kitchen at night",
+        category: "3D Renders",
+        scope: "3D design render",
+        location: "AMS Design Studio",
+        materials: "Wenge veneer, under-cabinet LED, pendant lights",
+        year: "2026",
+        story: "Evening mode: under-cabinet strips, a floating island kick and warm pendants turn the kitchen into a lounge."
+    },
+    {
+        id: "r3",
+        src: "/renders/kitchen-ivory-island.webp",
+        alt: "Ivory matte kitchen with Calacatta quartz",
+        category: "3D Renders",
+        scope: "3D design render",
+        location: "AMS Design Studio",
+        materials: "Ivory matte, Calacatta quartz, polished chrome",
+        year: "2026",
+        story: "The identical layout re-specified in ivory and Calacatta — proof of how much finishes change a room."
+    },
+    {
+        id: "r4",
+        src: "/renders/kitchen-navy.webp",
+        alt: "Navy lacquer kitchen detail",
+        category: "3D Renders",
+        scope: "3D design render",
+        location: "AMS Design Studio",
+        materials: "Navy lacquer, Calacatta quartz, champagne gold",
+        year: "2026",
+        tall: true,
+        story: "A navy lacquer run with profile handles and LED strips under every wall cabinet."
+    },
+    {
+        id: "r5",
+        src: "/renders/kitchen-walnut-pantry.webp",
+        alt: "Walnut kitchen with terracotta backsplash",
+        category: "3D Renders",
+        scope: "3D design render",
+        location: "AMS Design Studio",
+        materials: "Natural walnut, terracotta tile, matte black",
+        year: "2026",
+        story: "Warm walnut with a terracotta splash and matte black hardware, viewed towards the tall pantry."
+    },
+    {
+        id: "r6",
+        src: "/renders/living-walnut.webp",
+        alt: "Living room with fluted walnut wall",
+        category: "3D Renders",
+        scope: "3D design render",
+        location: "AMS Design Studio",
+        materials: "Walnut fluted panel, honey oak floor, velvet sofa",
+        year: "2026",
+        tall: true,
+        story: "Fluted walnut feature wall, floating console, cove-lit false ceiling and a curved velvet sofa."
+    },
+    {
+        id: "r7",
+        src: "/renders/living-evening.webp",
+        alt: "Living room at night with amber cove light",
+        category: "3D Renders",
+        scope: "3D design render",
+        location: "AMS Design Studio",
+        materials: "Walnut panel, amber cove LED, leather sofa",
+        year: "2026",
+        story: "Amber cove lighting and a tufted leather sofa make the same room feel like a private lounge."
+    },
+    {
+        id: "r8",
+        src: "/renders/living-travertine.webp",
+        alt: "Clay-toned living room with travertine wall",
+        category: "3D Renders",
+        scope: "3D design render",
+        location: "AMS Design Studio",
+        materials: "Travertine panel, Italian marble floor, clay walls",
+        year: "2026",
+        story: "A softer palette — desert clay walls, travertine feature wall and Italian marble underfoot."
+    },
+    {
+        id: "r9",
+        src: "/renders/wardrobe-open.webp",
+        alt: "Four-door wardrobe, doors open",
+        category: "3D Renders",
+        scope: "3D design render",
+        location: "AMS Design Studio",
+        materials: "Smoked oak, bronze mirror, brushed gold",
+        year: "2026",
+        tall: true,
+        story: "Long hanging, shelving, a drawer bank and lofts — every bay planned around how you dress."
+    },
+    {
+        id: "r10",
+        src: "/renders/wardrobe-evening.webp",
+        alt: "Espresso wardrobe interior with LED",
+        category: "3D Renders",
+        scope: "3D design render",
+        location: "AMS Design Studio",
+        materials: "Espresso gloss, internal LED, chrome rails",
+        year: "2026",
+        story: "Internal LED strips switch on with the doors, so every shelf is lit at night."
+    },
     {
         id: "g1",
         src: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=800&auto=format&fit=crop",
@@ -131,6 +246,7 @@ export const galleryPhotos: GalleryPhoto[] = [
 
 export const galleryCategories: GalleryCategory[] = [
     "All",
+    "3D Renders",
     "Kitchen",
     "Bedroom",
     "Living Room",
