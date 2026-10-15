@@ -1,191 +1,228 @@
-'use client';
+"use client";
 import { useAppStore } from '@/lib/store/useAppStore';
-import { CONTACT_INFO } from '@/lib/data/config';
-import { useEffect, useRef } from 'react';
+import { CONTACT_INFO, STATS } from '@/lib/data/config';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import dynamic from 'next/dynamic';
+import { useCountUp } from '@/lib/hooks/useCountUp';
+import Magnetic from '@/components/ui/Magnetic';
 
 const HeroCanvas = dynamic(() => import('./HeroCanvas'), { ssr: false });
 
+const ROTATING_WORDS = ['Luxury', 'Comfort', 'Elegance', 'You'];
+
+const TOURS = [
+    { label: 'Kitchen 3D', href: '/kitchen' },
+    { label: 'Interior 3D', href: '/interior' },
+    { label: 'Wardrobe 3D', href: '/wardrobe' },
+];
+
+function Stat({ value, suffix, label, decimals = 0, delay }: { value: number; suffix: string; label: string; decimals?: number; delay: number }) {
+    const introDone = useAppStore((s) => s.introDone);
+    const { ref, display } = useCountUp<HTMLSpanElement>(value, { decimals, delay: delay + 1400, duration: 2000, enabled: introDone });
+    return (
+        <div className="hero-stats-item flex flex-col cursor-default opacity-0">
+            <span ref={ref} className="font-display text-3xl md:text-4xl font-bold tabular-nums" style={{ color: 'var(--color-brass-light)' }}>
+                {Number(display).toLocaleString('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}{suffix}
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold mt-1" style={{ color: 'rgba(245,239,224,0.45)' }}>{label}</span>
+        </div>
+    );
+}
+
 export default function HeroSection() {
     const openLeadModal = useAppStore((s) => s.openLeadModal);
+    const introDone = useAppStore((s) => s.introDone);
     const heroRef = useRef<HTMLElement>(null);
 
     useGSAP(() => {
-        const ctx = gsap.context(() => {
-            const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+        if (!introDone) return;
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            // cinematic entry
-            tl.fromTo('.hero-eyebrow',
-                { opacity: 0, y: 20, letterSpacing: '1em' },
-                { opacity: 1, y: 0, letterSpacing: '0.5em', duration: 1.5, delay: 0.5 }
-            )
-                .fromTo('.hero-headline-word',
-                    { opacity: 0, y: 100, rotateX: -45, transformOrigin: '0% 50% -50' },
-                    { opacity: 1, y: 0, rotateX: 0, stagger: 0.1, duration: 1.2 },
-                    "-=1"
-                )
-                .fromTo('.hero-sub',
-                    { opacity: 0, scale: 0.95, filter: 'blur(10px)' },
-                    { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1 },
-                    "-=0.8"
-                )
-                .fromTo('.hero-cta',
-                    { opacity: 0, scale: 0.8 },
-                    { opacity: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: "back.out(1.7)" },
-                    "-=0.6"
-                )
-                .fromTo('.hero-stats-item',
-                    { opacity: 0, x: -20 },
-                    { opacity: 1, x: 0, stagger: 0.1, duration: 0.8 },
-                    "-=0.4"
-                );
+        const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+        tl.fromTo('.hero-eyebrow', { autoAlpha: 0, x: -30 }, { autoAlpha: 1, x: 0, duration: 1.2 })
+            .fromTo('.hero-word', { yPercent: 115, rotate: 4 }, { yPercent: 0, rotate: 0, stagger: 0.09, duration: 1.4 }, '-=0.9')
+            .fromTo('.hero-sub', { autoAlpha: 0, y: 24, filter: 'blur(8px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 1.1 }, '-=1')
+            .fromTo('.hero-cta', { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, stagger: 0.07, duration: 0.9 }, '-=0.8')
+            .fromTo('.hero-stats-item', { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.9 }, '-=0.6')
+            .fromTo('.hero-card', { autoAlpha: 0, y: 40, scale: 0.96 }, { autoAlpha: 1, y: 0, scale: 1, duration: 1.2 }, '-=0.9')
+            .fromTo('.hero-scroll', { autoAlpha: 0 }, { autoAlpha: 1, duration: 1 }, '-=0.6');
 
-            // Mouse parallax on headline
-            const onMouseMove = (e: MouseEvent) => {
-                const { clientX, clientY } = e;
-                const xPos = (clientX / window.innerWidth - 0.5) * 20;
-                const yPos = (clientY / window.innerHeight - 0.5) * 20;
+        // Cycling last word of the headline.
+        const words = gsap.utils.toArray<HTMLElement>('.hero-rotate');
+        let current = 0;
+        gsap.set(words.slice(1), { yPercent: 110 });
+        const cycle = reduced ? null : gsap.delayedCall(3.2, function next() {
+            const out = words[current];
+            current = (current + 1) % words.length;
+            const inn = words[current];
+            gsap.to(out, { yPercent: -110, duration: 0.9, ease: 'expo.inOut' });
+            gsap.fromTo(inn, { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: 'expo.inOut' });
+            cycle?.restart(true);
+        });
 
-                gsap.to('.hero-headline', {
-                    x: xPos,
-                    y: yPos,
-                    duration: 1,
-                    ease: "power2.out"
-                });
+        // Headline drifts with the pointer; content lifts away on scroll.
+        if (!reduced && window.matchMedia('(pointer: fine)').matches) {
+            const xTo = gsap.quickTo('.hero-headline', 'x', { duration: 1.2, ease: 'power3' });
+            const yTo = gsap.quickTo('.hero-headline', 'y', { duration: 1.2, ease: 'power3' });
+            const onMove = (e: PointerEvent) => {
+                xTo((e.clientX / window.innerWidth - 0.5) * 18);
+                yTo((e.clientY / window.innerHeight - 0.5) * 12);
             };
-
-            window.addEventListener('mousemove', onMouseMove);
-            return () => window.removeEventListener('mousemove', onMouseMove);
-        }, heroRef);
-
-        return () => ctx.revert();
-    }, []);
+            window.addEventListener('pointermove', onMove, { passive: true });
+            gsap.to('.hero-content', {
+                yPercent: -18,
+                autoAlpha: 0.2,
+                ease: 'none',
+                scrollTrigger: { trigger: heroRef.current, start: 'top top', end: 'bottom top', scrub: true },
+            });
+            return () => window.removeEventListener('pointermove', onMove);
+        }
+    }, { scope: heroRef, dependencies: [introDone] });
 
     return (
         <section
             id="hero-section"
-            className="relative min-h-screen flex flex-col perspective-1000"
+            className="relative min-h-[100svh] flex flex-col perspective-1000"
             style={{ background: 'var(--color-charcoal)' }}
             ref={heroRef}
         >
-            {/* Background: gradient + decorative pattern */}
+            {/* Background: gradient + blueprint grid + 3D scene */}
             <div className="absolute inset-0 overflow-hidden">
+                <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 50% 50%, #3D3020 0%, #140F08 100%)' }} />
                 <div
-                    className="absolute inset-0"
-                    style={{
-                        background: 'radial-gradient(circle at 50% 50%, #3D3020 0%, #140F08 100%)',
-                    }}
-                />
-                <div
-                    className="absolute inset-0 opacity-[0.03]"
+                    className="absolute inset-0 opacity-[0.04]"
                     style={{
                         backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 40px, #B8892A 40px, #B8892A 41px), repeating-linear-gradient(90deg, transparent, transparent 40px, #B8892A 40px, #B8892A 41px)',
+                        maskImage: 'radial-gradient(ellipse at 30% 50%, black 10%, transparent 70%)',
+                        WebkitMaskImage: 'radial-gradient(ellipse at 30% 50%, black 10%, transparent 70%)',
                     }}
                 />
-
                 <HeroCanvas />
+                <div className="absolute inset-0 hero-vignette pointer-events-none z-[16]" />
             </div>
 
             {/* Content */}
-            <div className="relative z-10 flex-1 flex items-center">
-                <div className="container-site w-full py-32">
-                    <div className="max-w-4xl">
+            <div className="hero-content relative z-20 flex-1 flex items-center pointer-events-none">
+                <div className="container-site w-full pt-32 pb-24">
+                    <div className="max-w-4xl pointer-events-auto">
+                        <div className="hero-eyebrow invisible flex items-center gap-4 mb-8">
+                            <span className="w-12 h-px" style={{ background: 'var(--color-brass)' }} />
+                            <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.4em]" style={{ color: 'var(--color-brass-light)' }}>
+                                Interior Design Studio · Delhi NCR
+                            </span>
+                        </div>
 
-                        {/* Headline */}
                         <h1
                             className="hero-headline font-display font-bold leading-[0.95] tracking-tighter mb-10"
-                            style={{ fontSize: 'clamp(48px, 8vw, 110px)', color: '#F5EFE0' }}
+                            style={{ fontSize: 'clamp(52px, 8.5vw, 124px)', color: '#F5EFE0' }}
                         >
-                            <span className="hero-headline-word inline-block mr-[0.2em]">Spaces</span>
-                            <span className="hero-headline-word inline-block mr-[0.2em] text-brass-gradient">That</span>
+                            <span className="line-mask mr-[0.22em]"><span className="hero-word inline-block">Spaces</span></span>
+                            <span className="line-mask"><span className="hero-word inline-block text-brass-gradient">That</span></span>
                             <br />
-                            <span className="hero-headline-word inline-block mr-[0.2em] text-brass-gradient italic font-normal">Define</span>
-                            <span className="hero-headline-word inline-block">Luxury</span>
+                            <span className="line-mask mr-[0.22em]"><span className="hero-word inline-block text-brass-gradient italic font-normal pr-[0.05em]">Define</span></span>
+                            <span className="line-mask">
+                                <span className="hero-word inline-grid">
+                                    {ROTATING_WORDS.map((w) => (
+                                        <span key={w} className="hero-rotate col-start-1 row-start-1 inline-block">{w}</span>
+                                    ))}
+                                </span>
+                            </span>
+                            <span className="sr-only">Spaces That Define Luxury</span>
                         </h1>
 
-                        {/* Sub */}
                         <p
-                            className="hero-sub text-lg md:text-2xl mb-12 max-w-2xl leading-relaxed font-body opacity-0"
+                            className="hero-sub invisible text-lg md:text-2xl mb-12 max-w-2xl leading-relaxed font-body font-light"
                             style={{ color: 'rgba(245,239,224,0.75)' }}
                         >
-                            Bespoke modular kitchens, signature wardrobes, and turnkey home transformations. Crafted for the most discerning homes in Delhi NCR.
+                            Bespoke modular kitchens, signature wardrobes and turnkey home transformations — designed in 3D, built in our own factory, installed by our own crew.
                         </p>
 
                         {/* CTAs */}
-                        <div className="flex flex-wrap gap-4 md:gap-6">
-                            <button
-                                onClick={() => openLeadModal({ service: 'Full Home Interior' })}
-                                className="hero-cta relative group overflow-hidden px-8 md:px-10 py-5 rounded-2xl font-bold text-white text-xs md:text-sm uppercase tracking-widest transition-all"
-                                style={{
-                                    background: 'linear-gradient(135deg, var(--color-brass) 0%, var(--color-brass-dark) 100%)',
-                                    boxShadow: '0 20px 40px -10px rgba(184,137,42,0.5)',
-                                }}
-                            >
-                                <span className="relative z-10">Start Project Inquiry</span>
-                                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-                            </button>
+                        <div className="flex flex-wrap items-center gap-4 md:gap-5">
+                            <Magnetic className="hero-cta invisible">
+                                <button
+                                    onClick={() => openLeadModal({ service: 'Full Home Interior' })}
+                                    className="btn-sheen px-8 md:px-10 py-5 rounded-2xl font-bold text-white text-xs md:text-sm uppercase tracking-widest flex items-center gap-3"
+                                    style={{
+                                        background: 'linear-gradient(135deg, var(--color-brass) 0%, var(--color-brass-dark) 100%)',
+                                        boxShadow: '0 20px 40px -10px rgba(184,137,42,0.5)',
+                                    }}
+                                >
+                                    Book Free Site Visit
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                                </button>
+                            </Magnetic>
 
-                            <div className="flex flex-wrap gap-4">
-                                {[
-                                    { label: 'Kitchen 3D', href: '/kitchen' },
-                                    { label: 'Interior 3D', href: '/interior' },
-                                    { label: 'Wardrobe 3D', href: '/wardrobe' }
-                                ].map((tour) => (
-                                    <a
-                                        key={tour.href}
-                                        href={tour.href}
-                                        className="hero-cta px-6 py-5 rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] border-2 transition-all hover:bg-white hover:text-charcoal hover:border-white flex items-center justify-center backdrop-blur-md"
-                                        style={{
-                                            color: 'white',
-                                            borderColor: 'rgba(255,255,255,0.2)',
-                                        }}
-                                    >
-                                        {tour.label}
-                                    </a>
-                                ))}
-                            </div>
+                            {TOURS.map((tour) => (
+                                <a
+                                    key={tour.href}
+                                    href={tour.href}
+                                    data-cursor="Enter"
+                                    className="hero-cta invisible group px-5 py-4 md:py-5 rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] border transition-all duration-500 hover:bg-white hover:text-charcoal hover:border-white flex items-center gap-2 backdrop-blur-md"
+                                    style={{ color: 'white', borderColor: 'rgba(255,255,255,0.2)' }}
+                                >
+                                    <CubeIcon />
+                                    {tour.label}
+                                </a>
+                            ))}
                         </div>
 
                         {/* Trust stats */}
-                        <div className="hero-stats flex flex-wrap gap-12 mt-20">
-                            {[
-                                { val: '10Y', label: 'Warranty' },
-                                { val: '1.2K', label: 'Projects' },
-                                { val: '4.9★', label: 'Rating' },
-                            ].map((s) => (
-                                <div key={s.label} className="hero-stats-item flex flex-col group cursor-default">
-                                    <span className="font-display text-4xl font-bold transition-colors group-hover:text-white" style={{ color: 'var(--color-brass-light)' }}>{s.val}</span>
-                                    <span className="text-[10px] uppercase tracking-[0.2em] font-bold mt-1" style={{ color: 'rgba(245,239,224,0.4)' }}>{s.label}</span>
-                                </div>
+                        <div className="flex flex-wrap gap-x-12 gap-y-6 mt-16 md:mt-20">
+                            {STATS.map((s, i) => (
+                                <Stat key={s.label} {...s} delay={i * 120} />
                             ))}
                         </div>
                     </div>
                 </div>
             </div>
 
+            {/* Floating review card */}
+            <div className="hero-card invisible hidden xl:block absolute right-[4vw] bottom-28 z-20 w-[300px] p-6 rounded-3xl border backdrop-blur-xl"
+                style={{ background: 'rgba(20,15,8,0.55)', borderColor: 'rgba(212,168,75,0.2)', boxShadow: '0 30px 60px -20px rgba(0,0,0,0.6)' }}>
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex gap-0.5" style={{ color: 'var(--color-brass-light)' }}>
+                        {[0, 1, 2, 3, 4].map((i) => (
+                            <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                        ))}
+                    </div>
+                    <span className="text-[9px] uppercase tracking-[0.25em] font-bold" style={{ color: 'rgba(245,239,224,0.4)' }}>IndiaMart</span>
+                </div>
+                <p className="font-display italic text-lg leading-snug mb-4" style={{ color: '#F5EFE0' }}>
+                    &ldquo;Kitchen best quality &amp; best service. The team finished everything in 15 days.&rdquo;
+                </p>
+                <div className="flex items-center gap-3">
+                    <span className="w-9 h-9 rounded-full flex items-center justify-center font-display font-bold text-sm" style={{ background: 'rgba(184,137,42,0.2)', color: 'var(--color-brass-light)' }}>HV</span>
+                    <div>
+                        <p className="text-xs font-semibold" style={{ color: '#F5EFE0' }}>Himanshu Verma</p>
+                        <p className="text-[10px]" style={{ color: 'rgba(245,239,224,0.45)' }}>Modular Kitchen · Delhi</p>
+                    </div>
+                </div>
+            </div>
+
             {/* Contact strip */}
             <div
-                className="relative z-10 border-t"
+                className="relative z-20 border-t"
                 style={{ background: 'rgba(20,15,8,0.8)', borderColor: 'rgba(184,137,42,0.2)' }}
             >
-                <div className="container-site h-12 flex items-center justify-between gap-4 flex-wrap">
+                <div className="container-site h-12 flex items-center justify-between gap-4">
                     <a
                         href={`https://maps.google.com/maps?q=${CONTACT_INFO.mapQuery}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-2 text-xs font-body"
+                        className="hidden sm:flex items-center gap-2 text-xs font-body hover:text-white transition-colors"
                         style={{ color: 'rgba(245,239,224,0.55)' }}
                     >
                         <MapPinIcon />
                         {CONTACT_INFO.addressShort}
                     </a>
-                    <div className="flex items-center gap-6">
-                        <a href={`tel:${CONTACT_INFO.phone1}`} className="text-xs font-body transition-colors" style={{ color: 'var(--color-brass-light)' }}>
+                    <div className="flex items-center gap-6 ml-auto">
+                        <a href={`tel:${CONTACT_INFO.phone1}`} className="text-xs font-body transition-colors hover:text-white" style={{ color: 'var(--color-brass-light)' }}>
                             {CONTACT_INFO.phone1Display}
                         </a>
-                        <a href={CONTACT_INFO.whatsapp} target="_blank" rel="noreferrer" className="text-xs font-body flex items-center gap-1" style={{ color: 'var(--color-brass-light)' }}>
+                        <a href={CONTACT_INFO.whatsapp} target="_blank" rel="noreferrer" className="text-xs font-body flex items-center gap-1 hover:text-white transition-colors" style={{ color: 'var(--color-brass-light)' }}>
                             <WADotIcon /> WhatsApp
                         </a>
                     </div>
@@ -193,19 +230,22 @@ export default function HeroSection() {
             </div>
 
             {/* Scroll hint */}
-            <div
-                className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
-            >
-                <div className="animate-bounce">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(184,137,42,0.6)" strokeWidth="2">
-                        <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                </div>
+            <div className="hero-scroll invisible absolute bottom-20 left-1/2 -translate-x-1/2 z-20 hidden md:flex flex-col items-center gap-3 pointer-events-none">
+                <span className="text-[9px] uppercase tracking-[0.4em]" style={{ color: 'rgba(245,239,224,0.4)' }}>Scroll</span>
+                <span className="relative block w-px h-12 overflow-hidden" style={{ background: 'rgba(184,137,42,0.2)' }}>
+                    <span className="absolute inset-x-0 top-0 h-1/2 animate-[scrollLine_2s_ease-in-out_infinite]" style={{ background: 'var(--color-brass-light)' }} />
+                </span>
             </div>
         </section>
     );
 }
 
+const CubeIcon = () => (
+    <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+        <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" />
+    </svg>
+);
 const MapPinIcon = () => (
     <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" /><circle cx="12" cy="10" r="3" />

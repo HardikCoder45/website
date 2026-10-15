@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import gsap from 'gsap';
@@ -8,33 +8,43 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Small deterministic PRNG so particle layout is pure and stable across renders.
+function mulberry32(seed: number) {
+    return () => {
+        seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+
 // Custom Particle System
-function ParticleBackground() {
-    const count = 2500;
+function ParticleBackground({ count }: { count: number }) {
     const mesh = useRef<THREE.InstancedMesh>(null);
     const light = useRef<THREE.PointLight>(null);
 
     const particles = useMemo(() => {
+        const rand = mulberry32(count);
         const temp = [];
         for (let i = 0; i < count; i++) {
-            const time = Math.random() * 100;
-            const factor = 20 + Math.random() * 100;
-            const speed = 0.01 + Math.random() / 200;
-            const x = Math.random() * 100 - 50;
-            const y = Math.random() * 100 - 50;
-            const z = Math.random() * 100 - 50;
+            const time = rand() * 100;
+            const factor = 20 + rand() * 100;
+            const speed = 0.01 + rand() / 200;
+            const x = rand() * 100 - 50;
+            const y = rand() * 100 - 50;
+            const z = rand() * 100 - 50;
             temp.push({ time, factor, speed, x, y, z });
         }
         return temp;
     }, [count]);
 
+
     const dummy = useMemo(() => new THREE.Object3D(), []);
 
     useFrame((state) => {
         particles.forEach((particle, i) => {
-            let { time, factor, speed, x, y, z } = particle;
-
-            time = particle.time += speed / 2;
+            const { factor, speed, x, y, z } = particle;
+            const time = (particle.time += speed / 2);
 
             dummy.position.set(
                 x + Math.cos((time / 10) * factor) + (Math.sin(time * 1) * factor) / 10,
@@ -86,6 +96,19 @@ function ParticleBackground() {
 export default function HeroCanvas() {
     const sketchfabRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [visible, setVisible] = useState(true);
+    // Rendered client-only (dynamic import with ssr: false), so window is available.
+    const [count] = useState(() => (window.innerWidth < 768 ? 600 : 1600));
+
+    // Stop rendering particles once the hero is scrolled away, and use fewer
+    // of them on small screens.
+    useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+        const obs = new IntersectionObserver(([e]) => setVisible(e.isIntersecting));
+        obs.observe(el);
+        return () => obs.disconnect();
+    }, []);
 
     useGSAP(() => {
         if (!sketchfabRef.current) return;
@@ -126,7 +149,7 @@ export default function HeroCanvas() {
         <div ref={containerRef} className="absolute inset-0 z-0 w-full h-full overflow-hidden flex items-center justify-center pointer-events-none">
 
             {/* Cinematic Grain Overlay */}
-            <div className="absolute inset-0 z-[5] opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] blend-multiply"></div>
+            <div className="grain absolute inset-0 z-[17] opacity-[0.05] pointer-events-none mix-blend-overlay"></div>
 
             {/* Sketchfab Iframe Background */}
             <div ref={sketchfabRef} className="absolute inset-0 w-full h-full scale-125 origin-center will-change-transform">
@@ -147,11 +170,12 @@ export default function HeroCanvas() {
             <Canvas
                 className="absolute inset-0 z-[10] pointer-events-none"
                 camera={{ position: [0, 0, 15], fov: 45 }}
-                dpr={[1, 2]}
+                dpr={[1, 1.75]}
+                frameloop={visible ? 'always' : 'never'}
                 gl={{ powerPreference: "high-performance", alpha: true, antialias: true }}
             >
                 <ambientLight intensity={1.5} />
-                <ParticleBackground />
+                <ParticleBackground key={count} count={count} />
             </Canvas>
 
             {/* Vignette */}

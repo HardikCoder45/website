@@ -18,15 +18,16 @@ export default function LeadModal() {
         return () => { document.body.style.overflow = ''; };
     }, [isLeadModalOpen]);
 
-    if (!isLeadModalOpen) return null;
-
     return (
         <AnimatePresence>
+            {isLeadModalOpen && (
             <motion.div
+                key="lead-modal"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] flex items-center justify-center bg-charcoal/80 backdrop-blur-md p-4"
+                className="fixed inset-0 z-[100] flex items-center justify-center bg-charcoal/80 backdrop-blur-md p-4 overflow-y-auto"
+                data-lenis-prevent
                 onClick={closeLeadModal}
             >
                 <motion.div
@@ -35,7 +36,10 @@ export default function LeadModal() {
                     exit={{ scale: 0.95, y: 20, opacity: 0 }}
                     transition={{ type: 'spring', damping: 25, stiffness: 300 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="relative w-full max-w-xl rounded-[2.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] p-8 md:p-12"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="lead-modal-title"
+                    className="relative my-auto w-full max-w-xl rounded-[2.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] p-8 md:p-12"
                     style={{
                         background: 'rgba(255, 255, 255, 0.95)',
                         backdropFilter: 'blur(20px)',
@@ -49,9 +53,10 @@ export default function LeadModal() {
 
                     <button
                         onClick={closeLeadModal}
+                        aria-label="Close"
                         className="absolute top-6 right-6 z-50 w-12 h-12 rounded-full bg-charcoal/5 hover:bg-charcoal/10 flex items-center justify-center transition-all hover:rotate-90"
                     >
-                        <svg width="20" height="20" fill="none" stroke="var(--color-charcoal)" strokeWidth="2.5"><path d="M15 5L5 15M5 5l10 10" /></svg>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--color-charcoal)" strokeWidth="2.5" aria-hidden="true"><path d="M15 5L5 15M5 5l10 10" /></svg>
                     </button>
 
                     <div className="relative z-10 mb-10">
@@ -61,7 +66,7 @@ export default function LeadModal() {
                                 Bespoke Experience
                             </span>
                         </div>
-                        <h2 className="text-4xl md:text-5xl font-display font-bold text-charcoal mb-4 tracking-tight">
+                        <h2 id="lead-modal-title" className="text-4xl md:text-5xl font-display font-bold text-charcoal mb-4 tracking-tight">
                             Design Your <span className="text-brass">Legacy.</span>
                         </h2>
                         <p className="text-mute/80 text-sm font-medium leading-relaxed max-w-md">
@@ -74,6 +79,7 @@ export default function LeadModal() {
                     </div>
                 </motion.div>
             </motion.div>
+            )}
         </AnimatePresence>
     );
 }

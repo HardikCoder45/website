@@ -13,6 +13,8 @@ interface AppState {
     closeLeadModal: () => void;
     activeSection: string;
     setActiveSection: (id: string) => void;
+    introDone: boolean;
+    setIntroDone: () => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -22,4 +24,6 @@ export const useAppStore = create<AppState>((set) => ({
     closeLeadModal: () => set({ isLeadModalOpen: false, leadFormData: {} }),
     activeSection: '',
     setActiveSection: (id) => set({ activeSection: id }),
+    introDone: false,
+    setIntroDone: () => set({ introDone: true }),
 }));

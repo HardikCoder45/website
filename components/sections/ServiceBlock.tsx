@@ -85,10 +85,11 @@ export default function ServiceBlock({ service, index }: ServiceBlockProps) {
                                 afterAlt={`${service.name} after`}
                             />
                         ) : (
-                            <div className="relative rounded-2xl overflow-hidden shadow-2xl border aspect-[4/3]" style={{ borderColor: 'var(--color-border)' }}>
+                            <div className="group relative rounded-2xl overflow-hidden shadow-2xl border aspect-[4/3]" style={{ borderColor: 'var(--color-border)' }}>
                                 <img
                                     src={service.image}
-                                    alt={service.name}
+                                    alt={service.imageAlt || service.name}
+                                    loading="lazy"
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                                 />
                                 <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
@@ -136,7 +137,7 @@ export default function ServiceBlock({ service, index }: ServiceBlockProps) {
                         <div className="flex flex-col sm:flex-row gap-4">
                             <button
                                 onClick={() => openLeadModal({ service: service.name })}
-                                className="px-8 py-3.5 rounded-xl font-medium text-white shadow-xl hover:-translate-y-1 transition-transform"
+                                className="btn-sheen px-8 py-3.5 rounded-xl font-medium text-white shadow-xl hover:-translate-y-1 transition-transform"
                                 style={{ background: 'linear-gradient(135deg, var(--color-brass), var(--color-brass-dark))' }}
                             >
                                 Book Free Assessment

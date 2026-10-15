@@ -1,11 +1,6 @@
 'use client';
-import React, { useRef } from 'react';
+import React from 'react';
 import { TRUST_BADGES } from '@/lib/data/config';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const icons: Record<string, React.ReactNode> = {
     verified: (
@@ -36,102 +31,38 @@ const icons: Record<string, React.ReactNode> = {
 };
 
 export default function TrustBar() {
-    const sectionRef = useRef<HTMLElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    useGSAP(() => {
-        const badges = containerRef.current?.querySelectorAll('.trust-badge');
-        if (!badges) return;
-
-        // Entrance animation
-        gsap.fromTo(badges,
-            { opacity: 0, scale: 0.8, rotateY: 30 },
-            {
-                opacity: 1,
-                scale: 1,
-                rotateY: 0,
-                duration: 1.2,
-                stagger: 0.1,
-                ease: "expo.out",
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top 95%",
-                    toggleActions: "play none none reverse"
-                }
-            }
-        );
-
-        // Magnetic effect logic
-        badges.forEach((badge) => {
-            const onMouseMove = (e: MouseEvent) => {
-                const rect = (badge as HTMLElement).getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-
-                gsap.to(badge, {
-                    x: x * 0.3,
-                    y: y * 0.3,
-                    rotateX: -y * 0.1,
-                    rotateY: x * 0.1,
-                    duration: 0.5,
-                    ease: "power2.out"
-                });
-            };
-
-            const onMouseLeave = () => {
-                gsap.to(badge, {
-                    x: 0,
-                    y: 0,
-                    rotateX: 0,
-                    rotateY: 0,
-                    duration: 0.8,
-                    ease: "elastic.out(1, 0.3)"
-                });
-            };
-
-            badge.addEventListener('mousemove', onMouseMove as any);
-            badge.addEventListener('mouseleave', onMouseLeave as any);
-        });
-    }, { scope: sectionRef });
-
+    const items = [...TRUST_BADGES, ...TRUST_BADGES];
     return (
         <section
-            ref={sectionRef}
-            className="py-12 border-y overflow-hidden perspective-1000"
+            aria-label="Credentials"
+            className="relative py-8 border-y overflow-hidden"
             style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
         >
-            <div className="container-site">
-                <div
-                    ref={containerRef}
-                    className="flex flex-wrap items-center justify-center gap-6 md:gap-12"
-                >
-                    {TRUST_BADGES.map((badge) => (
-                        <div
-                            key={badge.label}
-                            className="trust-badge flex items-center gap-4 px-8 py-4 rounded-2xl border bg-white/80 backdrop-blur-sm transition-shadow hover:shadow-2xl hover:shadow-brass/20 group cursor-default"
-                            style={{
-                                borderColor: 'rgba(184,137,42,0.1)',
-                                boxShadow: '0 10px 30px -10px rgba(0,0,0,0.05)',
-                            }}
-                        >
-                            <span
-                                className="transition-transform group-hover:scale-125 duration-500"
-                                style={{ color: 'var(--color-brass)' }}
-                            >
-                                {icons[badge.icon]}
+            <div className="absolute inset-y-0 left-0 w-24 md:w-48 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, var(--color-surface), transparent)' }} />
+            <div className="absolute inset-y-0 right-0 w-24 md:w-48 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, var(--color-surface), transparent)' }} />
+            <ul className="flex w-max animate-marquee">
+                {items.map((badge, i) => (
+                    <li
+                        key={`${badge.label}-${i}`}
+                        aria-hidden={i >= TRUST_BADGES.length ? true : undefined}
+                        className="group mr-6 md:mr-10 flex items-center gap-4 px-7 py-4 rounded-2xl border bg-white/80 transition-shadow duration-500 hover:shadow-xl hover:shadow-brass/10"
+                        style={{ borderColor: 'rgba(184,137,42,0.12)' }}
+                    >
+                        <span className="transition-transform group-hover:scale-125 duration-500" style={{ color: 'var(--color-brass)' }}>
+                            {icons[badge.icon]}
+                        </span>
+                        <div className="flex flex-col leading-tight whitespace-nowrap">
+                            <span className="text-sm font-bold font-display tracking-tight" style={{ color: 'var(--color-charcoal)' }}>
+                                {badge.label}
                             </span>
-                            <div className="flex flex-col leading-tight">
-                                <span className="text-sm font-bold font-display tracking-tight" style={{ color: 'var(--color-charcoal)' }}>
-                                    {badge.label}
-                                </span>
-                                <span className="text-[10px] uppercase font-bold tracking-widest opacity-60" style={{ color: 'var(--color-mute)' }}>
-                                    {badge.sub}
-                                </span>
-                            </div>
+                            <span className="text-[10px] uppercase font-bold tracking-widest opacity-60" style={{ color: 'var(--color-mute)' }}>
+                                {badge.sub}
+                            </span>
                         </div>
-                    ))}
-                </div>
-            </div>
+                        <span className="ml-6 w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-brass-light)' }} aria-hidden="true" />
+                    </li>
+                ))}
+            </ul>
         </section>
     );
 }

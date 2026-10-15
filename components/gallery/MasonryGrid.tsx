@@ -21,14 +21,21 @@ export default function MasonryGrid({ photos, onPhotoClick }: MasonryGridProps) 
                         exit={{ opacity: 0, scale: 0.9 }}
                         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                         key={photo.id}
-                        className="masonry-item relative group cursor-pointer rounded-2xl overflow-hidden shadow-2xl bg-charcoal"
+                        className="masonry-item relative group cursor-pointer rounded-2xl overflow-hidden shadow-2xl bg-charcoal focus-visible:ring-2 focus-visible:ring-brass"
                         onClick={() => onPhotoClick(index)}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPhotoClick(index); } }}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Open photo: ${photo.alt}`}
+                        data-cursor="View"
                     >
                         {/* Image Container */}
                         <div className={`relative w-full overflow-hidden ${photo.tall ? 'aspect-[3/4.5]' : 'aspect-square'}`}>
                             <img
                                 src={photo.src}
                                 alt={photo.alt}
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-1"
                             />
 

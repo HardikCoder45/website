@@ -1,24 +1,26 @@
 'use client';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 export default function KitchenPage() {
-    const router = useRouter();
-
     return (
         <main className="relative w-full h-screen bg-black overflow-hidden">
             {/* Back Button */}
-            <motion.button
+            <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                onClick={() => router.back()}
-                className="fixed top-8 left-8 z-[100] flex items-center gap-4 px-6 py-3 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white hover:bg-white/20 transition-all group"
+                className="fixed top-8 left-8 z-[100]"
+            >
+            <Link
+                href="/#tours"
+                className="flex items-center gap-4 px-6 py-3 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white hover:bg-white/20 transition-all group"
             >
                 <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
                 <span className="text-xs font-bold uppercase tracking-[0.2em]">Back to Home</span>
-            </motion.button>
+            </Link>
+            </motion.div>
 
             {/* Hint Overlay */}
             <motion.div

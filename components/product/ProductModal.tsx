@@ -53,11 +53,11 @@ export default function ProductModal() {
         return () => { document.body.style.overflow = ''; };
     }, [isOpen]);
 
-    if (!isOpen || !activeProduct) return null;
-
     return (
         <AnimatePresence>
+            {isOpen && activeProduct && (
             <motion.div
+                key="product-modal"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -70,15 +70,19 @@ export default function ProductModal() {
                     exit={{ scale: 0.95, y: 20 }}
                     transition={{ type: 'spring', damping: 25, stiffness: 300 }}
                     onClick={(e) => e.stopPropagation()}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label={activeProduct.name}
                     className="relative w-full max-w-6xl h-full max-h-[85vh] rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-2xl"
                     style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
                 >
                     {/* Close button */}
                     <button
                         onClick={closeModal}
+                        aria-label="Close"
                         className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-black/5 hover:bg-black/10 flex items-center justify-center transition-colors"
                     >
-                        <svg width="24" height="24" fill="none" stroke="var(--color-charcoal)" strokeWidth="2">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-charcoal)" strokeWidth="2" aria-hidden="true">
                             <path d="M18 6L6 18M6 6l12 12" />
                         </svg>
                     </button>
@@ -94,7 +98,7 @@ export default function ProductModal() {
                     </div>
 
                     {/* Right: Details & Variants */}
-                    <div className="w-full md:w-2/5 h-full overflow-y-auto p-8 lg:p-10 flex flex-col hide-scrollbar">
+                    <div data-lenis-prevent className="w-full md:w-2/5 h-full overflow-y-auto p-8 lg:p-10 flex flex-col hide-scrollbar">
                         <p className="text-xs uppercase tracking-widest font-bold mb-2 text-brass">
                             {activeProduct.category || "Product Detail"}
                         </p>
@@ -148,6 +152,7 @@ export default function ProductModal() {
                     </div>
                 </motion.div>
             </motion.div>
+            )}
         </AnimatePresence>
     );
 }

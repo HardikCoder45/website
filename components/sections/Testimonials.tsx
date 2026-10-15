@@ -41,11 +41,15 @@ export default function Testimonials() {
         });
 
         // Hover pause
-        marqueeRef.current.addEventListener('mouseenter', () => marqueeAnimation.pause());
-        marqueeRef.current.addEventListener('mouseleave', () => marqueeAnimation.play());
+        const track = marqueeRef.current;
+        const pause = () => marqueeAnimation.pause();
+        const play = () => marqueeAnimation.play();
+        track.addEventListener('mouseenter', pause);
+        track.addEventListener('mouseleave', play);
 
         return () => {
-            marqueeAnimation.kill();
+            track.removeEventListener('mouseenter', pause);
+            track.removeEventListener('mouseleave', play);
         };
     }, { scope: containerRef });
 
@@ -59,6 +63,25 @@ export default function Testimonials() {
                     dark={true}
                 />
 
+                {/* Aggregate rating */}
+                <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 -mt-6 mb-16">
+                    <div className="flex items-center gap-4">
+                        <span className="font-display font-bold text-6xl" style={{ color: 'var(--color-brass-light)' }}>4.7</span>
+                        <div>
+                            <div className="flex gap-0.5 text-brass" aria-label="4.7 out of 5 stars">
+                                {[1, 2, 3, 4, 5].map((s) => (
+                                    <svg key={s} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                                ))}
+                            </div>
+                            <p className="text-[10px] uppercase tracking-[0.25em] font-bold mt-1" style={{ color: 'rgba(245,239,224,0.45)' }}>37 reviews · IndiaMart</p>
+                        </div>
+                    </div>
+                    <span className="hidden md:block w-px h-12" style={{ background: 'rgba(245,239,224,0.12)' }} />
+                    <p className="text-sm max-w-xs text-center md:text-left" style={{ color: 'rgba(245,239,224,0.55)' }}>
+                        Hover a card to pause. Every review is from a verified customer listing.
+                    </p>
+                </div>
+
                 {/* Carousel Container */}
                 <div className="relative w-full overflow-hidden -mx-4 md:mx-0">
                     {/* ... Gradient Masks ... */}
@@ -71,13 +94,14 @@ export default function Testimonials() {
                         {duplicatedTestimonials.map((t, idx) => (
                             <div
                                 key={t.id + idx}
+                                aria-hidden={idx >= testimonials.length ? true : undefined}
                                 className="w-[320px] md:w-[450px] shrink-0 p-10 rounded-3xl flex flex-col justify-between transition-all duration-500 hover:bg-white/[0.08]"
                                 style={{ background: 'rgba(245,239,224,0.05)', border: '1px solid rgba(245,239,224,0.1)' }}
                             >
                                 <div>
                                     <div className="flex items-center gap-1 mb-6 text-brass">
-                                        {[1, 2, 3, 4, 5].map(star => (
-                                            <svg key={star} width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        {Array.from({ length: t.rating }, (_, i) => i).map(star => (
+                                            <svg key={star} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                                             </svg>
                                         ))}

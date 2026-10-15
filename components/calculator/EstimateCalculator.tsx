@@ -1,9 +1,39 @@
 'use client';
-import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import { motion, animate } from 'framer-motion';
 import { PACKAGE_RATES, PackageKey } from '@/lib/data/config';
 import CostBar from './CostBar';
 import { useAppStore } from '@/lib/store/useAppStore';
+
+/** ₹ in Indian notation: 95,000 → ₹95K, 1,20,000 → ₹1.2L, 1,50,00,000 → ₹1.5Cr */
+function formatINR(n: number) {
+    if (n >= 1e7) return `₹${(n / 1e7).toFixed(n >= 1e8 ? 1 : 2).replace(/\.?0+$/, '')}Cr`;
+    if (n >= 1e5) return `₹${(n / 1e5).toFixed(n >= 1e6 ? 1 : 2).replace(/\.?0+$/, '')}L`;
+    return `₹${Math.round(n / 1000)}K`;
+}
+
+/** Smoothly tweens the displayed amount whenever the estimate changes. */
+function AnimatedINR({ value }: { value: number }) {
+    const ref = useRef<HTMLSpanElement>(null);
+    const prev = useRef(value);
+    useEffect(() => {
+        const controls = animate(prev.current, value, {
+            duration: 0.6,
+            ease: [0.16, 1, 0.3, 1],
+            onUpdate: (v) => { if (ref.current) ref.current.textContent = formatINR(v); },
+        });
+        prev.current = value;
+        return () => controls.stop();
+    }, [value]);
+    return <span ref={ref}>{formatINR(value)}</span>;
+}
+
+const QUICK_AREAS = [
+    { label: 'Kitchen', area: 100 },
+    { label: 'Bedroom', area: 250 },
+    { label: '2 BHK', area: 900 },
+    { label: '3 BHK', area: 1400 },
+];
 
 export default function EstimateCalculator() {
     const [area, setArea] = useState<number>(100);
@@ -22,7 +52,7 @@ export default function EstimateCalculator() {
     }, [selectedPack]);
 
     return (
-        <section className="section-pad border-y" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
+        <section id="estimate" className="section-pad border-y scroll-mt-16" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
             <div className="container-site">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-center">
 
@@ -64,6 +94,24 @@ export default function EstimateCalculator() {
                                     <span>50 sq.ft</span>
                                     <span>2000+ sq.ft</span>
                                 </div>
+                                <div className="flex flex-wrap gap-2 mt-5" role="group" aria-label="Quick area presets">
+                                    {QUICK_AREAS.map((q) => (
+                                        <button
+                                            key={q.label}
+                                            type="button"
+                                            onClick={() => setArea(q.area)}
+                                            aria-pressed={area === q.area}
+                                            className="px-4 py-2 rounded-full text-xs font-semibold border transition-all"
+                                            style={{
+                                                background: area === q.area ? 'var(--color-charcoal)' : 'transparent',
+                                                color: area === q.area ? '#F5EFE0' : 'var(--color-charcoal)',
+                                                borderColor: area === q.area ? 'var(--color-charcoal)' : 'var(--color-border-strong)',
+                                            }}
+                                        >
+                                            {q.label} · {q.area} sq.ft
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
 
                             {/* Package Selector */}
@@ -75,6 +123,8 @@ export default function EstimateCalculator() {
                                     {(Object.entries(PACKAGE_RATES) as [PackageKey, typeof PACKAGE_RATES[PackageKey]][]).map(([key, pack]) => (
                                         <button
                                             key={key}
+                                            type="button"
+                                            aria-pressed={selectedPack === key}
                                             onClick={() => setSelectedPack(key)}
                                             className="relative p-4 rounded-xl border text-left flex flex-col transition-all"
                                             style={{
@@ -94,6 +144,9 @@ export default function EstimateCalculator() {
                                             <span className="text-xs text-mute leading-relaxed">
                                                 {pack.description}
                                             </span>
+                                            <span className="mt-2 text-[11px] font-bold tracking-wide" style={{ color: 'var(--color-brass-dark)' }}>
+                                                ₹{pack.min.toLocaleString('en-IN')}–{pack.max.toLocaleString('en-IN')}/sq.ft
+                                            </span>
                                         </button>
                                     ))}
                                 </div>
@@ -106,9 +159,10 @@ export default function EstimateCalculator() {
                         <motion.div
                             className="p-8 md:p-12 rounded-3xl shadow-2xl border flex flex-col relative overflow-hidden"
                             style={{ background: 'var(--color-charcoal)', borderColor: 'rgba(245,239,224,0.1)' }}
-                            animate={{ scale: [0.98, 1] }}
-                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                            key={selectedPack + area} // Re-animate subtly when estimate changes
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                         >
                             {/* Subtle accent glow */}
                             <div className="absolute -top-20 -right-20 w-64 h-64 bg-brass/20 rounded-full blur-3xl" />
@@ -117,11 +171,14 @@ export default function EstimateCalculator() {
                                 Estimated Range
                             </span>
 
-                            <div className="flex items-baseline gap-2 mb-8">
-                                <span className="text-4xl md:text-5xl font-display font-semibold" style={{ color: '#F5EFE0' }}>
-                                    ₹{Math.floor(estMin / 1000)}k <span className="text-3xl font-light text-brass-light">–</span> ₹{Math.floor(estMax / 1000)}k
+                            <div className="flex items-baseline gap-2 mb-2" aria-live="polite">
+                                <span className="text-5xl md:text-6xl font-display font-semibold tabular-nums" style={{ color: '#F5EFE0' }}>
+                                    <AnimatedINR value={estMin} /> <span className="text-3xl font-light text-brass-light">–</span> <AnimatedINR value={estMax} />
                                 </span>
                             </div>
+                            <p className="text-xs mb-8" style={{ color: 'rgba(245,239,224,0.45)' }}>
+                                Approximate, for {area.toLocaleString('en-IN')} sq.ft · {activeRate.label} finish · excl. GST
+                            </p>
 
                             <div className="mb-10 p-5 rounded-xl border" style={{ borderColor: 'rgba(245,239,224,0.08)', background: 'rgba(245,239,224,0.03)' }}>
                                 <h4 className="text-sm font-semibold mb-3" style={{ color: '#F5EFE0' }}>
@@ -143,10 +200,10 @@ export default function EstimateCalculator() {
 
                             <button
                                 onClick={() => openLeadModal({ package: activeRate.label })}
-                                className="w-full mt-10 py-4 rounded-xl font-medium text-charcoal shadow-xl hover:scale-[1.02] transition-transform"
+                                className="btn-sheen w-full mt-10 py-4 rounded-xl font-semibold text-charcoal shadow-xl hover:scale-[1.02] transition-transform"
                                 style={{ background: 'linear-gradient(135deg, var(--color-sand) 0%, #E8E0CB 100%)' }}
                             >
-                                Get Exact Quote for {area} sq.ft
+                                Get Exact Quote for {area.toLocaleString('en-IN')} sq.ft
                             </button>
                         </motion.div>
                     </div>

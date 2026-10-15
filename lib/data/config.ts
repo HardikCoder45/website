@@ -45,9 +45,110 @@ export const TRUST_BADGES = [
 export const SERVICES_NAV = [
     { label: "Kitchens", href: "#kitchens" },
     { label: "Wardrobes", href: "#wardrobes" },
+    { label: "Process", href: "#process" },
     { label: "Gallery", href: "#gallery" },
-    { label: "Services", href: "#interiors" },
+    { label: "FAQ", href: "#faq" },
     { label: "Contact", href: "#contact" },
+];
+
+export const SITE_URL = "https://amsinteriors.in";
+export const FOUNDED_YEAR = 2014;
+
+// Headline numbers shown in the hero and the "Why AMS" grid. Keep these in
+// sync with TRUST_BADGES so the site never contradicts itself.
+export const STATS = [
+    { value: 10, suffix: "Y", label: "Warranty" },
+    { value: 1000, suffix: "+", label: "Families Served" },
+    { value: 4.7, suffix: "★", label: "IndiaMart Rating", decimals: 1 },
+    { value: new Date().getFullYear() - FOUNDED_YEAR, suffix: "+", label: "Years in NCR" },
+];
+
+export const PROCESS_STEPS = [
+    {
+        step: "01",
+        title: "Free Site Visit",
+        duration: "Day 1",
+        description: "A senior designer visits your home, takes laser measurements and understands how your family actually lives.",
+    },
+    {
+        step: "02",
+        title: "3D Design & Quote",
+        duration: "Day 3–7",
+        description: "Photo-real 3D renders of every room with a line-item quote. Revise until it feels exactly right — no charge.",
+    },
+    {
+        step: "03",
+        title: "Factory Production",
+        duration: "Day 8–20",
+        description: "Panels are CNC-cut and edge-banded at our Indirapuram factory, so finishes are precise and site dust is minimal.",
+    },
+    {
+        step: "04",
+        title: "Installation",
+        duration: "Day 21–30",
+        description: "Our in-house crew installs, aligns and tests every hinge and channel. A dedicated site manager reports to you daily.",
+    },
+    {
+        step: "05",
+        title: "Handover & Warranty",
+        duration: "Move in",
+        description: "Deep-cleaned, snag-free handover with a written warranty of up to 10 years and lifetime service support.",
+    },
+];
+
+export const WHY_US = [
+    {
+        title: "Own factory, no middlemen",
+        description: "Manufactured in-house at Indirapuram, so you pay factory prices and get factory precision.",
+        icon: "factory",
+    },
+    {
+        title: "Free 3D design",
+        description: "See your exact kitchen or bedroom in 3D before a single panel is cut.",
+        icon: "cube",
+    },
+    {
+        title: "Up to 10-year warranty",
+        description: "Written warranty on carcass and hardware, backed by Godrej and Hettich fittings.",
+        icon: "shield",
+    },
+    {
+        title: "Transparent pricing",
+        description: "Line-item quotes with no hidden charges. GST-verified invoices for every rupee.",
+        icon: "receipt",
+    },
+    {
+        title: "On-time delivery",
+        description: "Most modular kitchens are installed in 15–25 days from design sign-off.",
+        icon: "clock",
+    },
+];
+
+export const FAQS = [
+    {
+        q: "How much does a modular kitchen cost in Delhi?",
+        a: "Our modular kitchens start at around ₹1,000 per sq.ft for an HDHMR + laminate finish and go up to ₹2,500 per sq.ft for lacquered glass with Hettich hardware. A typical 10×8 ft L-shaped kitchen lands between ₹1.2 and ₹2 lakh. Use the estimate calculator above for a quick range, then book a free visit for an exact quote.",
+    },
+    {
+        q: "Is the site visit really free?",
+        a: "Yes. A designer visits anywhere in Delhi NCR, measures your space and discusses layouts at no cost and with no obligation to book.",
+    },
+    {
+        q: "How long does a project take?",
+        a: "Modular kitchens and wardrobes usually take 15–25 days from design approval. Full-home interiors take 30–90 days depending on the scope of civil, electrical and false-ceiling work.",
+    },
+    {
+        q: "What warranty do you give?",
+        a: "Up to 10 years on the carcass and modular hardware depending on the material package, plus lifetime service support. All warranties are given in writing at handover.",
+    },
+    {
+        q: "Which areas do you serve?",
+        a: "All of Delhi NCR — East Delhi, Shahdara, Noida, Greater Noida, Ghaziabad, Indirapuram, Gurugram and Faridabad. Our studio is in Jagat Puri and our factory is in Indirapuram.",
+    },
+    {
+        q: "Can I see the design before production starts?",
+        a: "Absolutely. Every project gets a 3D design you can review and revise. You can also explore our interactive 3D kitchen, wardrobe and interior walkthroughs on this site.",
+    },
 ];
 
 export const CONTACT_INFO = {

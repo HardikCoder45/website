@@ -37,6 +37,18 @@ export default function ProductShowcase() {
             }
         });
 
+        gsap.fromTo('.product-progress', { scaleX: 0 }, {
+            scaleX: 1,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: sectionRef.current,
+                start: 'top top',
+                end: () => `+=${containerRef.current?.scrollWidth}`,
+                scrub: true,
+                invalidateOnRefresh: true,
+            }
+        });
+
         // Fade out the pinned section title as scroll begins
         gsap.to('.section-title-pinned', {
             opacity: 0,
@@ -52,7 +64,7 @@ export default function ProductShowcase() {
         });
 
         // Add amazing effects to each panel
-        panels.forEach((panel, i) => {
+        panels.forEach((panel) => {
             const content = panel.querySelector('.product-content');
             const image = panel.querySelector('.product-image');
             const number = panel.querySelector('.product-number');
@@ -123,17 +135,15 @@ export default function ProductShowcase() {
                         duration: 0.8, ease: "elastic.out(1, 0.3)"
                     });
                 };
-                button.addEventListener('mousemove', onMouseMove as any);
-                button.addEventListener('mouseleave', onMouseLeave as any);
+                button.addEventListener('mousemove', onMouseMove as EventListener);
+                button.addEventListener('mouseleave', onMouseLeave as EventListener);
             }
         });
-
-        return () => ScrollTrigger.getAll().forEach(t => t.kill());
     }, { scope: sectionRef });
 
     return (
         <section ref={sectionRef} id="products" className="relative bg-charcoal overflow-hidden scroll-mt-20">
-            <div className="section-title-pinned absolute top-0 left-0 w-full z-20 pointer-events-none pt-24 transition-opacity duration-500">
+            <div className="section-title-pinned hidden md:block absolute top-0 left-0 w-full z-20 pointer-events-none pt-24 transition-opacity duration-500">
                 <div className="container-site">
                     <SectionTitle
                         eyebrow="Our Collection"
@@ -143,6 +153,15 @@ export default function ProductShowcase() {
                         align="left"
                     />
                 </div>
+            </div>
+
+            {/* Journey progress */}
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 hidden md:flex items-center gap-4 pointer-events-none">
+                <span className="text-[10px] font-bold tracking-[0.3em] text-white/40">01</span>
+                <span className="relative block w-48 h-px bg-white/10 overflow-hidden">
+                    <span className="product-progress absolute inset-0 origin-left scale-x-0" style={{ background: 'var(--color-brass-light)' }} />
+                </span>
+                <span className="text-[10px] font-bold tracking-[0.3em] text-white/40">0{PRODUCT_CATEGORIES.length}</span>
             </div>
 
             <div
@@ -160,7 +179,8 @@ export default function ProductShowcase() {
                             <div className="product-image w-[140%] h-full relative left-[-20%]">
                                 <img
                                     src={product.image}
-                                    alt={product.name}
+                                    alt=""
+                                    loading={idx === 0 ? 'eager' : 'lazy'}
                                     className="w-full h-full object-cover opacity-20 grayscale-[0.2] hover:grayscale-0 transition-all duration-1000"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-r from-charcoal via-charcoal/90 to-charcoal/40" />
@@ -199,7 +219,7 @@ export default function ProductShowcase() {
                                 <div className="flex flex-wrap items-center gap-10">
                                     <button
                                         onClick={() => openLeadModal({ service: product.name })}
-                                        className="magnetic-btn px-12 py-6 rounded-2xl bg-brass text-white font-bold text-xs uppercase tracking-[0.3em] whitespace-nowrap shadow-2xl transition-transform"
+                                        className="magnetic-btn btn-sheen px-12 py-6 rounded-2xl bg-brass text-white font-bold text-xs uppercase tracking-[0.3em] whitespace-nowrap shadow-2xl transition-transform"
                                         style={{ boxShadow: '0 25px 50px -12px rgba(184,137,42,0.5)' }}
                                     >
                                         Get Estimate
@@ -216,7 +236,7 @@ export default function ProductShowcase() {
 
                                     <div className="flex flex-col border-l border-white/20 pl-10">
                                         <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold mb-1">Starting from</span>
-                                        <span className="text-3xl font-display font-bold text-white">₹{product.startingPrice}<span className="text-lg opacity-50 ml-1">{product.priceUnit}</span></span>
+                                        <span className="text-3xl font-display font-bold text-white">₹{product.startingPrice.toLocaleString('en-IN')}<span className="text-lg opacity-50 ml-1">{product.priceUnit}</span></span>
                                     </div>
                                 </div>
                             </div>
@@ -230,7 +250,7 @@ export default function ProductShowcase() {
                         </div>
 
                         {/* Side Scroll Hint */}
-                        <div className="absolute bottom-12 right-12 flex items-center gap-4 opacity-30">
+                        <div className="absolute bottom-12 right-12 hidden md:flex items-center gap-4 opacity-30">
                             <span className="text-[10px] uppercase tracking-[0.3em] text-white">Scroll to travel</span>
                             <div className="w-24 h-px bg-gradient-to-r from-brass to-transparent" />
                         </div>
