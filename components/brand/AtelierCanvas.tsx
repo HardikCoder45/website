@@ -1,7 +1,7 @@
 'use client';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { ContactShadows, Environment, Lightformer, RoundedBox } from '@react-three/drei';
+import { ContactShadows, Environment, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 import { usePbr, preloadPbr, PBR_NAMES } from '@/lib/three/usePbr';
 import type { Material } from '@/lib/data/work';
@@ -32,6 +32,8 @@ function Specimen({ material }: { material: Material }) {
         metalness: material.metalness,
         clearcoat: material.clearcoat,
         clearcoatRoughness: 0.25,
+        // Metals are all reflection, so give them a brighter environment.
+        envMapIntensity: material.metalness ? 2.6 : 1,
     };
 
     return (
@@ -74,13 +76,10 @@ export default function AtelierCanvas({ material }: { material: Material }) {
                 onCreated={({ camera, gl }) => { camera.lookAt(0, 0.72, 0); gl.toneMapping = THREE.AgXToneMapping; gl.toneMappingExposure = 1.1; }}
             >
                 <Suspense fallback={null}>
-                    {/* A small "photo studio": softboxes give stone and brass clean, believable highlights. */}
-                    <Environment resolution={256}>
-                        <Lightformer form="rect" intensity={3} position={[-3, 3, 2]} scale={[3, 4, 1]} color="#fff4e6" target={[0, 1, 0]} />
-                        <Lightformer form="rect" intensity={1.2} position={[4, 2, 3]} scale={[2, 5, 1]} color="#ffffff" target={[0, 1, 0]} />
-                        <Lightformer form="rect" intensity={0.8} position={[0, 5, -3]} scale={[6, 2, 1]} color="#ffe9cf" target={[0, 1, 0]} />
-                        <Lightformer form="circle" intensity={0.6} position={[0, -2, 4]} scale={2} color="#d8cfc2" />
-                    </Environment>
+                    {/* Studio HDRI for clean reflections (a Lightformer cube-map render
+                        fails on some GPUs, leaving metals black). Key + rim lights shape it. */}
+                    <Environment files="/hdri/studio.exr" environmentIntensity={1.1} />
+                    <directionalLight position={[3, 2.5, 4]} intensity={0.8} color="#fff4e6" />
                     <directionalLight position={[-3, 5, 3]} intensity={1.6} castShadow shadow-mapSize={[1024, 1024]} shadow-radius={6} />
                     <Specimen material={material} />
                     <ContactShadows position={[0, 0.001, 0]} scale={6} blur={2.8} opacity={0.45} far={2} resolution={512} color="#3a3128" />

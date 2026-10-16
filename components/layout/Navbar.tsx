@@ -110,7 +110,7 @@ export default function Navbar() {
                         style={{ background: 'var(--color-charcoal)', color: '#EEE9E1' }}
                         data-lenis-prevent
                     >
-                        <div className="container-site h-20 md:h-24 flex items-center justify-between">
+                        <div className="container-site w-full h-20 md:h-24 flex items-center justify-between">
                             <span className="font-display text-[32px] font-light tracking-[0.14em]">AMS</span>
                             <button onClick={() => setOpen(false)} className="label flex items-center gap-3" aria-label="Close menu">
                                 Close
@@ -118,7 +118,7 @@ export default function Navbar() {
                             </button>
                         </div>
 
-                        <div className="container-site flex-1 grid lg:grid-cols-[1.4fr_1fr] gap-12 py-10 overflow-y-auto">
+                        <div className="container-site w-full flex-1 grid lg:grid-cols-[1.4fr_1fr] gap-12 py-10 overflow-y-auto">
                             <ul className="flex flex-col justify-center">
                                 {[...SERVICES_NAV, { label: '3D Kitchen Tour', href: '/kitchen' }].map((item, i) => (
                                     <li key={item.href} className="overflow-hidden border-b" style={{ borderColor: 'var(--color-line-dark)' }}>
