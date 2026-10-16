@@ -188,7 +188,7 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
                             >
                                 <span className="absolute w-9 h-9 rounded-full pulse-ring" style={{ background: 'rgba(212,168,75,0.35)' }} />
                                 <span
-                                    className="relative w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border transition-transform group-hover:scale-125"
+                                    className="relative w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-medium border transition-transform group-hover:scale-125"
                                     style={{
                                         background: i === stop ? 'var(--color-brass)' : 'rgba(20,15,8,0.75)',
                                         borderColor: 'rgba(212,168,75,0.8)',
@@ -234,8 +234,8 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
                                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
                             </Link>
                             <div className="px-4 py-2 rounded-2xl backdrop-blur-xl border" style={{ background: 'rgba(20,15,8,0.55)', borderColor: 'rgba(245,239,224,0.12)' }}>
-                                <p className="text-[9px] uppercase tracking-[0.3em] font-bold" style={{ color: 'var(--color-brass-light)' }}>{tour.eyebrow}</p>
-                                <h1 className="font-display text-lg md:text-xl font-bold leading-tight" style={{ color: '#F5EFE0' }}>{tour.title}</h1>
+                                <p className="text-[9px] uppercase tracking-[0.3em] font-medium" style={{ color: 'var(--color-brass-light)' }}>{tour.eyebrow}</p>
+                                <h1 className="font-display text-xl md:text-2xl font-light leading-tight" style={{ color: '#F5EFE0' }}>{tour.title}</h1>
                             </div>
                         </div>
 
@@ -246,7 +246,7 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
                                         key={m}
                                         onClick={() => setMood(m)}
                                         aria-pressed={mood === m}
-                                        className="px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest transition-colors"
+                                        className="px-4 py-2 rounded-full text-[11px] font-medium uppercase tracking-widest transition-colors"
                                         style={{ background: mood === m ? 'var(--color-brass)' : 'transparent', color: mood === m ? '#fff' : 'rgba(245,239,224,0.7)' }}
                                     >
                                         {m === 'day' ? '☀ Day' : '☾ Evening'}
@@ -270,7 +270,7 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
                                     key={s.id}
                                     onClick={() => { setStop(i); setMoved(false); setAutoplay(false); }}
                                     aria-current={i === stop ? 'step' : undefined}
-                                    className="shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider backdrop-blur-xl border transition-all"
+                                    className="shrink-0 px-3 py-1.5 rounded-full text-[10px] font-medium uppercase tracking-wider backdrop-blur-xl border transition-all"
                                     style={{
                                         background: i === stop ? 'rgba(245,239,224,0.95)' : 'rgba(20,15,8,0.55)',
                                         color: i === stop ? 'var(--color-charcoal)' : 'rgba(245,239,224,0.75)',
@@ -288,7 +288,7 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                                className="p-5 md:p-6 rounded-3xl backdrop-blur-xl border"
+                                className="p-5 md:p-6 rounded-md backdrop-blur-xl border"
                                 style={{ background: 'rgba(20,15,8,0.65)', borderColor: 'rgba(245,239,224,0.12)' }}
                             >
                                 <div className="flex items-center justify-between mb-2">
@@ -303,10 +303,10 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
                                         <SmallBtn label="Next stop" onClick={() => go(1)}><path d="M9 18l6-6-6-6" /></SmallBtn>
                                     </div>
                                 </div>
-                                <h2 className="font-display text-2xl md:text-3xl font-bold mb-2" style={{ color: '#F5EFE0' }}>{current.label}</h2>
+                                <h2 className="font-display text-3xl md:text-4xl font-light mb-2" style={{ color: '#F5EFE0' }}>{current.label}</h2>
                                 <p className="text-sm leading-relaxed" style={{ color: 'rgba(245,239,224,0.7)' }}>{current.description}</p>
                                 {moved && (
-                                    <button onClick={resetView} className="mt-3 text-[11px] font-bold uppercase tracking-widest underline underline-offset-4" style={{ color: 'var(--color-brass-light)' }}>
+                                    <button onClick={resetView} className="mt-3 text-[11px] font-medium uppercase tracking-widest underline underline-offset-4" style={{ color: 'var(--color-brass-light)' }}>
                                         Reset view
                                     </button>
                                 )}
@@ -317,8 +317,8 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
                     {/* Mobile: open configurator */}
                     <button
                         onClick={() => setPanelOpen(true)}
-                        className="md:hidden absolute z-20 bottom-4 left-4 right-4 py-4 rounded-2xl text-xs font-bold uppercase tracking-widest text-white"
-                        style={{ background: 'linear-gradient(135deg, var(--color-brass), var(--color-brass-dark))' }}
+                        className="label md:hidden absolute z-20 bottom-4 left-4 right-4 py-4 rounded-full"
+                        style={{ background: '#EEE9E1', color: '#141310' }}
                     >
                         Customise · {formatINR(low)}–{formatINR(high)}
                     </button>
@@ -326,20 +326,20 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
                     {/* Configurator */}
                     <aside
                         data-lenis-prevent
-                        className={`absolute z-30 md:z-20 inset-x-0 bottom-0 md:inset-auto md:top-24 md:right-6 md:bottom-6 md:w-[340px] max-h-[78vh] md:max-h-none overflow-y-auto rounded-t-3xl md:rounded-3xl backdrop-blur-xl border transition-transform duration-500 md:translate-y-0 ${panelOpen ? 'translate-y-0' : 'translate-y-full'}`}
+                        className={`absolute z-30 md:z-20 inset-x-0 bottom-0 md:inset-auto md:top-24 md:right-6 md:bottom-6 md:w-[340px] max-h-[78vh] md:max-h-none overflow-y-auto rounded-t-md md:rounded-md backdrop-blur-xl border transition-transform duration-500 md:translate-y-0 ${panelOpen ? 'translate-y-0' : 'translate-y-full'}`}
                         style={{ background: 'rgba(20,15,8,0.82)', borderColor: 'rgba(245,239,224,0.12)' }}
                         aria-label="Customise this design"
                     >
                         <div className="p-5 md:p-6">
                             <div className="flex items-center justify-between mb-1">
-                                <p className="text-[10px] uppercase tracking-[0.3em] font-bold" style={{ color: 'var(--color-brass-light)' }}>Customise</p>
-                                <button onClick={() => setPanelOpen(false)} className="md:hidden text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(245,239,224,0.6)' }}>Close</button>
+                                <p className="text-[10px] uppercase tracking-[0.3em] font-medium" style={{ color: 'var(--color-brass-light)' }}>Customise</p>
+                                <button onClick={() => setPanelOpen(false)} className="md:hidden text-xs font-medium uppercase tracking-widest" style={{ color: 'rgba(245,239,224,0.6)' }}>Close</button>
                             </div>
                             <p className="text-xs leading-relaxed mb-6" style={{ color: 'rgba(245,239,224,0.55)' }}>{tour.intro}</p>
 
                             <div className="sm:hidden flex p-1 rounded-full border mb-6" style={{ borderColor: 'rgba(245,239,224,0.12)' }}>
                                 {(['day', 'evening'] as Mood[]).map((m) => (
-                                    <button key={m} onClick={() => setMood(m)} aria-pressed={mood === m} className="flex-1 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest" style={{ background: mood === m ? 'var(--color-brass)' : 'transparent', color: mood === m ? '#fff' : 'rgba(245,239,224,0.7)' }}>
+                                    <button key={m} onClick={() => setMood(m)} aria-pressed={mood === m} className="flex-1 py-2 rounded-full text-[11px] font-medium uppercase tracking-widest" style={{ background: mood === m ? 'var(--color-brass)' : 'transparent', color: mood === m ? '#fff' : 'rgba(245,239,224,0.7)' }}>
                                         {m === 'day' ? '☀ Day' : '☾ Evening'}
                                     </button>
                                 ))}
@@ -350,7 +350,7 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
                                 return (
                                     <fieldset key={g.id} className="mb-6">
                                         <legend className="flex w-full items-baseline justify-between mb-3">
-                                            <span className="text-xs font-bold" style={{ color: '#F5EFE0' }}>{g.label}</span>
+                                            <span className="text-xs font-medium" style={{ color: '#F5EFE0' }}>{g.label}</span>
                                             <span className="text-[11px]" style={{ color: 'rgba(245,239,224,0.55)' }}>{active?.label}</span>
                                         </legend>
                                         <div className="flex flex-wrap gap-2.5">
@@ -378,7 +378,7 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
 
                             {tour.toggles.map((t) => (
                                 <label key={t.id} className="flex items-center justify-between mb-6 cursor-pointer">
-                                    <span className="text-xs font-bold" style={{ color: '#F5EFE0' }}>{t.label}</span>
+                                    <span className="text-xs font-medium" style={{ color: '#F5EFE0' }}>{t.label}</span>
                                     <span className="relative inline-flex">
                                         <input type="checkbox" className="peer sr-only" checked={!!toggles[t.id]} onChange={(e) => setToggles((s) => ({ ...s, [t.id]: e.target.checked }))} />
                                         <span className="w-11 h-6 rounded-full transition-colors peer-checked:bg-brass peer-focus-visible:ring-2 peer-focus-visible:ring-brass-light" style={{ background: toggles[t.id] ? 'var(--color-brass)' : 'rgba(245,239,224,0.15)' }} />
@@ -388,8 +388,8 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
                             ))}
 
                             <div className="pt-5 mt-2 border-t" style={{ borderColor: 'rgba(245,239,224,0.1)' }}>
-                                <p className="text-[10px] uppercase tracking-[0.25em] font-bold mb-1" style={{ color: 'rgba(245,239,224,0.5)' }}>Estimate for ~{tour.area} sq.ft</p>
-                                <p className="font-display text-4xl font-bold tabular-nums mb-1" style={{ color: '#F5EFE0' }}>
+                                <p className="text-[10px] uppercase tracking-[0.25em] font-medium mb-1" style={{ color: 'rgba(245,239,224,0.5)' }}>Estimate for ~{tour.area} sq.ft</p>
+                                <p className="font-display text-4xl font-light tabular-nums mb-1" style={{ color: '#F5EFE0' }}>
                                     {formatINR(low)} <span className="text-2xl font-light" style={{ color: 'var(--color-brass-light)' }}>–</span> {formatINR(high)}
                                 </p>
                                 <p className="text-[11px] mb-5" style={{ color: 'rgba(245,239,224,0.45)' }}>Indicative, excl. GST. Exact quote after a free site visit.</p>
@@ -397,12 +397,12 @@ export default function TourExperience({ tour, Scene }: TourExperienceProps) {
                                     href={quoteHref}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="btn-sheen flex items-center justify-center gap-2 w-full py-4 rounded-2xl text-xs font-bold uppercase tracking-widest text-white mb-2"
-                                    style={{ background: 'linear-gradient(135deg, var(--color-brass), var(--color-brass-dark))' }}
+                                    className="label flex items-center justify-center gap-2 w-full py-4 rounded-full mb-2 transition-opacity hover:opacity-90"
+                                    style={{ background: '#EEE9E1', color: '#141310' }}
                                 >
                                     Get this design quoted
                                 </a>
-                                <Link href="/#contact" className="flex items-center justify-center w-full py-3 rounded-2xl text-[11px] font-bold uppercase tracking-widest border" style={{ borderColor: 'rgba(245,239,224,0.2)', color: '#F5EFE0' }}>
+                                <Link href="/#contact" className="label flex items-center justify-center w-full py-3.5 rounded-full border" style={{ borderColor: 'rgba(245,239,224,0.2)', color: '#F5EFE0' }}>
                                     Book free site visit
                                 </Link>
                             </div>

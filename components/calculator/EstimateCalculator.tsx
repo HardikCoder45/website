@@ -58,11 +58,9 @@ export default function EstimateCalculator() {
 
                     {/* Controls */}
                     <div className="w-full lg:w-1/2">
-                        <span className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={{ color: 'var(--color-brass)' }}>
-                            Instant Estimate
-                        </span>
-                        <h2 className="text-4xl md:text-5xl font-display font-semibold mb-6" style={{ color: 'var(--color-charcoal)' }}>
-                            Plan Your <span className="text-brass-gradient">Budget</span>
+                        <p className="label mb-6" style={{ color: 'var(--color-mute)' }}>( 08 ) &nbsp;Estimate</p>
+                        <h2 className="display mb-6" style={{ color: 'var(--color-charcoal)', fontSize: 'clamp(40px, 5vw, 84px)' }}>
+                            Plan the <span className="italic" style={{ color: 'var(--color-brass-dark)' }}>budget.</span>
                         </h2>
                         <p className="text-mute mb-10 text-lg">
                             Get an instant approximate calculation for your modular kitchen, wardrobe, or full home interior based on your carpet area.
@@ -75,7 +73,7 @@ export default function EstimateCalculator() {
                                     <label htmlFor="area-slider" className="text-sm font-bold tracking-wider uppercase text-charcoal">
                                         Estimated Area (Sq.Ft)
                                     </label>
-                                    <span className="text-2xl font-display font-semibold text-brass-dark">{area} sq.ft</span>
+                                    <span className="text-2xl font-display font-light text-brass-dark">{area} sq.ft</span>
                                 </div>
                                 <input
                                     id="area-slider"
@@ -172,7 +170,7 @@ export default function EstimateCalculator() {
                             </span>
 
                             <div className="flex items-baseline gap-2 mb-2" aria-live="polite">
-                                <span className="text-5xl md:text-6xl font-display font-semibold tabular-nums" style={{ color: '#F5EFE0' }}>
+                                <span className="text-5xl md:text-6xl font-display font-light tabular-nums" style={{ color: '#F5EFE0' }}>
                                     <AnimatedINR value={estMin} /> <span className="text-3xl font-light text-brass-light">–</span> <AnimatedINR value={estMax} />
                                 </span>
                             </div>

@@ -40,15 +40,13 @@ export default function ProcessSection() {
 
     return (
         <section ref={sectionRef} id="process" className="section-pad scroll-mt-16 relative overflow-hidden" style={{ background: 'var(--color-charcoal)' }}>
-            <div className="absolute -left-40 top-1/3 w-[520px] h-[520px] rounded-full blur-[140px] pointer-events-none" style={{ background: 'rgba(184,137,42,0.12)' }} />
+            
             <div className="container-site relative">
                 <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-16 lg:gap-24">
                     {/* Sticky intro */}
                     <div className="lg:sticky lg:top-32 self-start">
-                        <span className="inline-block px-3 py-1 mb-6 text-[10px] font-bold tracking-[0.3em] uppercase rounded-full border" style={{ borderColor: 'rgba(212,168,75,0.3)', color: 'var(--color-brass-light)' }}>
-                            How it works
-                        </span>
-                        <h2 className="font-display font-bold text-5xl md:text-7xl leading-[0.98] tracking-tight mb-8" style={{ color: '#F5EFE0' }}>
+                        <p className="label mb-6" style={{ color: 'var(--color-ash)' }}>( 06 ) &nbsp;Process</p>
+                        <h2 className="display mb-8" style={{ color: '#EEE9E1', fontSize: 'clamp(44px, 5.6vw, 96px)' }}>
                             From first visit<br />to <span className="italic font-normal text-brass-gradient">move-in day.</span>
                         </h2>
                         <p className="text-lg leading-relaxed max-w-md mb-10" style={{ color: 'rgba(245,239,224,0.6)' }}>
@@ -56,8 +54,8 @@ export default function ProcessSection() {
                         </p>
                         <button
                             onClick={() => openLeadModal({ service: 'General Enquiry' })}
-                            className="btn-sheen inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-xs font-bold uppercase tracking-widest text-white"
-                            style={{ background: 'linear-gradient(135deg, var(--color-brass), var(--color-brass-dark))', boxShadow: '0 20px 40px -12px rgba(184,137,42,0.5)' }}
+                            className="label inline-flex items-center gap-3 px-8 py-4 rounded-full border transition-colors duration-500 hover:bg-transparent hover:text-[#EEE9E1]"
+                            style={{ background: '#EEE9E1', color: '#141310', borderColor: '#EEE9E1' }}
                         >
                             Start with step one
                             <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
@@ -72,13 +70,13 @@ export default function ProcessSection() {
                         {PROCESS_STEPS.map((step) => (
                             <li key={step.step} className="process-step group relative pb-14 last:pb-0">
                                 <span
-                                    className="process-dot absolute -left-12 md:-left-20 top-1 w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center font-display font-bold text-xs md:text-base border transition-all duration-500"
+                                    className="process-dot absolute -left-12 md:-left-20 top-1 w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center font-display font-light text-xs md:text-base border transition-all duration-500"
                                     aria-hidden="true"
                                 >
                                     {step.step}
                                 </span>
                                 <div className="flex items-baseline gap-4 mb-3 flex-wrap">
-                                    <h3 className="font-display font-bold text-3xl md:text-4xl" style={{ color: '#F5EFE0' }}>{step.title}</h3>
+                                    <h3 className="font-display font-light text-3xl md:text-4xl" style={{ color: '#F5EFE0' }}>{step.title}</h3>
                                     <span className="text-[10px] uppercase tracking-[0.3em] font-bold" style={{ color: 'var(--color-brass-light)' }}>{step.duration}</span>
                                 </div>
                                 <p className="text-base md:text-lg leading-relaxed max-w-xl" style={{ color: 'rgba(245,239,224,0.6)' }}>{step.description}</p>

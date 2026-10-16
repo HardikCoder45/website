@@ -4,7 +4,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { INTERIOR_FINISHES } from '@/lib/data/tours';
 import { useFinishMaterials } from '@/lib/three/useFinishMaterials';
-import { plankTexture, plasterTexture } from '@/lib/three/textures';
+import { usePbr } from '@/lib/three/usePbr';
 import Prop from '@/components/three/Prop';
 import type { SceneProps } from './types';
 
@@ -12,19 +12,29 @@ import type { SceneProps } from './types';
 // (x = -4) are solid; the other two are left open like a dollhouse cutaway.
 const ROOM = { x0: -4, x1: 4, z0: -3, z1: 3.5, h: 3 };
 const SKY_DAY = new THREE.Color('#e3edf6');
+// Profile for a slender ceramic vase (radius, height) spun on a lathe.
+const VASE = [[0, 0], [0.07, 0], [0.09, 0.04], [0.11, 0.14], [0.1, 0.24], [0.06, 0.32], [0.045, 0.38], [0.055, 0.42], [0, 0.42]].map(([x, y]) => new THREE.Vector2(x, y));
 const SKY_NIGHT = new THREE.Color('#1d2840');
 
 const BASE = {
     'room-wall': { color: '#e7dccb', roughness: 0.9 },
     'room-panel': { color: '#5c4130', roughness: 0.55, clearcoat: 0.15 },
-    'room-floor': { color: '#a57a4f', roughness: 0.45, clearcoat: 0.3, clearcoatRoughness: 0.4 },
+    'room-floor': { color: '#dcc4a6', roughness: 0.45, clearcoat: 0.3, clearcoatRoughness: 0.4 },
     'room-cove': { color: '#ffc27a', emissive: '#ffc27a', emissiveIntensity: 2.5 },
 };
 
 export default function InteriorScene({ selection, mood, toggles }: SceneProps) {
+    const floorOak = usePbr('oak', [6, 10]);
+    const plaster = usePbr('plaster', [4, 2]);
+    const panelOak = usePbr('oak', [1, 3], Math.PI / 2);
+    const calacatta = usePbr('calacatta', [1, 1]);
+    const nero = usePbr('nero', [1.5, 0.4]);
+    const linen = usePbr('linen', [3, 2]);
+    const travertine = usePbr('travertine', [1, 1]);
     const mats = useFinishMaterials(BASE, INTERIOR_FINISHES, selection, (m) => {
-        m['room-floor'].map = plankTexture(5, 21);
-        m['room-wall'].map = plasterTexture(4, 5);
+        Object.assign(m['room-floor'], floorOak);
+        Object.assign(m['room-wall'], plaster);
+        Object.assign(m['room-panel'], { map: panelOak.map, roughnessMap: panelOak.roughnessMap });
     });
     const evening = mood === 'evening';
 
@@ -32,20 +42,20 @@ export default function InteriorScene({ selection, mood, toggles }: SceneProps) 
         return {
             ceiling: new THREE.MeshStandardMaterial({ color: '#f4efe6', roughness: 0.95, emissive: '#3a342c', emissiveIntensity: 0.6 }),
             tv: new THREE.MeshStandardMaterial({ color: '#0b0b0c', roughness: 0.15, metalness: 0.4, emissive: '#1a2230', emissiveIntensity: 0.4 }),
-            console: new THREE.MeshPhysicalMaterial({ color: '#2a221c', roughness: 0.35, clearcoat: 0.5 }),
-            marble: new THREE.MeshPhysicalMaterial({ color: '#efebe4', roughness: 0.15, clearcoat: 0.6 }),
+            console: new THREE.MeshPhysicalMaterial({ ...nero, color: '#ffffff', roughness: 0.2, clearcoat: 0.6 }),
+            marble: new THREE.MeshPhysicalMaterial({ ...calacatta, color: '#ffffff', roughness: 0.15, clearcoat: 0.6 }),
             brass: new THREE.MeshStandardMaterial({ color: '#c9a86a', roughness: 0.3, metalness: 1 }),
-            rug: new THREE.MeshStandardMaterial({ color: '#d9ccb4', roughness: 1 }),
+            rug: new THREE.MeshStandardMaterial({ ...linen, color: '#ddd2bf', roughness: 1 }),
             rugBorder: new THREE.MeshStandardMaterial({ color: '#8f6b3e', roughness: 1 }),
             sky: new THREE.MeshBasicMaterial({ color: '#dfe9f2', toneMapped: false }),
             frame: new THREE.MeshStandardMaterial({ color: '#2b2622', roughness: 0.4, metalness: 0.3 }),
             cushion: new THREE.MeshStandardMaterial({ color: '#c6b59a', roughness: 1 }),
             spot: new THREE.MeshStandardMaterial({ color: '#fff6e5', emissive: '#fff1d6', emissiveIntensity: 3 }),
-            plant: new THREE.MeshStandardMaterial({ color: '#4d6b3c', roughness: 0.8 }),
-            pot: new THREE.MeshStandardMaterial({ color: '#d8cdbb', roughness: 0.6 }),
+            pot: new THREE.MeshStandardMaterial({ ...travertine, color: '#e3d8c6', roughness: 0.8 }),
+            ceramic: new THREE.MeshPhysicalMaterial({ color: '#2b2824', roughness: 0.35, clearcoat: 0.4 }),
             art: new THREE.MeshStandardMaterial({ color: '#b58457', roughness: 0.8 }),
         };
-    }, []);
+    }, [nero, calacatta, linen, travertine]);
 
     // Animated materials are reached through a ref so per-frame mutation stays
     // outside React's render data.
@@ -104,8 +114,8 @@ export default function InteriorScene({ selection, mood, toggles }: SceneProps) 
                 <mesh material={env.console} position={[0, 0.42, 0.25]}><boxGeometry args={[2.6, 0.34, 0.42]} /></mesh>
                 <mesh material={mats['room-cove']} position={[0, 0.245, 0.3]}><boxGeometry args={[2.5, 0.01, 0.3]} /></mesh>
                 {/* Décor on console */}
-                <mesh material={env.pot} position={[-1.0, 0.72, 0.25]}><cylinderGeometry args={[0.09, 0.07, 0.26, 24]} /></mesh>
-                <mesh material={env.plant} position={[-1.0, 1.0, 0.25]}><sphereGeometry args={[0.2, 20, 16]} /></mesh>
+                <mesh material={env.ceramic} position={[-1.0, 0.59, 0.25]}><latheGeometry args={[VASE, 64]} /></mesh>
+                <mesh material={env.pot} position={[-0.72, 0.59, 0.25]} scale={0.6}><latheGeometry args={[VASE, 64]} /></mesh>
                 <mesh material={env.brass} position={[1.0, 0.64, 0.25]}><torusGeometry args={[0.09, 0.012, 12, 40]} /></mesh>
             </group>
 
@@ -151,8 +161,7 @@ export default function InteriorScene({ selection, mood, toggles }: SceneProps) 
             <Prop name="lamp" height={0.5} position={[1.9, 0.56, 2.1]} />
 
             {/* Plant in the corner */}
-            <mesh material={env.pot} position={[-3.4, 0.25, -2.4]}><cylinderGeometry args={[0.25, 0.2, 0.5, 24]} /></mesh>
-            <mesh material={env.plant} position={[-3.4, 1.0, -2.4]}><sphereGeometry args={[0.45, 24, 20]} /></mesh>
+            <mesh material={env.pot} position={[-3.4, 0, -2.4]} scale={2.6}><latheGeometry args={[VASE, 64]} /></mesh>
 
             {/* Lighting */}
             <hemisphereLight args={[evening ? '#3a3040' : '#fff6ea', evening ? '#1a120a' : '#b89a78', evening ? 0.25 : 0.9]} />

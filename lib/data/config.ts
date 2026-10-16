@@ -43,11 +43,10 @@ export const TRUST_BADGES = [
 ];
 
 export const SERVICES_NAV = [
-    { label: "Kitchens", href: "#kitchens" },
-    { label: "Wardrobes", href: "#wardrobes" },
+    { label: "Work", href: "#work" },
+    { label: "Services", href: "#services" },
+    { label: "Atelier", href: "#atelier" },
     { label: "Process", href: "#process" },
-    { label: "Gallery", href: "#gallery" },
-    { label: "FAQ", href: "#faq" },
     { label: "Contact", href: "#contact" },
 ];
 

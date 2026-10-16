@@ -4,7 +4,6 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useAppStore } from '@/lib/store/useAppStore';
-import { useProductStore } from '@/lib/store/useProductStore';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,7 +22,6 @@ export function scrollToTarget(target: string | number | HTMLElement) {
 
 export default function SmoothScroll() {
     const leadOpen = useAppStore((s) => s.isLeadModalOpen);
-    const productOpen = useProductStore((s) => s.isOpen);
 
     useEffect(() => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -50,9 +48,9 @@ export default function SmoothScroll() {
     // Freeze page scroll while any modal is open.
     useEffect(() => {
         if (!lenisInstance) return;
-        if (leadOpen || productOpen) lenisInstance.stop();
+        if (leadOpen) lenisInstance.stop();
         else lenisInstance.start();
-    }, [leadOpen, productOpen]);
+    }, [leadOpen]);
 
     return null;
 }

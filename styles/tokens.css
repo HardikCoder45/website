@@ -1,14 +1,18 @@
 :root {
   /* Brand palette */
-  --color-sand:       #F5EFE0;   /* page background */
-  --color-brass:      #B8892A;   /* primary CTA, accents */
-  --color-brass-dark: #8A6318;   /* CTA hover state */
-  --color-brass-light:#D4A84B;   /* light accent */
-  --color-charcoal:   #2C2416;   /* headings, footer bg */
-  --color-surface:    #FAFAF7;   /* card backgrounds */
-  --color-mute:       #6B6358;   /* body text, labels */
-  --color-border:     rgba(44,36,22,0.12); /* card borders */
-  --color-border-strong: rgba(44,36,22,0.24);
+  /* Quiet-luxury palette: warm ink, bone, stone and a muted brass. */
+  --color-sand:       #EEE9E1;   /* bone — page background */
+  --color-brass:      #A88A5C;   /* muted brass accent */
+  --color-brass-dark: #7D6643;
+  --color-brass-light:#CBB48D;
+  --color-charcoal:   #141310;   /* warm ink */
+  --color-surface:    #F6F3EE;   /* paper */
+  --color-stone:      #D8CFC2;
+  --color-mute:       #6F6960;   /* secondary text on light */
+  --color-border:     rgba(20,19,16,0.10);
+  --color-border-strong: rgba(20,19,16,0.22);
+  --color-ash:        rgba(238,233,225,0.62); /* secondary text on ink */
+  --color-line-dark:  rgba(238,233,225,0.14);
   --color-error:      #C0392B;   /* form error / terracotta */
 
   /* Typography */
@@ -31,6 +35,7 @@
 
   /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-lux: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-in-expo:  cubic-bezier(0.7, 0, 0.84, 0);
   --duration-fast: 180ms;
   --duration-base: 300ms;

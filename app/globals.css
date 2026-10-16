@@ -73,13 +73,9 @@ h4 {
 }
 
 /* ─── Brass Gradient Text ─────────────────────────────────────── */
+/* Kept for older markup: now a calm, static accent (no shimmer). */
 .text-brass-gradient {
-  background: linear-gradient(135deg, var(--color-brass) 0%, var(--color-brass-light) 40%, var(--color-brass-dark) 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmer 3s linear infinite;
+  color: var(--color-brass);
 }
 
 @keyframes shimmer {
@@ -438,4 +434,71 @@ html.has-custom-cursor iframe {
   border-color: var(--color-brass-light);
   color: #fff;
   box-shadow: 0 0 0 6px rgba(184, 137, 42, 0.15), 0 0 30px rgba(212, 168, 75, 0.5);
+}
+
+
+/* ─── Editorial primitives ────────────────────────────────────── */
+.label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+
+.hairline {
+  height: 1px;
+  background: currentColor;
+  opacity: 0.18;
+}
+
+/* Underline that draws in on hover */
+.link-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.6s var(--ease-out-expo);
+}
+
+.link-draw:hover {
+  background-size: 100% 1px;
+}
+
+/* Page-wide film grain */
+.film-grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(6) infinite;
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -1%); }
+  80% { transform: translate(3%, 2%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Image reveal: clip from bottom, used with GSAP */
+.reveal-img {
+  clip-path: inset(100% 0 0 0);
+}
+
+/* Native controls in the brand colour */
+input[type="range"],
+input[type="checkbox"] {
+  accent-color: var(--color-charcoal);
 }

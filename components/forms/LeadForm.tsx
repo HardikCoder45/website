@@ -140,7 +140,7 @@ export default function LeadForm({ onSuccess, defaultService }: LeadFormProps) {
                         <polyline points="20 6 9 17 4 12" />
                     </svg>
                 </div>
-                <h3 className="text-3xl font-display font-bold mb-2 text-charcoal">All Set!</h3>
+                <h3 className="text-3xl font-display font-light mb-2 text-charcoal">All Set!</h3>
                 <p className="text-mute mb-6 max-w-sm">
                     Opening WhatsApp to connect you with our lead designer...
                 </p>
@@ -239,8 +239,8 @@ export default function LeadForm({ onSuccess, defaultService }: LeadFormProps) {
                     onMouseLeave={handleMouseLeave}
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="btn-sheen group w-full py-5 rounded-2xl text-white font-bold text-xs uppercase tracking-[0.3em] shadow-[0_20px_40px_-15px_rgba(184,137,42,0.4)] hover:shadow-[0_25px_50px_-12px_rgba(184,137,42,0.5)] transition-all flex items-center justify-center gap-3 disabled:opacity-70"
-                    style={{ background: 'linear-gradient(135deg, var(--color-brass), var(--color-brass-dark))' }}
+                    className="btn-sheen group w-full py-5 rounded-2xl text-white font-bold text-xs uppercase tracking-[0.3em] hover: transition-all flex items-center justify-center gap-3 disabled:opacity-70"
+                    style={{ background: 'var(--color-charcoal)' }}
                 >
                     {status === 'submitting' ? (
                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

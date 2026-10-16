@@ -4,7 +4,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { WARDROBE_FINISHES } from '@/lib/data/tours';
 import { useFinishMaterials } from '@/lib/three/useFinishMaterials';
-import { plankTexture, plasterTexture } from '@/lib/three/textures';
+import { usePbr } from '@/lib/three/usePbr';
 import Prop from '@/components/three/Prop';
 import type { SceneProps } from './types';
 
@@ -19,7 +19,8 @@ const BASE = {
     'wardrobe-handle': { color: '#c9a86a', roughness: 0.3, metalness: 1 },
 };
 
-const CLOTHES = ['#2f3b52', '#c9b79c', '#7b2d2d', '#e8e2d6', '#4a5a43', '#1f1f1f', '#b56a4a', '#d8c7a3', '#3c4f6b', '#8a7a68'];
+// A muted, real-wardrobe palette: navy, camel, ivory, charcoal, olive, stone.
+const CLOTHES = ['#2c3242', '#b9a487', '#e7e1d6', '#2a2927', '#5d6150', '#cfc4b2', '#8c7a66', '#f1ede6', '#3d4452', '#a89a86'];
 
 function Door({ x, hinge, mat, handle, open }: { x: number; hinge: 'left' | 'right'; mat: THREE.Material; handle: THREE.Material; open: boolean }) {
     const ref = useRef<THREE.Group>(null);
@@ -43,25 +44,32 @@ function Door({ x, hinge, mat, handle, open }: { x: number; hinge: 'left' | 'rig
 }
 
 export default function WardrobeScene({ selection, mood, toggles }: SceneProps) {
-    const mats = useFinishMaterials(BASE, WARDROBE_FINISHES, selection);
+    const oak = usePbr('oak', [1, 2.4], Math.PI / 2);
+    const floorOak = usePbr('oak', [3.5, 7]);
+    const plaster = usePbr('plaster', [3, 1.5]);
+    const linen = usePbr('linen', [3, 2]);
+    const mats = useFinishMaterials(BASE, WARDROBE_FINISHES, selection, (m) => {
+        m['wardrobe-shutter'].map = oak.map;
+        m['wardrobe-shutter'].roughnessMap = oak.roughnessMap;
+        m['wardrobe-shutter'].normalMap = oak.normalMap;
+        m['wardrobe-shutter'].normalScale.set(0.3, 0.3);
+    });
     const open = !!toggles.open;
     const evening = mood === 'evening';
 
     const env = useMemo(() => {
-        const floorTex = plankTexture(3);
-        const wallTex = plasterTexture(4);
         return {
-            floor: new THREE.MeshStandardMaterial({ map: floorTex, color: '#a98058', roughness: 0.55 }),
-            wall: new THREE.MeshStandardMaterial({ map: wallTex, color: '#e3d8c6', roughness: 0.9 }),
-            carcass: new THREE.MeshStandardMaterial({ color: '#efe6d6', roughness: 0.7 }),
+            floor: new THREE.MeshStandardMaterial({ ...floorOak, color: '#c9a77f', roughness: 0.6 }),
+            wall: new THREE.MeshStandardMaterial({ ...plaster, color: '#e6ddcf', roughness: 0.95 }),
+            carcass: new THREE.MeshStandardMaterial({ ...linen, color: '#f1ebe1', roughness: 0.75 }),
             rail: new THREE.MeshStandardMaterial({ color: '#d8dade', roughness: 0.15, metalness: 1 }),
             led: new THREE.MeshStandardMaterial({ color: '#fff3dc', emissive: '#ffd9a0', emissiveIntensity: 2 }),
-            rug: new THREE.MeshStandardMaterial({ color: '#cbbba2', roughness: 1 }),
+            rug: new THREE.MeshStandardMaterial({ ...linen, color: '#d8ccb6', roughness: 1 }),
             wood: new THREE.MeshStandardMaterial({ color: '#7a5a40', roughness: 0.5 }),
             drawer: new THREE.MeshStandardMaterial({ color: '#d9cdb8', roughness: 0.5 }),
             skirting: new THREE.MeshStandardMaterial({ color: '#f1ebe0', roughness: 0.6 }),
         };
-    }, []);
+    }, [floorOak, plaster, linen]);
 
     const clothes = useMemo(() => CLOTHES.map((c) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.95 })), []);
 

@@ -28,8 +28,8 @@ export default function SectionTitle({ eyebrow, title, description, align = 'cen
             { opacity: 1, x: 0, duration: 0.8 }
         )
             .fromTo('.st-title',
-                { opacity: 0, y: 30, skewY: 2 },
-                { opacity: 1, y: 0, skewY: 0, duration: 1, ease: "expo.out" },
+                { opacity: 0, y: 40 },
+                { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" },
                 "-=0.5"
             )
             .fromTo('.st-desc',
@@ -41,16 +41,16 @@ export default function SectionTitle({ eyebrow, title, description, align = 'cen
 
     return (
         <div ref={containerRef} className={`max-w-3xl mb-16 ${align === 'center' ? 'mx-auto text-center' : 'text-left'}`}>
-            <span className="st-eyebrow opacity-0 inline-block px-3 py-1 mb-4 text-[10px] font-bold tracking-[0.2em] uppercase rounded-full border border-brass/30 text-brass-dark bg-brass/5">
-                {eyebrow}
+            <span className="st-eyebrow opacity-0 label inline-block mb-6" style={{ color: dark ? 'var(--color-ash)' : 'var(--color-mute)' }}>
+                ( {eyebrow} )
             </span>
             <h2
-                className="st-title opacity-0 text-4xl md:text-6xl font-display font-bold mb-6 leading-[1.1]"
-                style={{ color: dark ? '#F5EFE0' : 'var(--color-charcoal)' }}
+                className="st-title opacity-0 display mb-6"
+                style={{ color: dark ? '#EEE9E1' : 'var(--color-charcoal)', fontSize: 'clamp(40px, 5.2vw, 88px)' }}
             >
                 {title}
             </h2>
-            <p className="st-desc opacity-0 text-lg leading-relaxed" style={{ color: dark ? 'rgba(245,239,224,0.6)' : 'var(--color-mute)' }}>
+            <p className="st-desc opacity-0 text-base leading-relaxed max-w-xl" style={{ color: dark ? 'var(--color-ash)' : 'var(--color-mute)', marginInline: align === 'center' ? 'auto' : undefined }}>
                 {description}
             </p>
         </div>

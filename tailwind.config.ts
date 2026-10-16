@@ -10,11 +10,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        sand:    "#F5EFE0",
-        brass:   { DEFAULT: "#B8892A", dark: "#8A6318", light: "#D4A84B" },
-        charcoal:"#2C2416",
-        surface: "#FAFAF7",
-        mute:    "#6B6358",
+        sand:    "#EEE9E1",
+        brass:   { DEFAULT: "#A88A5C", dark: "#7D6643", light: "#CBB48D" },
+        charcoal:"#141310",
+        ink:     "#141310",
+        bone:    "#EEE9E1",
+        surface: "#F6F3EE",
+        stone:   "#D8CFC2",
+        mute:    "#6F6960",
       },
       fontFamily: {
         display: ["var(--font-cormorant)", "Georgia", "serif"],

@@ -80,7 +80,7 @@ export default function Showroom() {
                             </div>
                             <div className="px-6 pb-6 relative flex items-end justify-between gap-4">
                                 <div>
-                                    <h3 className="font-display font-bold text-2xl" style={{ color: 'var(--color-charcoal)' }}>{item.name}</h3>
+                                    <h3 className="font-display font-light text-2xl" style={{ color: 'var(--color-charcoal)' }}>{item.name}</h3>
                                     <p className="text-sm" style={{ color: 'var(--color-mute)' }}>{item.note}</p>
                                 </div>
                                 <span className="shrink-0 text-[9px] uppercase tracking-[0.25em] font-bold opacity-60 group-hover:opacity-100 transition-opacity" style={{ color: 'var(--color-charcoal)' }}>↻ Drag</span>
@@ -97,7 +97,7 @@ export default function Showroom() {
                         <button
                             onClick={() => openLeadModal({ service: 'Full Home Interior' })}
                             className="btn-sheen self-start px-6 py-3.5 rounded-full text-[11px] font-bold uppercase tracking-widest text-white"
-                            style={{ background: 'linear-gradient(135deg, var(--color-brass), var(--color-brass-dark))' }}
+                            style={{ background: 'var(--color-charcoal)' }}
                         >
                             Plan my room
                         </button>

@@ -22,11 +22,11 @@ export default function ScrollProgress() {
     }, []);
 
     return (
-        <div className="fixed top-0 left-0 right-0 h-1 origin-left z-[10000] pointer-events-none">
+        <div className="fixed top-0 left-0 right-0 h-px origin-left z-[10000] pointer-events-none">
             <div
                 ref={progressRef}
                 className="w-full h-full scale-x-0"
-                style={{ background: 'linear-gradient(to right, #D4A84B, #8A6318)' }}
+                style={{ background: 'var(--color-brass)' }}
             />
         </div>
     );

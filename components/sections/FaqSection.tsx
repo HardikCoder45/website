@@ -21,10 +21,10 @@ export default function FaqSection() {
                             align="left"
                         />
                         <div className="flex flex-wrap gap-3 -mt-6">
-                            <a href={`tel:${CONTACT_INFO.phone1}`} className="px-6 py-3 rounded-xl text-sm font-semibold border transition-colors hover:bg-black/5" style={{ borderColor: 'var(--color-border-strong)', color: 'var(--color-charcoal)' }}>
+                            <a href={`tel:${CONTACT_INFO.phone1}`} className="label px-6 py-3.5 rounded-full border transition-colors hover:bg-black/5" style={{ borderColor: 'var(--color-border-strong)', color: 'var(--color-charcoal)' }}>
                                 Call {CONTACT_INFO.phone1Display}
                             </a>
-                            <a href={CONTACT_INFO.whatsapp} target="_blank" rel="noreferrer" className="px-6 py-3 rounded-xl text-sm font-semibold text-white" style={{ background: '#1f9d55' }}>
+                            <a href={CONTACT_INFO.whatsapp} target="_blank" rel="noreferrer" className="label px-6 py-3.5 rounded-full" style={{ background: 'var(--color-charcoal)', color: '#EEE9E1' }}>
                                 Ask on WhatsApp
                             </a>
                         </div>
@@ -45,7 +45,7 @@ export default function FaqSection() {
                                             onClick={() => setOpen(isOpen ? null : i)}
                                             className="w-full flex items-center justify-between gap-6 py-7 text-left group"
                                         >
-                                            <span className="font-display font-bold text-xl md:text-2xl transition-colors group-hover:text-brass-dark" style={{ color: 'var(--color-charcoal)' }}>
+                                            <span className="font-display font-light text-xl md:text-2xl transition-colors group-hover:text-brass-dark" style={{ color: 'var(--color-charcoal)' }}>
                                                 {f.q}
                                             </span>
                                             <span

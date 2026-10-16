@@ -39,7 +39,7 @@ export default function LeadModal() {
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="lead-modal-title"
-                    className="relative my-auto w-full max-w-xl rounded-[2.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] p-8 md:p-12"
+                    className="relative my-auto w-full max-w-xl rounded-sm overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] p-8 md:p-12"
                     style={{
                         background: 'rgba(255, 255, 255, 0.95)',
                         backdropFilter: 'blur(20px)',
@@ -63,11 +63,11 @@ export default function LeadModal() {
                         <div className="flex items-center gap-3 mb-4">
                             <span className="w-12 h-[1px] bg-brass/40" />
                             <span className="text-[10px] font-bold tracking-[0.4em] uppercase" style={{ color: 'var(--color-brass)' }}>
-                                Bespoke Experience
+                                Free site visit
                             </span>
                         </div>
-                        <h2 id="lead-modal-title" className="text-4xl md:text-5xl font-display font-bold text-charcoal mb-4 tracking-tight">
-                            Design Your <span className="text-brass">Legacy.</span>
+                        <h2 id="lead-modal-title" className="text-4xl md:text-5xl font-display font-light text-charcoal mb-4 tracking-tight">
+                            Begin with <span className="italic" style={{ color: 'var(--color-brass-dark)' }}>a visit.</span>
                         </h2>
                         <p className="text-mute/80 text-sm font-medium leading-relaxed max-w-md">
                             Book a free premium site visit with our lead designers to transform your vision into reality.
