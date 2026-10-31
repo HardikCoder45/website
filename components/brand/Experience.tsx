@@ -35,16 +35,16 @@ export default function Experience() {
 
                 <div className="relative min-h-[100svh] md:min-h-0 md:h-full container-site flex flex-col justify-between gap-16 py-24 md:py-28">
                     <div className="flex items-start justify-between gap-6">
-                        <p className="label" style={{ color: 'var(--color-ash)' }}>( 05 ) &nbsp;Live 3D</p>
+                        <p className="label" style={{ color: 'var(--color-ash)' }}>Live 3D tours</p>
                         <p className="label text-right hidden sm:block" style={{ color: 'var(--color-ash)' }}>Ray-traced render · AMS design studio</p>
                     </div>
 
                     <div>
                         <h2 className="display max-w-5xl" style={{ fontSize: 'clamp(44px, 7vw, 128px)' }}>
-                            Walk through it<br /><span className="italic" style={{ color: 'var(--color-brass-light)' }}>before we build it.</span>
+                            Walk through it<br /><span style={{ color: 'var(--color-brass-light)' }}>before we build it.</span>
                         </h2>
                         <p className="mt-6 max-w-lg text-sm md:text-base leading-relaxed" style={{ color: 'var(--color-ash)' }}>
-                            Every AMS project is designed in 3D first. Step inside three of our signature spaces in real time — change the stone, the timber and the light, and see the estimate move with you.
+                            Every project is drawn in 3D before anything is cut. Walk through three of our rooms in your browser, change the stone, the timber and the light, and watch the estimate change with them.
                         </p>
 
                         <ul className="mt-12 grid md:grid-cols-3 border-t" style={{ borderColor: 'var(--color-line-dark)' }}>

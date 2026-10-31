@@ -15,16 +15,16 @@ export default function FaqSection() {
                 <div className="grid grid-cols-1 lg:grid-cols-[4fr_7fr] gap-12 lg:gap-24">
                     <div>
                         <SectionTitle
-                            eyebrow="Good to know"
+                            eyebrow="FAQ"
                             title="Questions, answered."
-                            description="Everything families usually ask before their first site visit. Still curious? Our designers are a call away."
+                            description="What owners ask us before the first site visit. Anything else, call the studio."
                             align="left"
                         />
                         <div className="flex flex-wrap gap-3 -mt-6">
-                            <a href={`tel:${CONTACT_INFO.phone1}`} className="label px-6 py-3.5 rounded-full border transition-colors hover:bg-black/5" style={{ borderColor: 'var(--color-border-strong)', color: 'var(--color-charcoal)' }}>
+                            <a href={`tel:${CONTACT_INFO.phone1}`} className="label px-6 py-3.5 border transition-colors hover:bg-black/5" style={{ borderColor: 'var(--color-border-strong)', color: 'var(--color-charcoal)' }}>
                                 Call {CONTACT_INFO.phone1Display}
                             </a>
-                            <a href={CONTACT_INFO.whatsapp} target="_blank" rel="noreferrer" className="label px-6 py-3.5 rounded-full" style={{ background: 'var(--color-charcoal)', color: '#EEE9E1' }}>
+                            <a href={CONTACT_INFO.whatsapp} target="_blank" rel="noreferrer" className="label px-6 py-3.5" style={{ background: 'var(--color-charcoal)', color: '#EEE9E1' }}>
                                 Ask on WhatsApp
                             </a>
                         </div>
@@ -45,11 +45,11 @@ export default function FaqSection() {
                                             onClick={() => setOpen(isOpen ? null : i)}
                                             className="w-full flex items-center justify-between gap-6 py-7 text-left group"
                                         >
-                                            <span className="font-display font-light text-xl md:text-2xl transition-colors group-hover:text-brass-dark" style={{ color: 'var(--color-charcoal)' }}>
+                                            <span className="font-display font-medium text-xl md:text-2xl transition-colors group-hover:text-brass-dark" style={{ color: 'var(--color-charcoal)' }}>
                                                 {f.q}
                                             </span>
                                             <span
-                                                className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-500"
+                                                className="shrink-0 w-10 h-10 flex items-center justify-center border transition-all duration-500"
                                                 style={{
                                                     transform: isOpen ? 'rotate(45deg)' : 'rotate(0)',
                                                     background: isOpen ? 'var(--color-brass)' : 'transparent',

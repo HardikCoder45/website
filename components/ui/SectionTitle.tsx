@@ -42,7 +42,7 @@ export default function SectionTitle({ eyebrow, title, description, align = 'cen
     return (
         <div ref={containerRef} className={`max-w-3xl mb-16 ${align === 'center' ? 'mx-auto text-center' : 'text-left'}`}>
             <span className="st-eyebrow opacity-0 label inline-block mb-6" style={{ color: dark ? 'var(--color-ash)' : 'var(--color-mute)' }}>
-                ( {eyebrow} )
+                {eyebrow}
             </span>
             <h2
                 className="st-title opacity-0 display mb-6"

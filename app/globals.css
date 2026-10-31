@@ -55,8 +55,8 @@ h4 {
 
 /* ─── Selection ─────────────────────────────────────────────── */
 ::selection {
-  background: rgba(184, 137, 42, 0.18);
-  color: var(--color-charcoal);
+  background: var(--color-brass);
+  color: #fff;
 }
 
 /* ─── Utilities ─────────────────────────────────────────────── */
@@ -439,18 +439,60 @@ html.has-custom-cursor iframe {
 
 /* ─── Editorial primitives ────────────────────────────────────── */
 .label {
-  font-family: var(--font-body);
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
+/* Condensed signage headlines (Archivo width axis). */
 .display {
   font-family: var(--font-display);
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  line-height: 0.95;
+  font-weight: 600;
+  font-stretch: 72%;
+  font-variation-settings: 'wdth' 72;
+  letter-spacing: -0.012em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+/* Emphasis inside headlines is colour, not italics. */
+.display em,
+.display .italic {
+  font-style: normal;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* Architectural dimension line:  |<——— 12 400 ———>| */
+.dim {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+.dim::before,
+.dim::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+}
+
+/* Faint drafting grid for paper sections */
+.drafting-grid {
+  background-image:
+    linear-gradient(rgba(18, 18, 18, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 18, 18, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
 .hairline {
@@ -501,4 +543,15 @@ html.has-custom-cursor iframe {
 input[type="range"],
 input[type="checkbox"] {
   accent-color: var(--color-charcoal);
+}
+
+@keyframes stageIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes pinDrop {
+  0% { transform: translateY(-90px); opacity: 0; }
+  60% { opacity: 1; }
+  100% { transform: none; opacity: 1; }
 }

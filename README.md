@@ -11,20 +11,29 @@ npm run lint
 
 ## Brand system
 
-Quiet-luxury, editorial direction: warm ink `#141310`, bone `#EEE9E1`, stone `#D8CFC2` and a muted brass `#A88A5C` (tokens in `styles/tokens.css`). Display type is Cormorant Garamond at light weights; UI labels are small tracked uppercase Inter (`.label`). Section headers follow the `( 0n ) Name` pattern. The nav uses `mix-blend-mode: difference` so it reads on both ink and bone sections.
+AMS Interiors & Construction. The identity is an architect's drawing set: tracing-paper `#F1EEE7`, ink `#121212` and one brick-red accent `#B4502F` (tokens in `styles/tokens.css`; older `--color-brass*` names now hold the accent). Headlines are condensed Archivo (`.display`, width axis 72); specs, prices and labels are IBM Plex Mono (`.label`, `.mono`). Major sections carry a drawing-sheet title block (`components/brand/SheetHeader.tsx`).
 
-Home page order: sculptural 3D hero → studio manifesto → selected work → services index → material atelier (3D) → live 3D tours → process → 3D showroom → client voices → estimate → FAQ → contact → footer.
+Logo: `components/brand/Logo.tsx` (an "A" drawn as a gable on a ground line, with a brick-red window). Icons: `app/icon.svg`, `app/favicon.ico`, `app/apple-icon.png`, `public/icon-192.png`, `public/icon-512.png`; Next.js writes the `<link rel="icon">` / `apple-touch-icon` tags from these and from `metadata.icons` in `app/layout.tsx`.
 
-## What's on the site
+Copy follows the no-AI-slop rules (concrete facts, no filler words, no em-dash crutches).
 
-| Route | What it is |
+## Prices
+
+Every rate on the site comes from `lib/data/pricing.ts` (construction packages, specification schedule, grey structure, stilt, services index, interiors rate card, estimator tiers). They are indicative 2026 Delhi NCR rates set against published guides, excluding GST. **Confirm or edit them there before launch.**
+
+## Home page
+
+| Section | File |
 |---|---|
-| `/` | Home (see brand system above): real-time 3D hero vignette — travertine arch, fluted column, brass sphere and moving window light |
-| `/kitchen` | Real-time 3D kitchen tour (the Blender model in `public/models/kitchen.glb`) |
-| `/wardrobe` | Real-time 3D wardrobe tour (procedural, doors open/close) |
-| `/interior` | Real-time 3D living-room tour (procedural room + furniture models) |
-
-The old standalone HTML walkthroughs are still in `public/*.html` but are no longer linked.
+| 3D construction hero: a G+1 house assembles in eight stages on scroll | `components/build/BuildHero.tsx`, `HouseScene.tsx`, `lib/data/build.ts` |
+| Studio statement + stats | `components/brand/Manifesto.tsx` |
+| Services index (Build / Interiors) | `components/brand/ServicesIndex.tsx` |
+| Construction packages + specification schedule | `components/sections/BuildPricing.tsx` |
+| Interiors rate card | `components/sections/InteriorRates.tsx` |
+| Estimator (build a house / interiors) | `components/calculator/QuoteCalculator.tsx` |
+| Work, materials (3D), live 3D tours, reviews, FAQ | `components/brand/*`, `components/sections/FaqSection.tsx` |
+| Globe finale: Earth turns and dives to the studio | `components/globe/GlobeFinale.tsx`, `EarthScene.tsx` |
+| Contact form, footer | `components/sections/ContactSection.tsx`, `components/layout/Footer.tsx` |
 
 ## 3D system
 
@@ -34,10 +43,10 @@ The old standalone HTML walkthroughs are still in `public/*.html` but are no lon
 - `components/three/Prop.tsx` — loads a furniture GLB, scales it to a real-world height and sits it on the floor.
 - `components/tour/TourExperience.tsx` — the tour engine: guided stops + hotspots, orbit camera, autoplay, day/evening, configurator, live estimate, WhatsApp quote, save image, fullscreen, adaptive quality.
 - `lib/data/tours.ts` — tour definitions (stops, finishes, toggles, area and rates).
-- `components/hero/AtelierScene.tsx` — the hero vignette: extruded travertine arch, lathe-built fluted column, off-screen window wall that casts moving window-pane shadows, scroll/pointer camera.
+- `components/build/HouseScene.tsx` — clay-maquette house built from parts tagged by stage; the active stage glows brick red; unlit paper ground + shadow catcher so the canvas matches the page.
+- `components/globe/EarthScene.tsx` — custom Earth shader (day, night lights, ocean glint, clouds, rim) + limb-hugging atmosphere; scroll turns India to camera and dives to Delhi; HTML pin and live altitude readout.
 - `components/brand/AtelierCanvas.tsx` — the material atelier specimen (Lightformer studio lighting, shadow-only floor).
 - `lib/three/usePbr.ts` — loads the texture sets in `public/textures`; `lib/three/quality.ts` picks the effects level (`?fx=lite|0`, phones get lite) and detects half-float support.
-- `components/sections/Showroom*.tsx` — one shared canvas drawing five draggable models via drei `View`.
 
 ### Tour URL parameters
 
@@ -70,6 +79,8 @@ Add a choice to the relevant group in `lib/three/finishes.ts` (kitchen) or `lib/
 - `public/renders/cy-*.webp` — ray-traced Cycles renders of the kitchen model, captioned on the site as 3D visualisations, not project photos. Re-render with Blender's Python module (`pip install bpy`, Python 3.11):
   `VARIANT=ivory MOOD=evening python scripts/render_kitchen.py public/kitchen.glb <tex_dir> public/hdri/apartment.exr <out_dir> 1440 900 64 island,overview`
   (variants: wenge, ivory, sage, walnut; shots: overview, island, cooking, detail, wide). Note the renderer needs the original `public/kitchen.glb`, not the meshopt-compressed copy.
+- `public/earth/` — Earth day / night / bump-roughness-clouds maps from Solar System Scope (CC BY 4.0), see `public/earth/CREDITS.md`.
+- `public/renders/build-*.webp` — stills of the 3D house used as service previews.
 - `public/og.jpg` — social preview image (from the evening render).
 
 To re-optimise a model: `npx @gltf-transform/cli optimize in.glb out.glb --compress meshopt --texture-compress webp --palette false --join false --flatten false` (keep material names so the configurator can find them).

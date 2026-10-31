@@ -8,8 +8,8 @@ import { useCountUp } from '@/lib/hooks/useCountUp';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TEXT = 'We design atmospheres, not just rooms. For over a decade AMS has drawn, built and finished homes across Delhi NCR — kitchens that gather a family, wardrobes that hold a life, and quiet rooms where light and material do the talking.';
-const EMPHASIS = new Set(['atmospheres,', 'light', 'material']);
+const TEXT = 'Since 2014 we have built and fitted out homes across Delhi NCR. The crew that pours your slab is the crew that fits your kitchen, so nothing gets lost between contractors and the drawing you approve is the house you get.';
+const EMPHASIS = new Set(['slab', 'kitchen,']);
 
 function Stat({ value, suffix, label, decimals = 0 }: { value: number; suffix: string; label: string; decimals?: number }) {
     const { ref, display } = useCountUp<HTMLSpanElement>(value, { decimals, duration: 2200 });
@@ -41,8 +41,8 @@ export default function Manifesto() {
         <section ref={ref} id="studio" className="relative py-28 md:py-44" style={{ background: 'var(--color-sand)', color: 'var(--color-charcoal)' }}>
             <div className="container-site">
                 <div className="grid md:grid-cols-[1fr_3fr] gap-10 md:gap-16">
-                    <p className="label" style={{ color: 'var(--color-mute)' }}>( 01 ) &nbsp;The studio</p>
-                    <p className="mf-text display" style={{ fontSize: 'clamp(30px, 4.1vw, 66px)', lineHeight: 1.12, letterSpacing: '-0.015em' }}>
+                    <p className="label" style={{ color: 'var(--color-mute)' }}>Studio · since 2014</p>
+                    <p className="mf-text display" style={{ fontSize: 'clamp(34px, 4.8vw, 78px)', lineHeight: 0.98 }}>
                         {TEXT.split(' ').map((w, i) => (
                             <span key={i} className={`mf-word inline-block mr-[0.24em] ${EMPHASIS.has(w) ? 'italic' : ''}`} style={EMPHASIS.has(w) ? { color: 'var(--color-brass-dark)' } : undefined}>
                                 {w}

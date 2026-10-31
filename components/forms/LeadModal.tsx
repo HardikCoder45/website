@@ -39,7 +39,7 @@ export default function LeadModal() {
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="lead-modal-title"
-                    className="relative my-auto w-full max-w-xl rounded-sm overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] p-8 md:p-12"
+                    className="relative my-auto w-full max-w-xl rounded-none overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] p-8 md:p-12"
                     style={{
                         background: 'rgba(255, 255, 255, 0.95)',
                         backdropFilter: 'blur(20px)',

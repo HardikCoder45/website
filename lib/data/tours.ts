@@ -128,7 +128,7 @@ export const TOURS: Record<TourDef['slug'], TourDef> = {
         toggles: [],
         hdri: { day: '/hdri/apartment.exr', evening: '/hdri/night.exr' },
         stops: [
-            { id: 'overview', label: 'Overview', description: 'L-shaped run with a full island — the most popular layout for 10×12 ft Delhi kitchens.', position: [3.3, 2.15, 2.35], target: [-0.6, 1.0, -1.6], hotspot: [0.6, 1.1, -0.4] },
+            { id: 'overview', label: 'Overview', description: 'L-shaped run with a full island, the layout we fit most often in 10×12 ft Delhi kitchens.', position: [3.3, 2.15, 2.35], target: [-0.6, 1.0, -1.6], hotspot: [0.6, 1.1, -0.4] },
             { id: 'island', label: 'Island & breakfast bar', description: 'Seating for three, soft-close drawers on both sides and an LED kick that floats the island at night.', position: [2.4, 1.45, 2.3], target: [0.4, 0.9, 0.0], hotspot: [0.8, 1.0, 0.25] },
             { id: 'cooking', label: 'Cooking wall', description: 'Built-in oven, chimney with ducting and a full-height zellige backsplash that wipes clean.', position: [0.2, 1.55, -0.2], target: [0.0, 1.3, -3.85], hotspot: [0.0, 1.35, -3.6] },
             { id: 'pantry', label: 'Tall pantry', description: 'Floor-to-ceiling pantry with pull-out wire baskets, sized for a month of groceries.', position: [0.9, 1.65, 1.5], target: [-3.4, 1.35, -1.5], hotspot: [-3.0, 1.5, -1.5] },
@@ -147,7 +147,7 @@ export const TOURS: Record<TourDef['slug'], TourDef> = {
         toggles: [{ id: 'open', label: 'Open doors', default: false }],
         hdri: { day: '/hdri/apartment.exr', evening: '/hdri/night.exr' },
         stops: [
-            { id: 'overview', label: 'Overview', description: 'Four doors across 9 ft, ceiling-height for maximum storage and a seamless look.', position: [0.4, 1.5, 4.4], target: [0, 1.25, 0], hotspot: [0, 2.0, 0.35] },
+            { id: 'overview', label: 'Overview', description: 'Four doors across 9 ft, ceiling height, so there is no dusty gap on top.', position: [0.4, 1.5, 4.4], target: [0, 1.25, 0], hotspot: [0, 2.0, 0.35] },
             { id: 'hanging', label: 'Long hanging', description: 'A full-length hanging bay for sarees and coats, with an oval chrome rail and a lit interior.', position: [-0.6, 1.35, 2.1], target: [-0.9, 1.4, 0], hotspot: [-0.9, 1.6, 0.3] },
             { id: 'drawers', label: 'Drawer bank', description: 'Three soft-close drawers with velvet-lined jewellery trays and an internal locker.', position: [1.1, 1.0, 1.9], target: [0.95, 0.6, 0], hotspot: [0.95, 0.6, 0.3] },
             { id: 'loft', label: 'Loft storage', description: 'Top lofts for suitcases and seasonal bedding, with gas-lift shutters.', position: [0.3, 2.05, 2.9], target: [0, 2.3, 0], hotspot: [0, 2.5, 0.33] },
@@ -158,7 +158,7 @@ export const TOURS: Record<TourDef['slug'], TourDef> = {
         slug: 'interior',
         title: 'The Living Suite',
         eyebrow: 'Live 3D tour · 03',
-        intro: 'A full living room — fluted feature wall, floating TV console, cove-lit false ceiling and curated furniture. Restyle the whole room live.',
+        intro: 'A full living room: fluted feature wall, floating TV console, cove-lit false ceiling and furniture. Restyle the whole room live.',
         service: 'Full Home Interior',
         area: 320,
         rate: [600, 1100],
@@ -166,11 +166,11 @@ export const TOURS: Record<TourDef['slug'], TourDef> = {
         toggles: [{ id: 'leather', label: 'Leather sofa', default: false }],
         hdri: { day: '/hdri/apartment.exr', evening: '/hdri/night.exr' },
         stops: [
-            { id: 'overview', label: 'Overview', description: 'An open 16×20 ft living room styled end to end — civil, ceiling, carpentry, lighting and décor.', position: [4.6, 2.3, 4.6], target: [-0.4, 0.9, -0.6], hotspot: [0, 1.6, -2.9] },
+            { id: 'overview', label: 'Overview', description: 'An open 16×20 ft living room: civil work, ceiling, carpentry, lighting and décor by one team.', position: [4.6, 2.3, 4.6], target: [-0.4, 0.9, -0.6], hotspot: [0, 1.6, -2.9] },
             { id: 'feature', label: 'Feature wall & TV unit', description: 'Fluted panelling with a floating, handle-less console and hidden cable management.', position: [0.2, 1.4, 1.6], target: [0, 1.3, -3], hotspot: [1.4, 1.4, -2.85] },
             { id: 'seating', label: 'Seating zone', description: 'Sofa, accent chair and side lamp arranged around a 2.4 m rug for easy conversation.', position: [-2.4, 1.3, -1.2], target: [0.4, 0.55, 1.4], hotspot: [0, 0.8, 1.5] },
             { id: 'ceiling', label: 'False ceiling', description: 'Gypsum false ceiling with a recessed cove, LED strip and spotlights on separate circuits.', position: [2.6, 1.5, 2.8], target: [-1.2, 2.4, -1.6], hotspot: [-1.5, 2.85, -1.5] },
-            { id: 'window', label: 'Window seat', description: 'A cushioned window bench with storage below — perfect morning light.', position: [-1.0, 1.4, 1.4], target: [-3.8, 1.0, 0.0], hotspot: [-3.4, 0.6, 0.2] },
+            { id: 'window', label: 'Window seat', description: 'A cushioned window bench with storage below, facing east for the morning light.', position: [-1.0, 1.4, 1.4], target: [-3.8, 1.0, 0.0], hotspot: [-3.4, 0.6, 0.2] },
         ],
     },
 };

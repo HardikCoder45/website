@@ -4,13 +4,17 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "AMS Interiors",
-    short_name: "AMS Interiors",
-    description: "Premium modular kitchens, wardrobes and interiors in Delhi NCR.",
+    name: "AMS Interiors & Construction",
+    short_name: "AMS",
+    description: "House construction, modular kitchens and interiors in Delhi NCR.",
     start_url: "/",
     display: "standalone",
-    background_color: "#140F08",
-    theme_color: "#B8892A",
-    icons: [{ src: "/favicon.ico", sizes: "any", type: "image/x-icon" }],
+    background_color: "#121212",
+    theme_color: "#121212",
+    icons: [
+      { src: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { src: "/icon-512.png", sizes: "512x512", type: "image/png" },
+      { src: "/icon.svg", sizes: "any", type: "image/svg+xml" },
+    ],
   };
 }

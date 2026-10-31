@@ -25,7 +25,7 @@ export default function Voices() {
         >
             <div className="container-site">
                 <div className="flex items-baseline justify-between gap-6 mb-16 md:mb-24">
-                    <p className="label" style={{ color: 'var(--color-ash)' }}>( 07 ) &nbsp;Client voices</p>
+                    <p className="label" style={{ color: 'var(--color-ash)' }}>Client reviews</p>
                     <p className="label" style={{ color: 'var(--color-ash)' }}>4.7 ★ · 37 verified reviews</p>
                 </div>
 

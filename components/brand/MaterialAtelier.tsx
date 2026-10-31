@@ -15,12 +15,12 @@ export default function MaterialAtelier() {
             <div className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] min-h-[100svh]">
                 {/* Library */}
                 <div className="container-site lg:pr-0 py-24 md:py-32 flex flex-col">
-                    <p className="label mb-6" style={{ color: 'var(--color-mute)' }}>( 04 ) &nbsp;Material atelier</p>
+                    <p className="label mb-6" style={{ color: 'var(--color-mute)' }}>Materials</p>
                     <h2 className="display mb-6" style={{ fontSize: 'clamp(44px, 5.6vw, 96px)' }}>
-                        Touch it<br /><span className="italic" style={{ color: 'var(--color-brass-dark)' }}>before</span> you choose.
+                        Pick the stone<br /><span style={{ color: 'var(--color-brass)' }}>and the grain.</span>
                     </h2>
                     <p className="max-w-md text-sm leading-relaxed mb-12" style={{ color: 'var(--color-mute)' }}>
-                        The stones, woods, metals and textiles we specify most — rendered live in 3D under studio light. Pick one to inspect it from every side.
+                        The eight finishes we specify most, rendered live under studio light. Choose one to turn it in your hand.
                     </p>
 
                     <ul className="border-t lg:max-w-md" style={{ borderColor: 'var(--color-border-strong)' }} role="listbox" aria-label="Materials">
@@ -35,7 +35,7 @@ export default function MaterialAtelier() {
                                 >
                                     <span className="flex items-baseline gap-4">
                                         <span className="label tabular-nums" style={{ color: 'var(--color-mute)' }}>{String(i + 1).padStart(2, '0')}</span>
-                                        <span className={`font-display text-2xl md:text-[28px] font-light transition-all duration-500 ${active === i ? 'italic translate-x-2' : ''}`}>{mat.name}</span>
+                                        <span className={`font-display text-2xl md:text-[28px] font-light transition-all duration-500 ${active === i ? 'translate-x-2 text-[var(--color-brass)]' : ''}`}>{mat.name}</span>
                                     </span>
                                     <span className="label transition-opacity duration-500" style={{ color: 'var(--color-mute)', opacity: active === i ? 1 : 0 }}>{mat.finish}</span>
                                 </button>

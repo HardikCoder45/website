@@ -4,16 +4,34 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore } from '@/lib/store/useAppStore';
 import { SERVICES_NAV, CONTACT_INFO } from '@/lib/data/config';
 import { scrollToTarget } from '@/components/providers/SmoothScroll';
+import { Logo } from '@/components/brand/Logo';
 
 const EASE = [0.65, 0, 0.35, 1] as const;
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
+    const [hidden, setHidden] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const openLeadModal = useAppStore((s) => s.openLeadModal);
     const activeSection = useAppStore((s) => s.activeSection);
     const setActiveSection = useAppStore((s) => s.setActiveSection);
 
-    // Scroll spy for every section linked from the nav.
+    // Hide while scrolling down, return on scroll up; solid sheet once off the top.
+    useEffect(() => {
+        let last = window.scrollY;
+        const onScroll = () => {
+            const y = window.scrollY;
+            setScrolled(y > 24);
+            if (Math.abs(y - last) > 6) {
+                setHidden(y > last && y > 400);
+                last = y;
+            }
+        };
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => { if (entry.isIntersecting) setActiveSection(entry.target.id); });
@@ -43,20 +61,24 @@ export default function Navbar() {
 
     return (
         <>
-            {/* Difference blend keeps the bar legible over both ink and bone sections. */}
-            <nav aria-label="Primary" className="fixed top-0 inset-x-0 z-50 mix-blend-difference text-[#EEE9E1]">
-                <div className="container-site h-20 md:h-24 flex items-center justify-between gap-6">
-                    <a
-                        href="#main"
-                        aria-label="AMS Interiors — back to top"
-                        onClick={(e) => { e.preventDefault(); scrollToTarget(0); }}
-                        className="flex items-baseline gap-3"
-                    >
-                        <span className="font-display text-[28px] md:text-[32px] font-light tracking-[0.14em] leading-none">AMS</span>
-                        <span className="label hidden sm:inline opacity-70">Interiors</span>
+            <nav
+                aria-label="Primary"
+                className="fixed top-0 inset-x-0 z-50 transition-[transform,background-color,border-color] duration-500"
+                style={{
+                    transform: hidden && !open ? 'translateY(-100%)' : 'none',
+                    background: scrolled ? 'rgba(241,238,231,0.88)' : 'transparent',
+                    backdropFilter: scrolled ? 'blur(14px)' : 'none',
+                    WebkitBackdropFilter: scrolled ? 'blur(14px)' : 'none',
+                    borderBottom: `1px solid ${scrolled ? 'var(--color-border)' : 'transparent'}`,
+                    color: 'var(--color-charcoal)',
+                }}
+            >
+                <div className="container-site h-16 md:h-[72px] flex items-center justify-between gap-6">
+                    <a href="#main" aria-label="AMS Interiors & Construction, back to top" onClick={(e) => { e.preventDefault(); scrollToTarget(0); }}>
+                        <Logo />
                     </a>
 
-                    <ul className="hidden lg:flex items-center gap-10">
+                    <ul className="hidden lg:flex items-center gap-8">
                         {SERVICES_NAV.map((item, i) => {
                             const active = activeSection === item.href.slice(1);
                             return (
@@ -65,31 +87,30 @@ export default function Navbar() {
                                         href={item.href}
                                         onClick={(e) => { e.preventDefault(); go(item.href); }}
                                         aria-current={active ? 'true' : undefined}
-                                        className="label flex items-baseline gap-1.5 transition-opacity hover:opacity-100"
-                                        style={{ opacity: active ? 1 : 0.62 }}
+                                        className="label flex items-baseline gap-1.5 transition-colors hover:text-[var(--color-brass)]"
+                                        style={{ color: active ? 'var(--color-brass)' : undefined }}
                                     >
-                                        <span className="text-[9px] tabular-nums opacity-60">0{i + 1}</span>
-                                        <span className="link-draw pb-0.5">{item.label}</span>
+                                        <span className="opacity-50 tabular-nums">0{i + 1}</span>
+                                        <span>{item.label}</span>
                                     </a>
                                 </li>
                             );
                         })}
                     </ul>
 
-                    <div className="flex items-center gap-6 md:gap-8">
-                        <button onClick={() => openLeadModal({ service: 'General Enquiry' })} className="label hidden md:inline link-draw pb-0.5">
-                            Book a visit ↗
-                        </button>
+                    <div className="flex items-center gap-5">
+                        <a href={`tel:${CONTACT_INFO.phone1}`} className="label hidden md:inline tabular-nums">{CONTACT_INFO.phone1Display}</a>
                         <button
-                            onClick={() => setOpen(true)}
-                            className="label flex items-center gap-3"
-                            aria-label="Open menu"
-                            aria-expanded={open}
+                            onClick={() => openLeadModal({ service: 'General Enquiry' })}
+                            className="label hidden sm:inline-flex items-center gap-2 px-4 py-2.5 transition-colors"
+                            style={{ background: 'var(--color-charcoal)', color: '#F1EEE7' }}
                         >
-                            <span className="hidden sm:inline">Menu</span>
+                            Get a quote <span aria-hidden="true">→</span>
+                        </button>
+                        <button onClick={() => setOpen(true)} className="lg:hidden label flex items-center gap-2" aria-label="Open menu" aria-expanded={open}>
                             <span className="flex flex-col gap-[5px]">
-                                <span className="block w-6 h-px bg-current" />
-                                <span className="block w-6 h-px bg-current" />
+                                <span className="block w-6 h-[1.5px] bg-current" />
+                                <span className="block w-6 h-[1.5px] bg-current" />
                             </span>
                         </button>
                     </div>
@@ -105,62 +126,37 @@ export default function Navbar() {
                         initial={{ clipPath: 'inset(0 0 100% 0)' }}
                         animate={{ clipPath: 'inset(0 0 0% 0)' }}
                         exit={{ clipPath: 'inset(0 0 100% 0)' }}
-                        transition={{ duration: 0.8, ease: EASE }}
+                        transition={{ duration: 0.7, ease: EASE }}
                         className="fixed inset-0 z-[120] flex flex-col"
-                        style={{ background: 'var(--color-charcoal)', color: '#EEE9E1' }}
+                        style={{ background: 'var(--color-charcoal)', color: '#F1EEE7' }}
                         data-lenis-prevent
                     >
-                        <div className="container-site w-full h-20 md:h-24 flex items-center justify-between">
-                            <span className="font-display text-[32px] font-light tracking-[0.14em]">AMS</span>
-                            <button onClick={() => setOpen(false)} className="label flex items-center gap-3" aria-label="Close menu">
-                                Close
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
-                            </button>
+                        <div className="container-site w-full h-16 flex items-center justify-between">
+                            <Logo compact />
+                            <button onClick={() => setOpen(false)} className="label" aria-label="Close menu">Close ✕</button>
                         </div>
-
-                        <div className="container-site w-full flex-1 grid lg:grid-cols-[1.4fr_1fr] gap-12 py-10 overflow-y-auto">
-                            <ul className="flex flex-col justify-center">
-                                {[...SERVICES_NAV, { label: '3D Kitchen Tour', href: '/kitchen' }].map((item, i) => (
-                                    <li key={item.href} className="overflow-hidden border-b" style={{ borderColor: 'var(--color-line-dark)' }}>
-                                        <motion.a
+                        <div className="container-site w-full flex-1 flex flex-col justify-between py-8 overflow-y-auto">
+                            <ul>
+                                {[...SERVICES_NAV, { label: '3D kitchen tour', href: '/kitchen' }].map((item, i) => (
+                                    <li key={item.href} className="border-b" style={{ borderColor: 'var(--color-line-dark)' }}>
+                                        <a
                                             href={item.href}
                                             onClick={(e) => { if (item.href.startsWith('#')) { e.preventDefault(); go(item.href); } }}
-                                            initial={{ y: '100%' }}
-                                            animate={{ y: 0 }}
-                                            transition={{ delay: 0.25 + i * 0.06, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                                            className="group flex items-baseline justify-between py-4 md:py-5"
+                                            className="flex items-baseline justify-between py-4"
                                         >
-                                            <span className="display text-5xl md:text-7xl transition-transform duration-700 group-hover:translate-x-4">{item.label}</span>
-                                            <span className="label opacity-40 tabular-nums">0{i + 1}</span>
-                                        </motion.a>
+                                            <span className="display text-5xl">{item.label}</span>
+                                            <span className="label opacity-50">0{i + 1}</span>
+                                        </a>
                                     </li>
                                 ))}
                             </ul>
-
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.6, duration: 0.8 }}
-                                className="flex flex-col justify-end gap-10 lg:pl-16 lg:border-l"
-                                style={{ borderColor: 'var(--color-line-dark)' }}
-                            >
-                                <div>
-                                    <p className="label opacity-50 mb-3">Studio</p>
-                                    <p className="font-display text-2xl font-light leading-snug">{CONTACT_INFO.address}</p>
-                                </div>
-                                <div>
-                                    <p className="label opacity-50 mb-3">Talk to a designer</p>
-                                    <a href={`tel:${CONTACT_INFO.phone1}`} className="block font-display text-3xl font-light link-draw w-fit">{CONTACT_INFO.phone1Display}</a>
-                                    <a href={`mailto:${CONTACT_INFO.email}`} className="block mt-1 text-sm opacity-70 link-draw w-fit">{CONTACT_INFO.email}</a>
-                                </div>
-                                <button
-                                    onClick={() => { setOpen(false); openLeadModal({ service: 'General Enquiry' }); }}
-                                    className="self-start px-8 py-4 rounded-full label border transition-colors hover:bg-[#EEE9E1] hover:text-[#141310]"
-                                    style={{ borderColor: 'rgba(238,233,225,0.4)' }}
-                                >
-                                    Book a free site visit
+                            <div className="pt-10 flex flex-col gap-3">
+                                <a href={`tel:${CONTACT_INFO.phone1}`} className="display text-3xl">{CONTACT_INFO.phone1Display}</a>
+                                <p className="mono text-xs opacity-60">{CONTACT_INFO.address}</p>
+                                <button onClick={() => { setOpen(false); openLeadModal({ service: 'General Enquiry' }); }} className="label mt-4 py-4 w-full" style={{ background: '#F1EEE7', color: '#121212' }}>
+                                    Get a quote →
                                 </button>
-                            </motion.div>
+                            </div>
                         </div>
                     </motion.div>
                 )}

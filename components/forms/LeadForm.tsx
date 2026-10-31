@@ -26,6 +26,9 @@ interface LeadFormProps {
 }
 
 const SERVICE_OPTIONS = [
+    { value: 'House Construction', label: 'House construction' },
+    { value: 'Grey Structure', label: 'Grey structure' },
+    { value: 'Floor Addition', label: 'Extra floor' },
     { value: 'Modular Kitchen', label: 'Modular Kitchen' },
     { value: 'Wardrobe', label: 'Wardrobes' },
     { value: 'Full Home Interior', label: 'Full Home Interior' },
@@ -39,12 +42,16 @@ const SERVICE_OPTIONS = [
 function matchService(input?: string) {
     if (!input) return '';
     const s = input.toLowerCase();
+    if (s.includes('construction') || s.includes('house')) return 'House Construction';
+    if (s.includes('grey')) return 'Grey Structure';
+    if (s.includes('floor addition') || s.includes('extra floor')) return 'Floor Addition';
     if (s.includes('kitchen')) return 'Modular Kitchen';
     if (s.includes('wardrobe')) return 'Wardrobe';
     if (s.includes('ceiling')) return 'False Ceiling';
     if (s.includes('renovat') || s.includes('bathroom') || s.includes('painting')) return 'Renovation';
     if (s.includes('office')) return 'Office Interior';
     if (s.includes('interior') || s.includes('home')) return 'Full Home Interior';
+    if (s.includes('remodel')) return 'Renovation';
     return 'General Enquiry';
 }
 
@@ -154,20 +161,20 @@ export default function LeadForm({ onSuccess, defaultService }: LeadFormProps) {
     return (
         <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-1.5 form-item-anim opacity-0">
-                <label htmlFor={`${uid}-name`} className="text-[10px] font-bold tracking-[0.2em] uppercase text-mute ml-1">Full Name *</label>
+                <label htmlFor={`${uid}-name`} className="label text-mute">Full Name *</label>
                 <input
                     {...register('name')}
                         id={`${uid}-name`}
                         aria-invalid={errors.name ? true : undefined}
                     type="text"
                     placeholder="Enter your name"
-                    className={`w-full bg-white border px-5 py-4 rounded-2xl focus-visible:outline-none focus:ring-2 focus:ring-brass/30 text-charcoal font-medium placeholder:text-mute/50 transition-all ${errors.name ? 'border-error' : 'border-black/10'}`}
+                    className={`w-full bg-white border px-5 py-4 rounded-none focus-visible:outline-none focus:ring-2 focus:ring-brass/30 text-charcoal font-medium placeholder:text-mute/50 transition-all ${errors.name ? 'border-error' : 'border-black/10'}`}
                 />
-                {errors.name && <p className="text-[10px] text-error font-bold mt-1 ml-1">{errors.name.message}</p>}
+                {errors.name && <p className="mono text-[11px] text-error mt-1">{errors.name.message}</p>}
             </div>
 
             <div className="space-y-1.5 form-item-anim opacity-0">
-                <label htmlFor={`${uid}-phone`} className="text-[10px] font-bold tracking-[0.2em] uppercase text-mute ml-1">Phone Number *</label>
+                <label htmlFor={`${uid}-phone`} className="label text-mute">Phone Number *</label>
                 <div className="relative">
                     <span className="absolute left-5 top-1/2 -translate-y-1/2 text-charcoal/40 text-sm font-bold">+91</span>
                     <input
@@ -179,21 +186,21 @@ export default function LeadForm({ onSuccess, defaultService }: LeadFormProps) {
                         autoComplete="tel-national"
                         maxLength={10}
                         placeholder="98765 43210"
-                        className={`w-full bg-white border pl-14 pr-5 py-4 rounded-2xl focus-visible:outline-none focus:ring-2 focus:ring-brass/30 text-charcoal font-medium placeholder:text-mute/50 transition-all ${errors.phone ? 'border-error' : 'border-black/10'}`}
+                        className={`w-full bg-white border pl-14 pr-5 py-4 rounded-none focus-visible:outline-none focus:ring-2 focus:ring-brass/30 text-charcoal font-medium placeholder:text-mute/50 transition-all ${errors.phone ? 'border-error' : 'border-black/10'}`}
                     />
                 </div>
-                {errors.phone && <p className="text-[10px] text-error font-bold mt-1 ml-1">{errors.phone.message}</p>}
+                {errors.phone && <p className="mono text-[11px] text-error mt-1">{errors.phone.message}</p>}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 form-item-anim opacity-0">
                 <div className="space-y-1.5">
-                    <label htmlFor={`${uid}-service`} className="text-[10px] font-bold tracking-[0.2em] uppercase text-mute ml-1">Interested In *</label>
+                    <label htmlFor={`${uid}-service`} className="label text-mute">Interested In *</label>
                     <div className="relative">
                         <select
                             {...register('service')}
                         id={`${uid}-service`}
                         aria-invalid={errors.service ? true : undefined}
-                            className={`w-full bg-white border px-5 py-4 rounded-2xl focus-visible:outline-none focus:ring-2 focus:ring-brass/30 text-charcoal font-medium appearance-none transition-all ${errors.service ? 'border-error' : 'border-black/10'}`}
+                            className={`w-full bg-white border px-5 py-4 rounded-none focus-visible:outline-none focus:ring-2 focus:ring-brass/30 text-charcoal font-medium appearance-none transition-all ${errors.service ? 'border-error' : 'border-black/10'}`}
                         >
                             <option value="">Select Service</option>
                             {SERVICE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -202,20 +209,20 @@ export default function LeadForm({ onSuccess, defaultService }: LeadFormProps) {
                             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--color-mute)" strokeWidth="2"><path d="M2.5 4.5L6 8L9.5 4.5" /></svg>
                         </div>
                     </div>
-                    {errors.service && <p className="text-[10px] text-error font-bold mt-1 ml-1">{errors.service.message}</p>}
+                    {errors.service && <p className="mono text-[11px] text-error mt-1">{errors.service.message}</p>}
                 </div>
 
                 <div className="space-y-1.5">
-                    <label htmlFor={`${uid}-locality`} className="text-[10px] font-bold tracking-[0.2em] uppercase text-mute ml-1">Locality in NCR *</label>
+                    <label htmlFor={`${uid}-locality`} className="label text-mute">Locality in NCR *</label>
                     <input
                         {...register('locality')}
                         id={`${uid}-locality`}
                         aria-invalid={errors.locality ? true : undefined}
                         type="text"
                         placeholder="e.g. Noida Sector 15"
-                        className={`w-full bg-white border px-5 py-4 rounded-2xl focus-visible:outline-none focus:ring-2 focus:ring-brass/30 text-charcoal font-medium placeholder:text-mute/50 transition-all ${errors.locality ? 'border-error' : 'border-black/10'}`}
+                        className={`w-full bg-white border px-5 py-4 rounded-none focus-visible:outline-none focus:ring-2 focus:ring-brass/30 text-charcoal font-medium placeholder:text-mute/50 transition-all ${errors.locality ? 'border-error' : 'border-black/10'}`}
                     />
-                    {errors.locality && <p className="text-[10px] text-error font-bold mt-1 ml-1">{errors.locality.message}</p>}
+                    {errors.locality && <p className="mono text-[11px] text-error mt-1">{errors.locality.message}</p>}
                 </div>
             </div>
 
@@ -227,7 +234,7 @@ export default function LeadForm({ onSuccess, defaultService }: LeadFormProps) {
                         className="w-5 h-5 rounded-lg border-black/10 text-brass focus:ring-brass/20 cursor-pointer"
                     />
                 </div>
-                <span className="text-[10px] text-mute font-medium leading-relaxed uppercase tracking-wider">
+                <span className="mono text-[10.5px] text-mute leading-relaxed">
                     Get updates on WhatsApp. By clicking below, you agree to connect with our experts.
                 </span>
             </label>
@@ -239,7 +246,7 @@ export default function LeadForm({ onSuccess, defaultService }: LeadFormProps) {
                     onMouseLeave={handleMouseLeave}
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="btn-sheen group w-full py-5 rounded-2xl text-white font-bold text-xs uppercase tracking-[0.3em] hover: transition-all flex items-center justify-center gap-3 disabled:opacity-70"
+                    className="label group w-full py-5 rounded-none text-white transition-all flex items-center justify-center gap-3 disabled:opacity-70"
                     style={{ background: 'var(--color-charcoal)' }}
                 >
                     {status === 'submitting' ? (

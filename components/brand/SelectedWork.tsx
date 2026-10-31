@@ -39,13 +39,13 @@ export default function SelectedWork() {
             <div className="container-site">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-12 md:pb-20 border-b" style={{ borderColor: 'var(--color-border-strong)' }}>
                     <div>
-                        <p className="label mb-6" style={{ color: 'var(--color-mute)' }}>( 02 ) &nbsp;Selected work</p>
+                        <p className="label mb-6" style={{ color: 'var(--color-mute)' }}>Work · 2024–2026</p>
                         <h2 className="display" style={{ fontSize: 'clamp(44px, 6.4vw, 112px)' }}>
-                            Rooms with a<br /><span className="italic" style={{ color: 'var(--color-brass-dark)' }}>point of view.</span>
+                            Recent kitchens<br /><span style={{ color: 'var(--color-brass)' }}>and homes.</span>
                         </h2>
                     </div>
                     <p className="max-w-sm text-sm leading-relaxed" style={{ color: 'var(--color-mute)' }}>
-                        A selection of kitchens, bedrooms and living spaces — alongside 3D visualisations from our design studio.
+                        Kitchens, bedrooms and living rooms we have handed over, with two 3D visualisations from the design studio marked as renders.
                     </p>
                 </div>
 

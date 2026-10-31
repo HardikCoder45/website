@@ -1,15 +1,16 @@
 import Navbar from '@/components/layout/Navbar';
-import HeroSection from '@/components/hero/HeroSection';
+import BuildHero from '@/components/build/BuildHero';
 import Manifesto from '@/components/brand/Manifesto';
-import SelectedWork from '@/components/brand/SelectedWork';
 import ServicesIndex from '@/components/brand/ServicesIndex';
+import BuildPricing from '@/components/sections/BuildPricing';
+import InteriorRates from '@/components/sections/InteriorRates';
+import QuoteCalculator from '@/components/calculator/QuoteCalculator';
+import SelectedWork from '@/components/brand/SelectedWork';
 import MaterialAtelier from '@/components/brand/MaterialAtelier';
 import Experience from '@/components/brand/Experience';
-import ProcessSection from '@/components/sections/ProcessSection';
-import Showroom from '@/components/sections/Showroom';
 import Voices from '@/components/brand/Voices';
-import EstimateCalculator from '@/components/calculator/EstimateCalculator';
 import FaqSection from '@/components/sections/FaqSection';
+import GlobeFinale from '@/components/globe/GlobeFinale';
 import ContactSection from '@/components/sections/ContactSection';
 import Footer from '@/components/layout/Footer';
 import LeadModal from '@/components/forms/LeadModal';
@@ -23,17 +24,18 @@ export default function Home() {
       <Preloader />
       <Navbar />
 
-      <HeroSection />
+      <BuildHero />
       <Manifesto />
-      <SelectedWork />
       <ServicesIndex />
+      <BuildPricing />
+      <InteriorRates />
+      <QuoteCalculator />
+      <SelectedWork />
       <MaterialAtelier />
       <Experience />
-      <ProcessSection />
-      <Showroom />
       <Voices />
-      <EstimateCalculator />
       <FaqSection />
+      <GlobeFinale />
       <ContactSection />
       <Footer />
 
