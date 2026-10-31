@@ -11,15 +11,15 @@ npm run lint
 
 ## Brand system
 
-AMS Interiors & Construction. The identity is an architect's drawing set: tracing-paper `#F1EEE7`, ink `#121212` and one brick-red accent `#B4502F` (tokens in `styles/tokens.css`; older `--color-brass*` names now hold the accent). Headlines are condensed Archivo (`.display`, width axis 72); specs, prices and labels are IBM Plex Mono (`.label`, `.mono`). Major sections carry a drawing-sheet title block (`components/brand/SheetHeader.tsx`).
+AMS Interiors, in its original brand colours: sand `#F5EFE0`, brass gold `#B8892A` and walnut brown `#2C2416` (tokens in `styles/tokens.css`). Headlines are Cormorant Garamond (`.display`, italic for emphasis), text and labels are Inter (`.label`, `.mono` for tabular figures). Major sections carry a sheet title block (`components/brand/SheetHeader.tsx`).
 
-Logo: `components/brand/Logo.tsx` (an "A" drawn as a gable on a ground line, with a brick-red window). Icons: `app/icon.svg`, `app/favicon.ico`, `app/apple-icon.png`, `public/icon-192.png`, `public/icon-512.png`; Next.js writes the `<link rel="icon">` / `apple-touch-icon` tags from these and from `metadata.icons` in `app/layout.tsx`.
+Logo: `components/brand/Logo.tsx` (an "A" drawn as a gable on a ground line, with a brass window, beside the AMS / INTERIORS wordmark). Icons: `app/icon.svg`, `app/favicon.ico`, `app/apple-icon.png`, `public/icon-192.png`, `public/icon-512.png`; Next.js writes the `<link rel="icon">` / `apple-touch-icon` tags from these and from `metadata.icons` in `app/layout.tsx`.
 
 Copy follows the no-AI-slop rules (concrete facts, no filler words, no em-dash crutches).
 
 ## Prices
 
-Every rate on the site comes from `lib/data/pricing.ts` (construction packages, specification schedule, grey structure, stilt, services index, interiors rate card, estimator tiers). They are indicative 2026 Delhi NCR rates set against published guides, excluding GST. **Confirm or edit them there before launch.**
+Every rate on the site comes from `lib/data/pricing.ts` and is the price AMS lists on IndiaMart under its two trading names, Anil Multi Service (Jagat Puri) and Anil Electric Multi Service (Indirapuram). Each entry records the seller, and packages record the listing name. Rates exclude GST. **If a listing changes, change it there**; the 3D tour estimates (`lib/data/tours.ts`) use the same ranges.
 
 ## Home page
 
@@ -43,7 +43,7 @@ Every rate on the site comes from `lib/data/pricing.ts` (construction packages, 
 - `components/three/Prop.tsx` — loads a furniture GLB, scales it to a real-world height and sits it on the floor.
 - `components/tour/TourExperience.tsx` — the tour engine: guided stops + hotspots, orbit camera, autoplay, day/evening, configurator, live estimate, WhatsApp quote, save image, fullscreen, adaptive quality.
 - `lib/data/tours.ts` — tour definitions (stops, finishes, toggles, area and rates).
-- `components/build/HouseScene.tsx` — clay-maquette house built from parts tagged by stage; the active stage glows brick red; unlit paper ground + shadow catcher so the canvas matches the page.
+- `components/build/HouseScene.tsx` — a G+1 house built from parts tagged by stage (travertine, teak louvres, bronze fins, pergola, gate and garden, neighbouring plots for context). The active stage glows brass; the light falls from afternoon to dusk as the house is finished; then the camera walks through the front glass into the living room and kitchen (the tour scenes, evening mood). Scroll ranges live in `HERO_P` in `lib/data/build.ts`.
 - `components/globe/EarthScene.tsx` — custom Earth shader (day, night lights, ocean glint, clouds, rim) + limb-hugging atmosphere; scroll turns India to camera and dives to Delhi; HTML pin and live altitude readout.
 - `components/brand/AtelierCanvas.tsx` — the material atelier specimen (Lightformer studio lighting, shadow-only floor).
 - `lib/three/usePbr.ts` — loads the texture sets in `public/textures`; `lib/three/quality.ts` picks the effects level (`?fx=lite|0`, phones get lite) and detects half-float support.

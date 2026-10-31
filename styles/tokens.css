@@ -1,24 +1,23 @@
 :root {
-  /* Drawing-set palette: tracing paper, ink, and one brick-red accent.
-     Older variable names are kept (brass = the accent) so every component follows. */
-  --color-sand:       #F1EEE7;   /* paper — page background */
-  --color-surface:    #F8F6F1;   /* lighter sheet */
-  --color-stone:      #E3DED4;   /* card / panel */
-  --color-charcoal:   #121212;   /* ink */
-  --color-brass:      #B4502F;   /* brick accent */
-  --color-brass-dark: #8C3A1F;
-  --color-brass-light:#E07A55;   /* accent on ink */
-  --color-mute:       #5F5B55;   /* secondary text on paper */
-  --color-border:     rgba(18,18,18,0.10);
-  --color-border-strong: rgba(18,18,18,0.22);
-  --color-ash:        rgba(241,238,231,0.62); /* secondary text on ink */
-  --color-line-dark:  rgba(241,238,231,0.14);
+  /* AMS Interiors palette: warm sand, brass gold and deep walnut brown. */
+  --color-sand:       #F5EFE0;   /* sand: page background */
+  --color-surface:    #FAFAF7;   /* lighter sheet */
+  --color-stone:      #EBE2CF;   /* card / panel */
+  --color-charcoal:   #2C2416;   /* walnut brown: headings, dark sections */
+  --color-brass:      #B8892A;   /* brass gold accent */
+  --color-brass-dark: #8A6318;
+  --color-brass-light:#D4A84B;   /* brass on dark */
+  --color-mute:       #6B6358;   /* secondary text */
+  --color-border:     rgba(44,36,22,0.12);
+  --color-border-strong: rgba(44,36,22,0.24);
+  --color-ash:        rgba(245,239,224,0.62); /* secondary text on brown */
+  --color-line-dark:  rgba(245,239,224,0.14);
   --color-error:      #C0392B;   /* form error / terracotta */
 
   /* Typography */
-  --font-display: var(--font-archivo), 'Archivo', 'Arial Narrow', sans-serif;
-  --font-body:    var(--font-archivo), 'Archivo', system-ui, sans-serif;
-  --font-mono:    var(--font-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
+  --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-body:    var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-mono:    var(--font-inter), 'Inter', system-ui, sans-serif;
 
   /* Spacing scale */
   --space-xs:  4px;

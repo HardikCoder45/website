@@ -9,7 +9,7 @@ export default function ContactSection() {
                 <div>
                     <p className="label mb-5" style={{ color: 'var(--color-mute)' }}>Start a project</p>
                     <h2 className="display mb-8" style={{ fontSize: 'clamp(46px, 7vw, 120px)' }}>
-                        Tell us about<br /><span style={{ color: 'var(--color-brass)' }}>your plot.</span>
+                        Tell us about<br /><em style={{ color: 'var(--color-brass)' }}>your home.</em>
                     </h2>
                     <p className="max-w-md text-base leading-relaxed mb-12" style={{ color: 'var(--color-mute)' }}>
                         An engineer or designer calls within one working day and visits your site for free. Bring the plot papers or the flat layout if you have them.

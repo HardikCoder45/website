@@ -27,7 +27,7 @@ export interface TourDef {
     service: string;
     /** Typical area used for the live estimate, in sq.ft. */
     area: number;
-    /** Base ₹/sq.ft range before finish upgrades. */
+    /** ₹/sq ft range from AMS's IndiaMart listings (see lib/data/pricing.ts). */
     rate: [number, number];
     stops: TourStop[];
     finishes: FinishGroup[];
@@ -41,10 +41,10 @@ export const WARDROBE_FINISHES: FinishGroup[] = [
         label: 'Shutter finish',
         materials: ['wardrobe-shutter'],
         choices: [
-            { id: 'oak', label: 'Smoked Oak', swatch: '#6d5440', priceDelta: 200, original: true },
+            { id: 'oak', label: 'Smoked Oak', swatch: '#6d5440', priceDelta: 0, original: true },
             { id: 'cream', label: 'Cream Matte', swatch: '#e8dfcc', priceDelta: 0, color: '#e6ddca', roughness: 0.6 },
-            { id: 'olive', label: 'Olive Fluted', swatch: '#6f7558', priceDelta: 250, color: '#6c7356', roughness: 0.45 },
-            { id: 'espresso', label: 'Espresso Gloss', swatch: '#2b2019', priceDelta: 300, color: '#2a1f18', roughness: 0.12 },
+            { id: 'olive', label: 'Olive Fluted', swatch: '#6f7558', priceDelta: 0, color: '#6c7356', roughness: 0.45 },
+            { id: 'espresso', label: 'Espresso Gloss', swatch: '#2b2019', priceDelta: 0, color: '#2a1f18', roughness: 0.12 },
         ],
     },
     {
@@ -52,9 +52,9 @@ export const WARDROBE_FINISHES: FinishGroup[] = [
         label: 'Centre panel',
         materials: ['wardrobe-glass'],
         choices: [
-            { id: 'bronze', label: 'Bronze Mirror', swatch: '#8a6a4a', priceDelta: 180, original: true },
-            { id: 'smoke', label: 'Smoked Glass', swatch: '#3a3a3c', priceDelta: 150, color: '#2e2e31', roughness: 0.05, metalness: 0.6 },
-            { id: 'clear', label: 'Clear Mirror', swatch: '#cfd6dc', priceDelta: 120, color: '#d9e0e6', roughness: 0.02, metalness: 1 },
+            { id: 'bronze', label: 'Bronze Mirror', swatch: '#8a6a4a', priceDelta: 0, original: true },
+            { id: 'smoke', label: 'Smoked Glass', swatch: '#3a3a3c', priceDelta: 0, color: '#2e2e31', roughness: 0.05, metalness: 0.6 },
+            { id: 'clear', label: 'Clear Mirror', swatch: '#cfd6dc', priceDelta: 0, color: '#d9e0e6', roughness: 0.02, metalness: 1 },
             { id: 'match', label: 'Match Shutters', swatch: '#a08c76', priceDelta: 0, color: '#9c8771', roughness: 0.5, metalness: 0 },
         ],
     },
@@ -63,9 +63,9 @@ export const WARDROBE_FINISHES: FinishGroup[] = [
         label: 'Profile handles',
         materials: ['wardrobe-handle'],
         choices: [
-            { id: 'gold', label: 'Brushed Gold', swatch: '#c9a86a', priceDelta: 40, original: true },
-            { id: 'black', label: 'Matte Black', swatch: '#1a1a1a', priceDelta: 20, color: '#161616', roughness: 0.6, metalness: 0.4 },
-            { id: 'steel', label: 'Brushed Steel', swatch: '#b9bcc0', priceDelta: 30, color: '#c4c7cb', roughness: 0.35, metalness: 1 },
+            { id: 'gold', label: 'Brushed Gold', swatch: '#c9a86a', priceDelta: 0, original: true },
+            { id: 'black', label: 'Matte Black', swatch: '#1a1a1a', priceDelta: 0, color: '#161616', roughness: 0.6, metalness: 0.4 },
+            { id: 'steel', label: 'Brushed Steel', swatch: '#b9bcc0', priceDelta: 0, color: '#c4c7cb', roughness: 0.35, metalness: 1 },
         ],
     },
 ];
@@ -77,9 +77,9 @@ export const INTERIOR_FINISHES: FinishGroup[] = [
         materials: ['room-wall'],
         choices: [
             { id: 'linen', label: 'Warm Linen', swatch: '#e7dccb', priceDelta: 0, original: true },
-            { id: 'clay', label: 'Desert Clay', swatch: '#c79a7c', priceDelta: 15, color: '#c59779' },
-            { id: 'sage', label: 'Soft Sage', swatch: '#a9b39b', priceDelta: 15, color: '#a6b097' },
-            { id: 'ink', label: 'Midnight Ink', swatch: '#2c3140', priceDelta: 25, color: '#2b303e' },
+            { id: 'clay', label: 'Desert Clay', swatch: '#c79a7c', priceDelta: 0, color: '#c59779' },
+            { id: 'sage', label: 'Soft Sage', swatch: '#a9b39b', priceDelta: 0, color: '#a6b097' },
+            { id: 'ink', label: 'Midnight Ink', swatch: '#2c3140', priceDelta: 0, color: '#2b303e' },
         ],
     },
     {
@@ -87,10 +87,10 @@ export const INTERIOR_FINISHES: FinishGroup[] = [
         label: 'Feature wall',
         materials: ['room-panel'],
         choices: [
-            { id: 'walnut', label: 'Walnut Fluted', swatch: '#5c4130', priceDelta: 180, original: true },
-            { id: 'oak', label: 'Light Oak', swatch: '#b48c62', priceDelta: 160, color: '#b38a60' },
-            { id: 'marble', label: 'Travertine', swatch: '#d8cbb6', priceDelta: 260, color: '#d6c9b3', roughness: 0.35 },
-            { id: 'charcoal', label: 'Charcoal Slats', swatch: '#2a2826', priceDelta: 170, color: '#282624' },
+            { id: 'walnut', label: 'Walnut Fluted', swatch: '#5c4130', priceDelta: 0, original: true },
+            { id: 'oak', label: 'Light Oak', swatch: '#b48c62', priceDelta: 0, color: '#b38a60' },
+            { id: 'marble', label: 'Travertine', swatch: '#d8cbb6', priceDelta: 0, color: '#d6c9b3', roughness: 0.35 },
+            { id: 'charcoal', label: 'Charcoal Slats', swatch: '#2a2826', priceDelta: 0, color: '#282624' },
         ],
     },
     {
@@ -98,9 +98,9 @@ export const INTERIOR_FINISHES: FinishGroup[] = [
         label: 'Flooring',
         materials: ['room-floor'],
         choices: [
-            { id: 'herringbone', label: 'Honey Oak', swatch: '#a57a4f', priceDelta: 120, original: true },
-            { id: 'marble', label: 'Italian Marble', swatch: '#ebe6dd', priceDelta: 220, color: '#ece7de', roughness: 0.12 },
-            { id: 'ash', label: 'Ash Grey', swatch: '#8d867c', priceDelta: 90, color: '#8b847a' },
+            { id: 'herringbone', label: 'Honey Oak', swatch: '#a57a4f', priceDelta: 0, original: true },
+            { id: 'marble', label: 'Italian Marble', swatch: '#ebe6dd', priceDelta: 0, color: '#ece7de', roughness: 0.12 },
+            { id: 'ash', label: 'Ash Grey', swatch: '#8d867c', priceDelta: 0, color: '#8b847a' },
         ],
     },
     {
@@ -123,7 +123,7 @@ export const TOURS: Record<TourDef['slug'], TourDef> = {
         intro: 'An island kitchen with tall pantry units, LED-lit shelving and a breakfast bar. Change every finish and see it instantly.',
         service: 'Modular Kitchen',
         area: 120,
-        rate: [1200, 1600],
+        rate: [1000, 1700], // IndiaMart: modular kitchens ₹1,000–1,700 / sq ft
         finishes: KITCHEN_FINISHES,
         toggles: [],
         hdri: { day: '/hdri/apartment.exr', evening: '/hdri/night.exr' },
@@ -142,7 +142,7 @@ export const TOURS: Record<TourDef['slug'], TourDef> = {
         intro: 'A 9-foot, four-door wardrobe with a mirrored centre panel, internal LED and a dresser drawer bank. Open the doors to see inside.',
         service: 'Wardrobe',
         area: 72,
-        rate: [1000, 1500],
+        rate: [1100, 1100], // IndiaMart: wooden wardrobe ₹1,100 / sq ft
         finishes: WARDROBE_FINISHES,
         toggles: [{ id: 'open', label: 'Open doors', default: false }],
         hdri: { day: '/hdri/apartment.exr', evening: '/hdri/night.exr' },
@@ -161,7 +161,7 @@ export const TOURS: Record<TourDef['slug'], TourDef> = {
         intro: 'A full living room: fluted feature wall, floating TV console, cove-lit false ceiling and furniture. Restyle the whole room live.',
         service: 'Full Home Interior',
         area: 320,
-        rate: [600, 1100],
+        rate: [800, 1500], // IndiaMart: full-home interiors ₹800–1,500 / sq ft
         finishes: INTERIOR_FINISHES,
         toggles: [{ id: 'leather', label: 'Leather sofa', default: false }],
         hdri: { day: '/hdri/apartment.exr', evening: '/hdri/night.exr' },

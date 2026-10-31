@@ -1,5 +1,5 @@
-// AMS mark: an "A" drawn as a gable roof on a ground line, with the crossbar as
-// the first-floor slab and a brick-red window under the ridge.
+// AMS Interiors mark: an "A" drawn as a gable roof on a ground line, the
+// crossbar as the first-floor slab and a brass window under the ridge.
 interface MarkProps {
     size?: number;
     className?: string;
@@ -23,9 +23,9 @@ export function Logo({ compact = false, className = '' }: { compact?: boolean; c
     return (
         <span className={`inline-flex items-center gap-3 ${className}`}>
             <LogoMark size={compact ? 28 : 34} />
-            <span className="flex flex-col leading-none">
-                <span className="display text-[26px] md:text-[28px] tracking-[0.02em]" style={{ lineHeight: 0.85 }}>AMS</span>
-                {!compact && <span className="mono text-[8.5px] tracking-[0.14em] uppercase mt-1 opacity-70">Interiors &amp; Construction</span>}
+            <span className="flex items-baseline gap-1.5 leading-none">
+                <span className="font-display font-bold text-[30px] md:text-[32px] tracking-[-0.03em]" style={{ lineHeight: 0.8 }}>AMS</span>
+                {!compact && <span className="font-display font-semibold text-[12px] md:text-[13px] tracking-[0.3em] uppercase" style={{ color: 'var(--color-brass)' }}>Interiors</span>}
             </span>
         </span>
     );

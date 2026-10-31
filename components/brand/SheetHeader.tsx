@@ -18,9 +18,9 @@ export default function SheetHeader({ sheet, eyebrow, title, intro, dark = false
                 {intro && <p className="mt-6 max-w-xl text-base leading-relaxed" style={{ color: mute }}>{intro}</p>}
             </div>
             <dl className="hidden md:grid grid-cols-2 mono text-[10px] uppercase tracking-[0.08em] border" style={{ borderColor: line, color: mute }}>
-                <div className="px-3 py-2 border-r border-b" style={{ borderColor: line }}><dt className="opacity-70">Sheet</dt><dd className="text-sm mt-0.5" style={{ color: dark ? '#F1EEE7' : 'var(--color-charcoal)' }}>{sheet}</dd></div>
-                <div className="px-3 py-2 border-b" style={{ borderColor: line }}><dt className="opacity-70">Rev</dt><dd className="text-sm mt-0.5" style={{ color: dark ? '#F1EEE7' : 'var(--color-charcoal)' }}>2026.1</dd></div>
-                <div className="px-3 py-2 col-span-2"><dt className="opacity-70">Drawn by</dt><dd className="mt-0.5" style={{ color: dark ? '#F1EEE7' : 'var(--color-charcoal)' }}>AMS Interiors &amp; Construction</dd></div>
+                <div className="px-3 py-2 border-r border-b" style={{ borderColor: line }}><dt className="opacity-70">Sheet</dt><dd className="text-sm mt-0.5" style={{ color: dark ? '#F5EFE0' : 'var(--color-charcoal)' }}>{sheet}</dd></div>
+                <div className="px-3 py-2 border-b" style={{ borderColor: line }}><dt className="opacity-70">Rev</dt><dd className="text-sm mt-0.5" style={{ color: dark ? '#F5EFE0' : 'var(--color-charcoal)' }}>2026.1</dd></div>
+                <div className="px-3 py-2 col-span-2"><dt className="opacity-70">Drawn by</dt><dd className="mt-0.5" style={{ color: dark ? '#F5EFE0' : 'var(--color-charcoal)' }}>AMS Interiors</dd></div>
             </dl>
         </header>
     );

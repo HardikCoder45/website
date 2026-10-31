@@ -66,7 +66,7 @@ export default function Navbar() {
                 className="fixed top-0 inset-x-0 z-50 transition-[transform,background-color,border-color] duration-500"
                 style={{
                     transform: hidden && !open ? 'translateY(-100%)' : 'none',
-                    background: scrolled ? 'rgba(241,238,231,0.88)' : 'transparent',
+                    background: scrolled ? 'rgba(245,239,224,0.88)' : 'transparent',
                     backdropFilter: scrolled ? 'blur(14px)' : 'none',
                     WebkitBackdropFilter: scrolled ? 'blur(14px)' : 'none',
                     borderBottom: `1px solid ${scrolled ? 'var(--color-border)' : 'transparent'}`,
@@ -74,7 +74,7 @@ export default function Navbar() {
                 }}
             >
                 <div className="container-site h-16 md:h-[72px] flex items-center justify-between gap-6">
-                    <a href="#main" aria-label="AMS Interiors & Construction, back to top" onClick={(e) => { e.preventDefault(); scrollToTarget(0); }}>
+                    <a href="#main" aria-label="AMS Interiors, back to top" onClick={(e) => { e.preventDefault(); scrollToTarget(0); }}>
                         <Logo />
                     </a>
 
@@ -103,7 +103,7 @@ export default function Navbar() {
                         <button
                             onClick={() => openLeadModal({ service: 'General Enquiry' })}
                             className="label hidden sm:inline-flex items-center gap-2 px-4 py-2.5 transition-colors"
-                            style={{ background: 'var(--color-charcoal)', color: '#F1EEE7' }}
+                            style={{ background: 'var(--color-charcoal)', color: '#F5EFE0' }}
                         >
                             Get a quote <span aria-hidden="true">→</span>
                         </button>
@@ -128,7 +128,7 @@ export default function Navbar() {
                         exit={{ clipPath: 'inset(0 0 100% 0)' }}
                         transition={{ duration: 0.7, ease: EASE }}
                         className="fixed inset-0 z-[120] flex flex-col"
-                        style={{ background: 'var(--color-charcoal)', color: '#F1EEE7' }}
+                        style={{ background: 'var(--color-charcoal)', color: '#F5EFE0' }}
                         data-lenis-prevent
                     >
                         <div className="container-site w-full h-16 flex items-center justify-between">
@@ -153,7 +153,7 @@ export default function Navbar() {
                             <div className="pt-10 flex flex-col gap-3">
                                 <a href={`tel:${CONTACT_INFO.phone1}`} className="display text-3xl">{CONTACT_INFO.phone1Display}</a>
                                 <p className="mono text-xs opacity-60">{CONTACT_INFO.address}</p>
-                                <button onClick={() => { setOpen(false); openLeadModal({ service: 'General Enquiry' }); }} className="label mt-4 py-4 w-full" style={{ background: '#F1EEE7', color: '#121212' }}>
+                                <button onClick={() => { setOpen(false); openLeadModal({ service: 'General Enquiry' }); }} className="label mt-4 py-4 w-full" style={{ background: '#F5EFE0', color: '#2C2416' }}>
                                     Get a quote →
                                 </button>
                             </div>

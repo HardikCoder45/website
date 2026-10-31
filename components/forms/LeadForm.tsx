@@ -27,8 +27,6 @@ interface LeadFormProps {
 
 const SERVICE_OPTIONS = [
     { value: 'House Construction', label: 'House construction' },
-    { value: 'Grey Structure', label: 'Grey structure' },
-    { value: 'Floor Addition', label: 'Extra floor' },
     { value: 'Modular Kitchen', label: 'Modular Kitchen' },
     { value: 'Wardrobe', label: 'Wardrobes' },
     { value: 'Full Home Interior', label: 'Full Home Interior' },
@@ -43,8 +41,6 @@ function matchService(input?: string) {
     if (!input) return '';
     const s = input.toLowerCase();
     if (s.includes('construction') || s.includes('house')) return 'House Construction';
-    if (s.includes('grey')) return 'Grey Structure';
-    if (s.includes('floor addition') || s.includes('extra floor')) return 'Floor Addition';
     if (s.includes('kitchen')) return 'Modular Kitchen';
     if (s.includes('wardrobe')) return 'Wardrobe';
     if (s.includes('ceiling')) return 'False Ceiling';

@@ -1,30 +1,29 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/ui/CustomCursor";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { CONTACT_INFO, FAQS, SITE_URL, FOUNDED_YEAR } from "@/lib/data/config";
 
-// Archivo's width axis gives the condensed "drawing title" headlines; Plex Mono
-// carries specs, prices and dimensions.
-const archivo = Archivo({
+// The original AMS Interiors pairing: Cormorant Garamond headlines, Inter text.
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  axes: ["wdth"],
-  variable: "--font-archivo",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
   display: "swap",
 });
 
-const plexMono = IBM_Plex_Mono({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-plex-mono",
+  variable: "--font-inter",
   display: "swap",
 });
 
-const title = "AMS Interiors & Construction | Houses, Kitchens and Interiors in Delhi NCR";
+const title = "AMS Interiors | Modular Kitchens, Interiors and Construction in Delhi NCR";
 const description =
-  "House construction from ₹1,950/sq ft, modular kitchens from ₹1,500/sq ft and full-home interiors across Delhi NCR. One team from foundation to handover, own factory in Indirapuram, since 2014.";
+  "Modular kitchens from ₹1,000/sq ft, full-home interiors, wardrobes, false ceilings and house construction from ₹1,100/sq ft across Delhi NCR. Studio in Jagat Puri, factory in Indirapuram, since 2014.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -49,8 +48,8 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/" },
   openGraph: {
-    title: "AMS Interiors & Construction",
-    description: "We build the house, then we fit out every room. Construction, modular kitchens and interiors across Delhi NCR since 2014.",
+    title: "AMS Interiors",
+    description: "Modular kitchens, interiors and house construction across Delhi NCR since 2014.",
     type: "website",
     url: SITE_URL,
     siteName: "AMS Interiors",
@@ -59,8 +58,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AMS Interiors & Construction",
-    description: "House construction, modular kitchens and interiors across Delhi NCR.",
+    title: "AMS Interiors",
+    description: "Modular kitchens, interiors and house construction across Delhi NCR.",
     images: ["/og.jpg"],
   },
   robots: { index: true, follow: true },
@@ -75,7 +74,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#121212",
+  themeColor: "#2C2416",
   width: "device-width",
   initialScale: 1,
 };
@@ -85,7 +84,7 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "HomeAndConstructionBusiness",
     "@id": `${SITE_URL}/#business`,
-    name: "AMS Interiors & Construction",
+    name: "AMS Interiors",
     logo: `${SITE_URL}/icon-512.png`,
     image: `${SITE_URL}/og.jpg`,
     geo: { "@type": "GeoCoordinates", latitude: 28.6633, longitude: 77.2905 },
@@ -134,7 +133,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-IN" className={`${archivo.variable} ${plexMono.variable}`}>
+    <html lang="en-IN" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="font-body antialiased bg-charcoal text-white selection:bg-brass selection:text-white">
         <script
           type="application/ld+json"

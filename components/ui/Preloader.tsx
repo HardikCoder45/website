@@ -54,16 +54,16 @@ export default function Preloader() {
     if (gone) return null;
 
     return (
-        <div ref={rootRef} aria-hidden="true" className="fixed inset-0 z-[20000] flex flex-col items-center justify-center drafting-grid" style={{ background: '#F1EEE7', color: '#121212' }}>
+        <div ref={rootRef} aria-hidden="true" className="fixed inset-0 z-[20000] flex flex-col items-center justify-center drafting-grid" style={{ background: '#F5EFE0', color: '#2C2416' }}>
             <svg width="120" height="120" viewBox="0 0 48 48" fill="none">
                 <path className="pl-stroke" d="M10 39.6 L24 10 L38 39.6" stroke="currentColor" strokeWidth="2.6" />
                 <path className="pl-stroke" d="M15.6 27 H32.4" stroke="currentColor" strokeWidth="2.6" />
                 <path className="pl-stroke" d="M5 39.6 H43" stroke="currentColor" strokeWidth="1.4" />
-                <rect className="pl-window" x="21.8" y="20.4" width="4.4" height="4.4" fill="#B4502F" />
+                <rect className="pl-window" x="21.8" y="20.4" width="4.4" height="4.4" fill="#B8892A" />
             </svg>
-            <p className="pl-text display text-4xl mt-6 invisible">AMS</p>
-            <p className="pl-text label mt-2 invisible" style={{ color: '#5F5B55' }}>Interiors &amp; Construction</p>
-            <div className="absolute bottom-8 inset-x-0 container-site flex justify-between label" style={{ color: '#5F5B55' }}>
+            <p className="pl-text font-display font-bold text-5xl mt-6 invisible tracking-[-0.03em]">AMS</p>
+            <p className="pl-text font-display font-semibold text-sm tracking-[0.34em] uppercase mt-2 invisible" style={{ color: '#B8892A' }}>Interiors</p>
+            <div className="absolute bottom-8 inset-x-0 container-site flex justify-between label" style={{ color: '#6B6358' }}>
                 <span>Sheet 00 · Cover</span>
                 <span className="tabular-nums"><span ref={countRef}>000</span> %</span>
             </div>

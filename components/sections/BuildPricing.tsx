@@ -1,13 +1,13 @@
 'use client';
 import { useState } from 'react';
 import SheetHeader from '@/components/brand/SheetHeader';
-import { BUILD_PACKAGES, BUILD_SPECS, GREY_STRUCTURE, RATE_NOTE, STILT_RATE, type BuildTier } from '@/lib/data/pricing';
+import { BUILD_PACKAGES, BUILD_SPECS, CIVIL_RATES, RATE_NOTE, SELLERS, type BuildTier } from '@/lib/data/pricing';
 import { useAppStore } from '@/lib/store/useAppStore';
 
 export default function BuildPricing() {
     const openLeadModal = useAppStore((s) => s.openLeadModal);
     // On phones the schedule shows one package at a time.
-    const [mobileTier, setMobileTier] = useState<BuildTier>('signature');
+    const [mobileTier, setMobileTier] = useState<BuildTier>('standard');
 
     return (
         <section id="pricing" className="relative py-24 md:py-36 scroll-mt-16" style={{ background: 'var(--color-sand)', color: 'var(--color-charcoal)' }}>
@@ -15,8 +15,8 @@ export default function BuildPricing() {
                 <SheetHeader
                     sheet="A-03"
                     eyebrow="Construction packages"
-                    title={<>Priced per square foot.<br /><span style={{ color: 'var(--color-brass)' }}>Specified to the brand.</span></>}
-                    intro="Three turnkey packages for houses and builder floors. Each rate covers structure, services and finishes on the built-up area, and every material is named below so quotes are easy to compare."
+                    title={<>House construction,<br /><em style={{ color: 'var(--color-brass)' }}>priced per square foot.</em></>}
+                    intro="The same three rates AMS lists on IndiaMart. Each covers structure, services and finishes on the built-up area, and the materials for each are set out below."
                 />
 
                 {/* Package columns */}
@@ -30,11 +30,12 @@ export default function BuildPricing() {
                             </div>
                             <p className="display tabular-nums" style={{ fontSize: 'clamp(56px, 6vw, 92px)' }}>₹{p.rate.toLocaleString('en-IN')}</p>
                             <p className="mono text-xs mt-2" style={{ color: 'var(--color-mute)' }}>per sq ft of built-up area</p>
+                            <p className="text-[11px] mt-4 leading-snug" style={{ color: 'var(--color-mute)' }}>IndiaMart: “{p.listing}”, {SELLERS[p.seller]}</p>
                             <p className="mt-6 text-sm leading-relaxed flex-1" style={{ color: 'var(--color-mute)' }}>{p.summary}</p>
                             <button
                                 onClick={() => openLeadModal({ service: `House Construction (${p.name})` })}
                                 className="label mt-8 py-4 w-full transition-colors"
-                                style={p.popular ? { background: 'var(--color-charcoal)', color: '#F1EEE7' } : { border: '1px solid var(--color-border-strong)' }}
+                                style={p.popular ? { background: 'var(--color-charcoal)', color: '#F5EFE0' } : { border: '1px solid var(--color-border-strong)' }}
                             >
                                 Quote this package →
                             </button>
@@ -48,7 +49,7 @@ export default function BuildPricing() {
                         <h3 className="label">Specification schedule</h3>
                         <div className="flex md:hidden gap-1" role="tablist" aria-label="Choose package">
                             {BUILD_PACKAGES.map((p) => (
-                                <button key={p.id} role="tab" aria-selected={mobileTier === p.id} onClick={() => setMobileTier(p.id)} className="label px-3 py-2" style={mobileTier === p.id ? { background: 'var(--color-charcoal)', color: '#F1EEE7' } : { border: '1px solid var(--color-border-strong)' }}>
+                                <button key={p.id} role="tab" aria-selected={mobileTier === p.id} onClick={() => setMobileTier(p.id)} className="label px-3 py-2" style={mobileTier === p.id ? { background: 'var(--color-charcoal)', color: '#F5EFE0' } : { border: '1px solid var(--color-border-strong)' }}>
                                     {p.name}
                                 </button>
                             ))}
@@ -78,19 +79,15 @@ export default function BuildPricing() {
 
                 {/* Other civil rates */}
                 <div className="mt-12 grid sm:grid-cols-3 gap-px" style={{ background: 'var(--color-border-strong)' }}>
-                    {[
-                        { k: 'Grey structure only', v: `₹${GREY_STRUCTURE.min.toLocaleString('en-IN')}–${GREY_STRUCTURE.max.toLocaleString('en-IN')} / sq ft`, n: 'Foundation, frame, slabs, walls, plaster' },
-                        { k: 'Stilt parking floor', v: `₹${STILT_RATE.toLocaleString('en-IN')} / sq ft`, n: 'Structure, flooring, lighting, gate' },
-                        { k: 'Extra floor on existing house', v: 'from ₹2,100 / sq ft', n: 'After a structural load check' },
-                    ].map((r) => (
-                        <div key={r.k} className="p-6" style={{ background: 'var(--color-sand)' }}>
-                            <p className="label mb-3" style={{ color: 'var(--color-mute)' }}>{r.k}</p>
-                            <p className="display text-3xl">{r.v}</p>
-                            <p className="text-xs mt-2" style={{ color: 'var(--color-mute)' }}>{r.n}</p>
+                    {CIVIL_RATES.map((r) => (
+                        <div key={r.item} className="p-6" style={{ background: 'var(--color-sand)' }}>
+                            <p className="label mb-3" style={{ color: 'var(--color-mute)' }}>{r.item}</p>
+                            <p className="display text-4xl">{'rate' in r && r.rate ? `₹${r.rate.toLocaleString('en-IN')} / sq ft` : r.price}</p>
+                            <p className="text-xs mt-2" style={{ color: 'var(--color-mute)' }}>{SELLERS[r.seller]}</p>
                         </div>
                     ))}
                 </div>
-                <p className="mono text-[11px] mt-6" style={{ color: 'var(--color-mute)' }}>{RATE_NOTE} Approvals fees, boundary wall, borewell and interiors are quoted separately.</p>
+                <p className="mono text-[11px] mt-6" style={{ color: 'var(--color-mute)' }}>{RATE_NOTE} Approval fees, boundary wall, borewell and interiors are quoted separately; brands are confirmed in the written quote.</p>
             </div>
         </section>
     );

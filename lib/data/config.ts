@@ -17,43 +17,43 @@ export const FOUNDED_YEAR = 2014;
 // sync with TRUST_BADGES so the site never contradicts itself.
 export const STATS = [
     { value: 1000, suffix: "+", label: "Homes delivered" },
-    { value: 10, suffix: " yr", label: "Structural warranty" },
+    { value: 10, suffix: " yr", label: "Kitchen warranty" },
     { value: 4.7, suffix: "★", label: "IndiaMart rating", decimals: 1 },
     { value: new Date().getFullYear() - FOUNDED_YEAR, suffix: "", label: "Years building in NCR" },
 ];
 
 export const FAQS = [
     {
-        q: "What does it cost to build a house in Delhi?",
-        a: "Our turnkey rates are ₹1,950, ₹2,450 and ₹3,150 per sq ft of built-up area for the Essential, Signature and Bespoke packages. A G+2 builder floor with stilt parking on a 150 sq yd plot comes to roughly ₹84–95 lakh in Signature. Grey structure alone is ₹1,350–1,650 per sq ft. The estimate tool above gives a figure for your plot.",
+        q: "What does it cost to build a house with AMS?",
+        a: "Our IndiaMart rates are ₹1,100 per sq ft for new home building, ₹1,200 for our standard house construction and ₹1,500 for residential construction projects. A G+1 house on a 100 sq yd plot (about 1,350 sq ft built-up) comes to roughly ₹16 lakh at ₹1,200. The estimate tool gives a figure for your plot.",
     },
     {
         q: "What is included in the per-square-foot rate?",
-        a: "Structure, brickwork, plaster, plumbing, electrical wiring, waterproofing, flooring, doors, windows, bathroom fittings and paint, with the brands listed in the specification schedule. Approvals fees, boundary walls, borewells, lifts and interiors are quoted separately.",
+        a: "Structure, brickwork, plaster, plumbing, electrical wiring, waterproofing, flooring, doors, windows, bathroom fittings and paint, as listed in the specification table. Approval fees, boundary walls, borewells and interiors are quoted separately. Rates exclude GST.",
     },
     {
-        q: "Do you handle MCD approvals and structural drawings?",
-        a: "Yes. Our engineer prepares the structural drawings and we prepare the submission set and follow it through. Government fees are paid at actuals.",
+        q: "How much does a modular kitchen cost?",
+        a: "From ₹1,000 per sq ft for an L-shaped laminate kitchen. HDHMR kitchens are ₹1,200–1,300, acrylic high-gloss on HDHMR is ₹1,400 with a 10-year warranty, and aluminium HDHMR kitchens are ₹1,700. The minimum order is 100 sq ft and delivery takes 15–20 days.",
+    },
+    {
+        q: "What do full-home interiors cost?",
+        a: "1BHK ₹1,500 per sq ft, 2BHK ₹1,100, 3BHK ₹800–1,000 and 4BHK ₹1,500. That covers false ceiling, civil changes, modular kitchen, wardrobes, flooring and a 3D design of every room.",
+    },
+    {
+        q: "Do you renovate old houses and bathrooms?",
+        a: "Yes. Home renovation is ₹1,000 per sq ft and a complete bathroom renovation is a flat ₹95,000, including waterproofing.",
     },
     {
         q: "How long does construction take?",
-        a: "About 11 months for a G+2 house with stilt parking, and 8 months for G+1. Interiors add 6–10 weeks if we start them before handover, which we usually do.",
+        a: "About 7 months for a G+1 house and 9 months for G+2. Interiors add 6–10 weeks if we start them before handover, which we usually do.",
     },
     {
         q: "How do payments work?",
         a: "In stages tied to work on site: booking, plinth, each slab, brickwork, finishes and handover. You pay for what has been built, never ahead of it.",
     },
     {
-        q: "How much does a modular kitchen cost?",
-        a: "From ₹1,500 per sq ft for laminate on HDHMR, ₹2,000–2,600 for acrylic and ₹2,600–3,200 for PU or glass. An L-shaped kitchen for a 2BHK usually lands between ₹2.5 and ₹4.5 lakh with hardware.",
-    },
-    {
         q: "Which areas do you work in?",
         a: "All of Delhi NCR: East and South Delhi, Noida, Greater Noida, Ghaziabad, Indirapuram, Gurugram and Faridabad. Our studio is in Jagat Puri and our factory is in Indirapuram.",
-    },
-    {
-        q: "What warranty do you give?",
-        a: "10 years on structure in the Signature and Bespoke packages, 5 years in Essential, and up to 10 years on modular carpentry and hardware. Every warranty is written into the handover file.",
     },
 ];
 

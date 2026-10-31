@@ -8,7 +8,7 @@ const COLUMNS = [
         title: 'Build',
         links: [
             { label: 'House construction', href: '#construction' },
-            { label: 'Grey structure', href: '#grey-structure' },
+            { label: 'Home renovation', href: '#renovation' },
             { label: 'Packages & specs', href: '#pricing' },
             { label: 'Cost estimate', href: '#estimate' },
         ],
@@ -36,11 +36,11 @@ const COLUMNS = [
 export default function Footer() {
     const year = new Date().getFullYear();
     return (
-        <footer className="relative overflow-hidden pt-20 md:pt-28" style={{ background: 'var(--color-charcoal)', color: '#F1EEE7' }}>
+        <footer className="relative overflow-hidden pt-20 md:pt-28" style={{ background: 'var(--color-charcoal)', color: '#F5EFE0' }}>
             <div className="container-site">
                 <div className="grid grid-cols-2 md:grid-cols-12 gap-10 pb-16 border-b" style={{ borderColor: 'var(--color-line-dark)' }}>
                     <div className="col-span-2 md:col-span-4">
-                        <LogoMark size={44} accent="var(--color-brass-light)" title="AMS Interiors & Construction" />
+                        <LogoMark size={44} accent="var(--color-brass-light)" title="AMS Interiors" />
                         <address className="not-italic mt-6 text-sm leading-relaxed" style={{ color: 'var(--color-ash)' }}>
                             72-A, Main Road Jagat Puri, Shahdara<br />New Delhi 110051
                         </address>
@@ -71,14 +71,14 @@ export default function Footer() {
                 </div>
 
                 <div className="flex flex-col md:flex-row justify-between gap-3 py-6 mono text-[10.5px]" style={{ color: 'var(--color-ash)' }}>
-                    <p>© {year} AMS Interiors &amp; Construction · GST {CONTACT_INFO.gstNo}</p>
+                    <p>© {year} AMS Interiors · GST {CONTACT_INFO.gstNo}</p>
                     <p>Earth maps: Solar System Scope (CC BY 4.0) · Furniture models: Khronos glTF samples (CC0 / CC BY 4.0, © Wayfair)</p>
                 </div>
             </div>
 
             {/* Full-width wordmark set on the ground line */}
             <div aria-hidden="true" className="select-none relative">
-                <div className="display leading-[0.78] whitespace-nowrap text-center" style={{ fontSize: '31vw', letterSpacing: '-0.02em', color: '#F1EEE7', marginBottom: '-0.04em' }}>
+                <div className="display leading-[0.78] whitespace-nowrap text-center" style={{ fontSize: '31vw', letterSpacing: '-0.02em', color: '#F5EFE0', marginBottom: '-0.04em' }}>
                     AMS<span style={{ color: 'var(--color-brass-light)' }}>.</span>
                 </div>
             </div>

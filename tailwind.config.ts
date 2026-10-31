@@ -10,21 +10,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        sand:    "#F1EEE7",
-        brass:   { DEFAULT: "#B4502F", dark: "#8C3A1F", light: "#E07A55" },
-        brick:   { DEFAULT: "#B4502F", dark: "#8C3A1F", light: "#E07A55" },
-        charcoal:"#121212",
-        ink:     "#121212",
-        paper:   "#F1EEE7",
-        bone:    "#F1EEE7",
-        surface: "#F8F6F1",
-        stone:   "#E3DED4",
-        mute:    "#5F5B55",
+        sand:    "#F5EFE0",
+        brass:   { DEFAULT: "#B8892A", dark: "#8A6318", light: "#D4A84B" },
+                charcoal:"#2C2416",
+        ink:     "#2C2416",
+        paper:   "#F5EFE0",
+        bone:    "#F5EFE0",
+        surface: "#FAFAF7",
+        stone:   "#EBE2CF",
+        mute:    "#6B6358",
       },
       fontFamily: {
-        display: ["var(--font-archivo)", "Arial Narrow", "sans-serif"],
-        body:    ["var(--font-archivo)", "system-ui", "sans-serif"],
-        mono:    ["var(--font-plex-mono)", "ui-monospace", "monospace"],
+        display: ["var(--font-cormorant)", "Georgia", "serif"],
+        body:    ["var(--font-inter)", "system-ui", "sans-serif"],
+        mono:    ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       animation: {
         marquee:      "marquee 28s linear infinite",

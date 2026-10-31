@@ -32,19 +32,19 @@ export default function ServicesIndex() {
     }, []);
 
     return (
-        <section id="services" className="relative py-24 md:py-36 scroll-mt-16" style={{ background: 'var(--color-charcoal)', color: '#F1EEE7' }}>
+        <section id="services" className="relative py-24 md:py-36 scroll-mt-16" style={{ background: 'var(--color-charcoal)', color: '#F5EFE0' }}>
             <div className="container-site">
                 <SheetHeader
                     dark
                     sheet="A-02"
                     eyebrow="Services"
                     title={<>From bare plot<br /><span style={{ color: 'var(--color-brass-light)' }}>to the last shelf.</span></>}
-                    intro="Nine services, two disciplines, one team. Starting rates are shown on every line; open a line for what it includes."
+                    intro="Seven services, one team. Each line shows the starting rate from our IndiaMart listings; open it to see what is included."
                 />
 
                 <div className="flex gap-1.5 mb-8" role="tablist" aria-label="Filter services">
                     {FILTERS.map((f) => (
-                        <button key={f} role="tab" aria-selected={filter === f} onClick={() => { setFilter(f); setOpen(null); }} className="mono text-xs px-4 py-2.5 transition-colors" style={filter === f ? { background: '#F1EEE7', color: '#121212' } : { border: '1px solid var(--color-line-dark)', color: 'var(--color-ash)' }}>
+                        <button key={f} role="tab" aria-selected={filter === f} onClick={() => { setFilter(f); setOpen(null); }} className="mono text-xs px-4 py-2.5 transition-colors" style={filter === f ? { background: '#F5EFE0', color: '#2C2416' } : { border: '1px solid var(--color-line-dark)', color: 'var(--color-ash)' }}>
                             {f}
                         </button>
                     ))}
@@ -77,8 +77,8 @@ export default function ServicesIndex() {
                                             <div className="grid md:grid-cols-[64px_1fr_1fr] gap-8 pb-10">
                                                 <span />
                                                 <div>
-                                                    <p className="text-base leading-relaxed max-w-lg mb-7" style={{ color: 'rgba(241,238,231,0.82)' }}>{s.detail}</p>
-                                                    <button onClick={() => openLeadModal({ service: s.name })} className="label px-6 py-3.5" style={{ background: '#F1EEE7', color: '#121212' }}>
+                                                    <p className="text-base leading-relaxed max-w-lg mb-7" style={{ color: 'rgba(245,239,224,0.82)' }}>{s.detail}</p>
+                                                    <button onClick={() => openLeadModal({ service: s.name })} className="label px-6 py-3.5" style={{ background: '#F5EFE0', color: '#2C2416' }}>
                                                         Quote {s.name.toLowerCase()} →
                                                     </button>
                                                 </div>
@@ -107,7 +107,7 @@ export default function ServicesIndex() {
                 >
                     {SERVICE_LINES.map((s) => (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img key={s.id} src={s.image} alt="" className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500" style={{ opacity: hover === s.id ? 1 : 0, background: '#E3DED4' }} />
+                        <img key={s.id} src={s.image} alt="" className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500" style={{ opacity: hover === s.id ? 1 : 0, background: '#EBE2CF' }} />
                     ))}
                 </div>
             </div>

@@ -439,32 +439,32 @@ html.has-custom-cursor iframe {
 
 /* ─── Editorial primitives ────────────────────────────────────── */
 .label {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-/* Condensed signage headlines (Archivo width axis). */
+/* Cormorant Garamond headlines: the original AMS Interiors serif. */
 .display {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-stretch: 72%;
-  font-variation-settings: 'wdth' 72;
-  letter-spacing: -0.012em;
-  line-height: 0.9;
-  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 0.95;
 }
 
-/* Emphasis inside headlines is colour, not italics. */
 .display em,
 .display .italic {
-  font-style: normal;
+  font-style: italic;
+  font-weight: 500;
 }
 
+/* Figures: prices, sizes and dimensions set in tabular Inter. */
 .mono {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
 }
 
 /* Architectural dimension line:  |<——— 12 400 ———>| */
@@ -473,9 +473,9 @@ html.has-custom-cursor iframe {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 10px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.12em;
 }
 
 .dim::before,
@@ -490,8 +490,8 @@ html.has-custom-cursor iframe {
 /* Faint drafting grid for paper sections */
 .drafting-grid {
   background-image:
-    linear-gradient(rgba(18, 18, 18, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(18, 18, 18, 0.045) 1px, transparent 1px);
+    linear-gradient(rgba(44,36,22, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(44,36,22, 0.045) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 

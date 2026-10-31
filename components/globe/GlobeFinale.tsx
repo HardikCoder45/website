@@ -59,7 +59,7 @@ export default function GlobeFinale() {
     const directions = `https://www.google.com/maps/dir/?api=1&destination=${OFFICE_GEO.lat},${OFFICE_GEO.lon}`;
 
     return (
-        <section id="visit" ref={section} className={`relative ${reduced ? 'h-[100svh]' : 'h-[420vh]'} scroll-mt-0`} style={{ background: '#0b0b0c', color: '#F1EEE7' }} aria-label="Find our studio">
+        <section id="visit" ref={section} className={`relative ${reduced ? 'h-[100svh]' : 'h-[420vh]'} scroll-mt-0`} style={{ background: '#0b0b0c', color: '#F5EFE0' }} aria-label="Find our studio">
             <div className="sticky top-0 h-[100svh] overflow-hidden">
                 <EarthScene state={state} onAltitude={onAltitude} />
 
@@ -87,8 +87,8 @@ export default function GlobeFinale() {
                     style={{ opacity: arrived ? 1 : 0, transform: arrived ? undefined : 'translateY(24px)', pointerEvents: arrived ? 'auto' : 'none' }}
                     aria-hidden={!arrived}
                 >
-                    <div className="m-4 md:m-0" style={{ background: '#F1EEE7', color: '#121212' }}>
-                        <div className="relative aspect-[16/10] overflow-hidden hidden md:block" style={{ background: '#E3DED4' }}>
+                    <div className="m-4 md:m-0" style={{ background: '#F5EFE0', color: '#2C2416' }}>
+                        <div className="relative aspect-[16/10] overflow-hidden hidden md:block" style={{ background: '#EBE2CF' }}>
                             {arrived && (
                                 <iframe
                                     title="AMS studio on Google Maps"
@@ -105,8 +105,8 @@ export default function GlobeFinale() {
                             <address className="not-italic display text-3xl leading-[0.95]">72-A, Main Road<br />Jagat Puri, Shahdara<br />New Delhi 110051</address>
                             <p className="mono text-[11px] mt-4" style={{ color: 'var(--color-mute)' }}>Factory: Royal Tower, Indirapuram, Ghaziabad (8 km)</p>
                             <div className="mt-6 grid grid-cols-2 gap-2">
-                                <a href={directions} target="_blank" rel="noreferrer" className="label py-3.5 text-center" style={{ background: '#121212', color: '#F1EEE7' }}>Directions →</a>
-                                <a href={`tel:${CONTACT_INFO.phone1}`} className="label py-3.5 text-center border" style={{ borderColor: 'rgba(18,18,18,0.25)' }}>Call studio</a>
+                                <a href={directions} target="_blank" rel="noreferrer" className="label py-3.5 text-center" style={{ background: '#2C2416', color: '#F5EFE0' }}>Directions →</a>
+                                <a href={`tel:${CONTACT_INFO.phone1}`} className="label py-3.5 text-center border" style={{ borderColor: 'rgba(44,36,22,0.25)' }}>Call studio</a>
                             </div>
                         </div>
                     </div>

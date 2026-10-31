@@ -193,9 +193,9 @@ function Earth({ state, onAltitude }: { state: MutableRefObject<GlobeState>; onA
             {label && (
                 <Html position={TARGET.toArray()} center zIndexRange={[20, 0]} style={{ pointerEvents: 'none' }}>
                     <div className="relative" style={{ animation: 'pinDrop 0.9s cubic-bezier(0.34,1.4,0.64,1) both' }}>
-                        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full pulse-ring" style={{ background: 'rgba(224,122,85,0.45)' }} />
-                        <span className="relative block w-3.5 h-3.5 rounded-full" style={{ background: '#E07A55', boxShadow: '0 0 0 3px #F1EEE7, 0 6px 18px rgba(0,0,0,0.45)' }} />
-                        <span className="absolute left-6 top-1/2 -translate-y-1/2 mono text-[11px] whitespace-nowrap px-2.5 py-1.5" style={{ background: '#F1EEE7', color: '#121212' }}>
+                        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full pulse-ring" style={{ background: 'rgba(212,168,75,0.45)' }} />
+                        <span className="relative block w-3.5 h-3.5 rounded-full" style={{ background: '#D4A84B', boxShadow: '0 0 0 3px #F5EFE0, 0 6px 18px rgba(0,0,0,0.45)' }} />
+                        <span className="absolute left-6 top-1/2 -translate-y-1/2 mono text-[11px] whitespace-nowrap px-2.5 py-1.5" style={{ background: '#F5EFE0', color: '#2C2416' }}>
                             AMS STUDIO · JAGAT PURI
                         </span>
                     </div>
@@ -222,7 +222,7 @@ function Stars() {
     }, []);
     return (
         <points geometry={geo}>
-            <pointsMaterial size={1.3} sizeAttenuation={false} color="#F1EEE7" transparent opacity={0.55} depthWrite={false} />
+            <pointsMaterial size={1.3} sizeAttenuation={false} color="#F5EFE0" transparent opacity={0.55} depthWrite={false} />
         </points>
     );
 }
