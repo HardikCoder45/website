@@ -1,20 +1,17 @@
-// AMS Interiors rate card. Every rate below is the price AMS lists on IndiaMart,
-// under its two trading names:
-//   · Anil Multi Service (studio, 72-A Main Road Jagat Puri, Shahdara)
+// AMS Interiors rate card. Every rate below is the price AMS lists on IndiaMart
+// under Anil Multi Service (72-A Main Road Jagat Puri, Shahdara):
 //     indiamart.com/flavour-fottage · anilmultiservice.co.in
-//   · Anil Electric Multi Service (factory side, Jaipuria Sunrise Plaza, Indirapuram)
-//     indiamart.com/anilelectricmultiservice
 // Listing names are kept in `listing` so each figure can be traced back.
 // IndiaMart rates are per sq ft and exclude GST. If a listing changes, change it here:
 // every section of the site reads from this file.
 
 export const SELLERS = {
     ams: 'Anil Multi Service',
-    aems: 'Anil Electric Multi Service',
+    aems: 'Anil Multi Service',
 } as const;
 export type Seller = keyof typeof SELLERS;
 
-export const RATE_NOTE = 'Rates as listed by AMS on IndiaMart (Anil Multi Service and Anil Electric Multi Service), per sq ft, excluding GST. Final price after a free site visit.';
+export const RATE_NOTE = 'Rates as listed by AMS on IndiaMart (Anil Multi Service), per sq ft, excluding GST. Final price after a free site visit.';
 
 // ── Construction ─────────────────────────────────────────────────────────
 
@@ -97,7 +94,7 @@ export interface HomeSize { id: string; label: string; area: number; rate: [numb
 export const HOME_SIZES: HomeSize[] = [
     { id: '1bhk', label: '1BHK', area: 550, rate: [1500, 1500], seller: 'ams', listing: '1 BHK Flat Interior Design' },
     { id: '2bhk', label: '2BHK', area: 900, rate: [1100, 1100], seller: 'ams', listing: '2 BHK Interior Design' },
-    { id: '3bhk', label: '3BHK', area: 1350, rate: [800, 1000], seller: 'ams', listing: '3 BHK Interior (₹800 Anil Multi Service, ₹1,000 Anil Electric Multi Service)' },
+    { id: '3bhk', label: '3BHK', area: 1350, rate: [800, 1000], seller: 'ams', listing: '3 BHK Interior' },
     { id: '4bhk', label: '4BHK', area: 1900, rate: [1500, 1500], seller: 'aems', listing: '4 BHK Flat Interior Designing (wood work and furniture)' },
 ];
 

@@ -19,7 +19,7 @@ Copy follows the no-AI-slop rules (concrete facts, no filler words, no em-dash c
 
 ## Prices
 
-Every rate on the site comes from `lib/data/pricing.ts` and is the price AMS lists on IndiaMart under its two trading names, Anil Multi Service (Jagat Puri) and Anil Electric Multi Service (Indirapuram). Each entry records the seller, and packages record the listing name. Rates exclude GST. **If a listing changes, change it there**; the 3D tour estimates (`lib/data/tours.ts`) use the same ranges.
+Every rate on the site comes from `lib/data/pricing.ts` and is the price AMS lists on IndiaMart under Anil Multi Service. Packages record the listing name. Rates exclude GST. **If a listing changes, change it there**; the 3D tour estimates (`lib/data/tours.ts`) use the same ranges.
 
 ## Home page
 
