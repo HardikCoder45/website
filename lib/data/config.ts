@@ -25,7 +25,7 @@ export const STATS = [
 export const FAQS = [
     {
         q: "What does it cost to build a house with AMS?",
-        a: "Our IndiaMart rates are ₹1,100 per sq ft for new home building, ₹1,200 for our standard house construction and ₹1,500 for residential construction projects. A G+1 house on a 100 sq yd plot (about 1,350 sq ft built-up) comes to roughly ₹16 lakh at ₹1,200. The estimate tool gives a figure for your plot.",
+        a: "House construction is ₹1,200 per sq ft in the Essential package, ₹1,600 in Premium and ₹2,200 in Luxury, on built-up area. A G+1 house on a 100 sq yd plot (about 1,350 sq ft built-up) comes to roughly ₹16 lakh in Essential and ₹21.6 lakh in Premium. The estimate tool gives a figure for your plot.",
     },
     {
         q: "What is included in the per-square-foot rate?",

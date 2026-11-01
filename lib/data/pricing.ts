@@ -1,4 +1,5 @@
-// AMS Interiors rate card. Every rate below is the price AMS lists on IndiaMart
+// AMS Interiors rate card. Rates are the prices AMS lists on IndiaMart (house-construction
+// packages are set by AMS: ₹1,200 / ₹1,600 / ₹2,200)
 // under Anil Multi Service (72-A Main Road Jagat Puri, Shahdara):
 //     indiamart.com/flavour-fottage · anilmultiservice.co.in
 // Listing names are kept in `listing` so each figure can be traced back.
@@ -15,37 +16,35 @@ export const RATE_NOTE = 'Rates as listed by AMS on IndiaMart (Anil Multi Servic
 
 // ── Construction ─────────────────────────────────────────────────────────
 
-export type BuildTier = 'essential' | 'standard' | 'premium';
+export type BuildTier = 'essential' | 'premium' | 'luxury';
 
 export interface BuildPackage {
     id: BuildTier;
     name: string;
     rate: number; // ₹ per sq ft
-    listing: string;
-    seller: Seller;
     summary: string;
     popular?: boolean;
 }
 
 export const BUILD_PACKAGES: BuildPackage[] = [
-    { id: 'essential', name: 'Essential', rate: 1100, listing: 'New Home Building and Renovation', seller: 'ams', summary: 'A sound, plain-finished home or a full rebuild of an old one.' },
-    { id: 'standard', name: 'Standard', rate: 1200, listing: 'House Construction Service', seller: 'aems', summary: 'Our usual house build, from footings to paint.', popular: true },
-    { id: 'premium', name: 'Premium', rate: 1500, listing: 'Residential Construction Projects', seller: 'aems', summary: 'Larger homes and builder floors with better finishes.' },
+    { id: 'essential', name: 'Essential', rate: 1200, summary: 'A sound, plain-finished home or a full rebuild of an old one.' },
+    { id: 'premium', name: 'Premium', rate: 1600, summary: 'Our usual house build, from footings to paint, with better fittings.', popular: true },
+    { id: 'luxury', name: 'Luxury', rate: 2200, summary: 'Stone floors, premium fittings and designer finishes throughout.' },
 ];
 
 /** What each package specifies, row by row. Brands are confirmed in the written quote. */
-export const BUILD_SPECS: { item: string; essential: string; standard: string; premium: string }[] = [
-    { item: 'Structure', essential: 'RCC frame, M20 concrete', standard: 'RCC frame, M20 concrete', premium: 'RCC frame, M25 concrete' },
-    { item: 'Steel', essential: 'ISI Fe-500 TMT', standard: 'ISI Fe-500D TMT', premium: 'Fe-550D TMT' },
-    { item: 'Cement', essential: 'OPC 43', standard: 'OPC 53', premium: 'OPC 53' },
-    { item: 'Walls', essential: '9" brick outer, 4.5" inside', standard: '9" brick outer, 4.5" inside', premium: 'Brick or AAC block' },
-    { item: 'Flooring', essential: 'Vitrified 600×600 mm', standard: 'Vitrified 600×1200 mm', premium: 'Vitrified 800×1600 mm' },
-    { item: 'Kitchen', essential: 'Granite platform, steel sink', standard: 'Granite platform, base units', premium: 'AMS modular kitchen' },
-    { item: 'Bathrooms', essential: 'ISI fittings', standard: 'Hindware / Cera', premium: 'Jaquar fittings' },
-    { item: 'Electrical', essential: 'ISI wire, modular switches', standard: 'Havells / Anchor', premium: 'Legrand switches' },
-    { item: 'Doors & windows', essential: 'Flush doors, aluminium windows', standard: 'Flush doors, UPVC windows', premium: 'Teak frames, UPVC windows' },
-    { item: 'Paint', essential: 'Putty, primer, emulsion', standard: 'Asian Paints Apcolite', premium: 'Asian Paints Royale' },
-    { item: 'Waterproofing', essential: 'Roof and wet areas', standard: 'Roof and wet areas', premium: 'Roof, wet areas, terrace' },
+export const BUILD_SPECS: { item: string; essential: string; premium: string; luxury: string }[] = [
+    { item: 'Structure', essential: 'RCC frame, M20 concrete', premium: 'RCC frame, M20 concrete', luxury: 'RCC frame, M25 concrete' },
+    { item: 'Steel', essential: 'ISI Fe-500 TMT', premium: 'Fe-500D TMT (ISI)', luxury: 'Fe-550D TMT (Tata / JSW)' },
+    { item: 'Cement', essential: 'OPC 43', premium: 'OPC 53', luxury: 'UltraTech OPC 53' },
+    { item: 'Walls', essential: '9" brick outer, 4.5" inside', premium: '9" brick outer, 4.5" inside', luxury: 'AAC block, insulated' },
+    { item: 'Flooring', essential: 'Vitrified 600×600 mm', premium: 'Vitrified 600×1200 mm', luxury: 'Italian marble / engineered wood' },
+    { item: 'Kitchen', essential: 'Granite platform, steel sink', premium: 'Granite platform, base units', luxury: 'Full AMS modular kitchen' },
+    { item: 'Bathrooms', essential: 'ISI fittings', premium: 'Hindware / Cera', luxury: 'Kohler / Jaquar, rain shower' },
+    { item: 'Electrical', essential: 'ISI wire, modular switches', premium: 'Havells / Anchor', luxury: 'Legrand Arteor switches' },
+    { item: 'Doors & windows', essential: 'Flush doors, aluminium windows', premium: 'Flush doors, UPVC windows', luxury: 'Teak frames, system windows' },
+    { item: 'Paint', essential: 'Putty, primer, emulsion', premium: 'Asian Paints Apcolite', luxury: 'Asian Paints Royale' },
+    { item: 'Waterproofing', essential: 'Roof and wet areas', premium: 'Roof and wet areas', luxury: 'Roof, wet areas, terrace, 10-yr warranty' },
 ];
 
 /** Other civil work listed on IndiaMart. */
@@ -116,8 +115,8 @@ const u = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=cro
 
 export const SERVICE_LINES: ServiceLine[] = [
     {
-        id: 'construction', anchor: 'construction', discipline: 'Build', name: 'House construction', from: '₹1,100', unit: '/ sq ft',
-        detail: 'Listed at ₹1,100 (new home building), ₹1,200 (house construction) and ₹1,500 (residential projects) per sq ft.',
+        id: 'construction', anchor: 'construction', discipline: 'Build', name: 'House construction', from: '₹1,200', unit: '/ sq ft',
+        detail: 'Three packages: Essential ₹1,200, Premium ₹1,600 and Luxury ₹2,200 per sq ft of built-up area.',
         scope: ['Structural drawings and site marking', 'RCC frame, brickwork, plaster', 'Plumbing, electrical, waterproofing', 'Flooring, doors, windows, paint'],
         image: '/renders/build-house.webp',
     },

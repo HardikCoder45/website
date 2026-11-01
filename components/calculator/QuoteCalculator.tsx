@@ -45,7 +45,7 @@ export default function QuoteCalculator() {
     const [mode, setMode] = useState<Mode>('build');
     const [plot, setPlot] = useState(100);
     const [floors, setFloors] = useState(2);
-    const [tier, setTier] = useState<BuildTier>('standard');
+    const [tier, setTier] = useState<BuildTier>('premium');
     const [kType, setKType] = useState('acrylic-gloss');
     const [kSize, setKSize] = useState(100);
     const [home, setHome] = useState('2bhk');
@@ -112,7 +112,6 @@ export default function QuoteCalculator() {
                                 <div>
                                     <p className="label mb-3">Package</p>
                                     <Seg label="Package" value={tier} onChange={setTier} options={BUILD_PACKAGES.map((p) => ({ v: p.id, t: `${p.name} · ₹${p.rate.toLocaleString('en-IN')}` }))} />
-                                    <p className="text-sm mt-3" style={{ color: 'var(--color-mute)' }}>IndiaMart listing: “{build.pkg.listing}”, {SELLERS[build.pkg.seller]}</p>
                                 </div>
                             </div>
                         ) : mode === 'kitchen' ? (

@@ -7,7 +7,7 @@ import { useAppStore } from '@/lib/store/useAppStore';
 export default function BuildPricing() {
     const openLeadModal = useAppStore((s) => s.openLeadModal);
     // On phones the schedule shows one package at a time.
-    const [mobileTier, setMobileTier] = useState<BuildTier>('standard');
+    const [mobileTier, setMobileTier] = useState<BuildTier>('premium');
 
     return (
         <section id="pricing" className="relative py-24 md:py-36 scroll-mt-16" style={{ background: 'var(--color-sand)', color: 'var(--color-charcoal)' }}>
@@ -16,7 +16,7 @@ export default function BuildPricing() {
                     sheet="A-03"
                     eyebrow="Construction packages"
                     title={<>House construction,<br /><em style={{ color: 'var(--color-brass)' }}>priced per square foot.</em></>}
-                    intro="The same three rates AMS lists on IndiaMart. Each covers structure, services and finishes on the built-up area, and the materials for each are set out below."
+                    intro="Three packages by finish level. Each covers structure, services and finishes on the built-up area, and the materials for each are set out below."
                 />
 
                 {/* Package columns */}
@@ -30,7 +30,6 @@ export default function BuildPricing() {
                             </div>
                             <p className="display tabular-nums" style={{ fontSize: 'clamp(56px, 6vw, 92px)' }}>₹{p.rate.toLocaleString('en-IN')}</p>
                             <p className="mono text-xs mt-2" style={{ color: 'var(--color-mute)' }}>per sq ft of built-up area</p>
-                            <p className="text-[11px] mt-4 leading-snug" style={{ color: 'var(--color-mute)' }}>IndiaMart: “{p.listing}”, {SELLERS[p.seller]}</p>
                             <p className="mt-6 text-sm leading-relaxed flex-1" style={{ color: 'var(--color-mute)' }}>{p.summary}</p>
                             <button
                                 onClick={() => openLeadModal({ service: `House Construction (${p.name})` })}

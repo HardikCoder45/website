@@ -17,7 +17,7 @@ export const BUILD_STAGES: BuildStage[] = [
     { id: 'slabs', title: 'Slabs', weeks: 'Weeks 8–16', body: 'Each slab is cast in a single pour and kept ponded for 21 days. Shuttering stays up for 14.' },
     { id: 'walls', title: 'Walls', weeks: 'Weeks 12–20', body: '9-inch brick outer walls and 4.5-inch partitions. Conduits and plumbing go in before plaster.' },
     { id: 'openings', title: 'Openings', weeks: 'Weeks 18–24', body: 'Window frames, balcony glazing and terrace parapet. Roof and wet areas waterproofed and pond-tested.' },
-    { id: 'finishes', title: 'Finishes', weeks: 'Weeks 22–30', body: 'Plaster, stone cladding, flooring, bathroom fittings and two coats of paint inside and out.', price: 'House construction from ₹1,100 / sq ft' },
+    { id: 'finishes', title: 'Finishes', weeks: 'Weeks 22–30', body: 'Plaster, stone cladding, flooring, bathroom fittings and two coats of paint inside and out.', price: 'House construction from ₹1,200 / sq ft' },
     { id: 'interiors', title: 'Interiors', weeks: 'Weeks 28–36', body: 'Kitchen and wardrobes from our Indirapuram factory, false ceilings and lights. Then the keys.', price: 'Modular kitchens from ₹1,000 / sq ft' },
 ];
 
